@@ -48,14 +48,14 @@ interface Medkit {
   id: string; // PK
   ownerID: string; // FK -> User
   name: string;
-  drugs: Drug[];
+  medicines: Medicines[];
   members: MedMember[];
   ts: TimeStamp;
 }
 ```
 
 - Належить певному `User`.
-- Містить список `Drug`.
+- Містить список `Medicines`.
 - Може мати кількох `MedMembers`.
 
 ---
@@ -75,10 +75,10 @@ interface MedMember {
 
 ---
 
-### **Drug (Ліки)**
+### **Medicines (Ліки)**
 
 ```ts
-interface Drug {
+interface Medicines {
   id: string; // PK
   name: string;
   quantity: number;
@@ -98,14 +98,14 @@ interface Drug {
 interface Notification {
   id: string; // PK
   userId: string; // FK -> User
-  medicineId: string; // FK -> Drug
+  medicineId: string; // FK -> Medicines
   isRead: boolean;
   type: string;
   ts: TimeStamp;
 }
 ```
 
-- Повідомляє `User` про конкретні `Drug` (наприклад, прострочені ліки чи низький залишок).
+- Повідомляє `User` про конкретні `Medicines` (наприклад, прострочені ліки чи низький залишок).
 
 ---
 
@@ -126,9 +126,9 @@ interface TimeStamp {
 
 ```ts
 enum Rules {
-  VIEW = "drugs:GET",
-  EDITOR = "drugs:GET,PUT,CREATE,DELETE",
-  OWNER = "drugs:GET,PUT,CREATE,DELETE; members:GET,DELETE",
+  VIEW = "medicines:GET",
+  EDITOR = "medicines:GET,PUT,CREATE,DELETE",
+  OWNER = "medicines:GET,PUT,CREATE,DELETE; members:GET,DELETE",
 }
 ```
 
@@ -138,6 +138,6 @@ enum Rules {
 
 - **User – Medkit**: один користувач може мати багато аптечок.
 - **User – AccessToken**: один користувач може мати кілька токенів доступу.
-- **Medkit – Drug**: одна аптечка може містити багато ліків.
+- **Medkit – Medicines**: одна аптечка може містити багато ліків.
 - **Medkit – MedMember – User**: зв’язок багато-до-багатьох (користувач може бути учасником кількох аптечок).
-- **User – Notification – Drug**: сповіщення пов’язують користувача з конкретними ліками.
+- **User – Notification – Medicines**: сповіщення пов’язують користувача з конкретними ліками.
