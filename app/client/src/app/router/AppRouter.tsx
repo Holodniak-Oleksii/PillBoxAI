@@ -1,6 +1,12 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import { Home } from "../../pages/Home/Home";
-import { MainLayout } from "../layouts/MainLayout";
+import { MainLayout } from "@/app/layouts/MainLayout";
+import { Home } from "@/pages/Home/Home";
+import { Profile } from "@/pages/Profile/Profile";
+import {
+  Navigate,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+} from "react-router-dom";
 import { PATHS } from "./paths";
 
 const AppRouter = () => (
@@ -9,7 +15,8 @@ const AppRouter = () => (
       <Route path={PATHS.HOME} element={<MainLayout />}>
         <Route path={PATHS.HOME} element={<Home />} />
       </Route>
-      <Route path="*" element={<div>404</div>} />
+      <Route path={PATHS.PROFILE} element={<Profile />} />
+      <Route path="*" element={<Navigate to={PATHS.HOME} />} />
     </Routes>
   </Router>
 );
