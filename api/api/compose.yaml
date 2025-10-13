@@ -1,0 +1,6 @@
+services:
+    api:
+        image: api:latest
+        build: .
+        ports:
+            - "8080:8080"
