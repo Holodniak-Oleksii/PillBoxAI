@@ -1,8 +1,13 @@
 import { Account } from "@/app/layouts/components/Account/Account";
 import imageLogo from "@/assets/logo.webp";
-import { Center, Flex, Image, Separator, Span } from "@chakra-ui/react";
+import { Button, Center, Flex, Image, Span } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
+import { GrAidOption } from "react-icons/gr";
+import { RiAddFill } from "react-icons/ri";
 
 export const SideBar = () => {
+  const { t } = useTranslation();
+
   return (
     <Flex
       as={"aside"}
@@ -20,8 +25,20 @@ export const SideBar = () => {
           </Span>
         </Center>
       </Flex>
-      <Separator borderColor={"blackAlpha.200"} />
-      <Flex p={4} w="100%" flexGrow={1}></Flex>
+      <Flex p={4} w="100%" flexGrow={1} direction={"column"}>
+        <Button
+          variant={"outline"}
+          bg={"whiteAlpha.500"}
+          justifyContent={"flex-start"}
+        >
+          <RiAddFill />
+          {t("button.askChat")}
+        </Button>
+        <Flex gap={3} alignItems={"center"} mt={4} py={4} px={2}>
+          <GrAidOption />
+          <Span>{t("titles.medicine")}</Span>
+        </Flex>
+      </Flex>
       <Account />
     </Flex>
   );

@@ -2,7 +2,11 @@
   "translation": {
     "button": {
       "login": "Login",
-      "signUp": "Sign Up"
+      "signUp": "Sign Up",
+      "askChat": "Ask Chat"
+    },
+    "titles": {
+      "medicine": "Medicines"
     }
   }
 }

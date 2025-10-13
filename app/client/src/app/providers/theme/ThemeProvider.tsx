@@ -37,6 +37,7 @@ const config = defineConfig({
       colorPalette: "white",
       background: "blackAlpha.50",
       fontFamily: `'Roboto', sans-serif`,
+      color: "blackAlpha.700",
     },
   },
 });
