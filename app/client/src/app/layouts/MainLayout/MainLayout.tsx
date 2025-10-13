@@ -1,4 +1,4 @@
-import { SideBar } from "@/app/layouts/components/SideBar/SideBar";
+import { SideBar } from "@/app/layouts/MainLayout/components/SideBar/SideBar";
 import { Box, Grid } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 

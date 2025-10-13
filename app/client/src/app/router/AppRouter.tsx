@@ -1,4 +1,4 @@
-import { MainLayout } from "@/app/layouts/MainLayout";
+import { MainLayout } from "@/app/layouts/MainLayout/MainLayout";
 import { Home } from "@/pages/Home/Home";
 import { Profile } from "@/pages/Profile/Profile";
 import {

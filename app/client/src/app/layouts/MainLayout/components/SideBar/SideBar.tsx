@@ -1,4 +1,4 @@
-import { Account } from "@/app/layouts/components/Account/Account";
+import { Account } from "@/app/layouts/MainLayout/components/Account/Account";
 import imageLogo from "@/assets/logo.webp";
 import { Button, Center, Flex, Image, Span } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
