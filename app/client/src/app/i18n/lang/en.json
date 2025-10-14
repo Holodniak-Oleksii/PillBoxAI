@@ -3,10 +3,46 @@
     "button": {
       "login": "Login",
       "signUp": "Sign Up",
-      "askChat": "Ask Chat"
+      "askChat": "Ask Chat",
+      "continue": "Continue"
     },
     "titles": {
       "medicine": "Medicines"
+    },
+    "errors": {
+      "isRequired": "This field is required",
+      "minLength": "Minimum 2 characters",
+      "invalidEmail": "Enter a valid email",
+      "passwordMin": "Minimum 6 characters",
+      "passwordComplexity": "Password must contain uppercase, lowercase and number",
+      "passwordMismatch": "Passwords do not match"
+    },
+    "labels": {
+      "password": "Password",
+      "email": "Email address",
+      "name": "Full name",
+      "confirmPassword": "Confirm password"
+    },
+    "placeholders": {
+      "email": "you@example.com",
+      "password": "Enter your password",
+      "name": "John Doe",
+      "confirmPassword": "Confirm your password"
+    },
+    "auth": {
+      "join": "Join and make life better",
+      "AIMedicineOrganizer": "#1 AI Medicine Organizer",
+      "goodUsersExperience": "good users experience",
+      "forgotPassword": "Forgot password",
+      "noAccount": "Don't have an account?",
+      "hasAccount": "Already have an account?",
+      "signInToContinue": "Sign in to continue",
+      "createAccountToContinue": "Create account to continue",
+      "perfectAllInOneApp": "Perfect all-in-one app!",
+      "soEasyAndPowerful": "So easy and powerful",
+      "signUpWithGoogle": "Sign up with Google",
+      "signInWithGoogle": "Sign in with Google",
+      "orContinueWith": "or continue with"
     }
   }
 }

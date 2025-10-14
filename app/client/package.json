@@ -14,6 +14,7 @@
     "@ebay/nice-modal-react": "^1.2.13",
     "@emotion/react": "^11.14.0",
     "@fontsource/roboto": "^5.2.8",
+    "@hookform/resolvers": "^5.2.2",
     "@tanstack/react-query": "^5.90.2",
     "axios": "^1.12.2",
     "i18next": "^25.5.3",
@@ -24,6 +25,7 @@
     "react-i18next": "^16.0.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.9.3",
+    "zod": "^4.1.12",
     "zustand": "^5.0.8"
   },
   "devDependencies": {
