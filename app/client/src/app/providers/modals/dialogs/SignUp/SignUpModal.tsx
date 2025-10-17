@@ -25,7 +25,6 @@ export const SignUpModal = create<IModalProps>(() => {
     resolver: zodResolver(signUpSchema),
   });
 
-  console.log("errors :", errors);
   const onSubmit: SubmitHandler<ISignUpFormValues> = async () => {
     modal.hide();
   };

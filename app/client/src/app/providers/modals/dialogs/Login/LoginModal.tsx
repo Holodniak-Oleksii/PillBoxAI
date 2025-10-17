@@ -70,10 +70,7 @@ export const LoginModal = create<IModalProps>(() => {
           </Button>
         </VStack>
 
-        <HStack justify="space-between">
-          <Link color="blue.600" href="#">
-            {t("auth.forgotPassword")}
-          </Link>
+        <HStack justify="center">
           <Text color="gray.700" fontSize="sm">
             {t("auth.noAccount")}&nbsp;
             <Link color="blue.600" onClick={redirectToSignUpHandler}>
