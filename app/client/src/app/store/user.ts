@@ -23,7 +23,13 @@ export const useUserStore = create<IUserStore>()(
       refreshToken: null,
 
       setUser: (user) => set({ user, isAuth: true }),
-      logout: () => set({ user: null, isAuth: false }),
+      logout: () =>
+        set({
+          user: null,
+          isAuth: false,
+          accessToken: null,
+          refreshToken: null,
+        }),
       setCredentials: (refreshToken, accessToken) =>
         set({ accessToken, refreshToken }),
       removeCredentials: () => set({ accessToken: null, refreshToken: null }),

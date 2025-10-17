@@ -1,8 +1,8 @@
-import { Field, HStack, IconButton, Input } from "@chakra-ui/react";
+import { Field, IconButton, Input, InputGroup } from "@chakra-ui/react";
 import { ForwardedRef, forwardRef, useState } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { EyeIcon, EyeOffIcon } from "../../icons";
+import { LuEye, LuEyeOff } from "react-icons/lu";
 
 export interface FormInputProps {
   label: string;
@@ -11,11 +11,22 @@ export interface FormInputProps {
   autoComplete?: string;
   register: UseFormRegisterReturn;
   error?: string;
+  required?: boolean;
+  startElement?: React.ReactNode;
 }
 
 export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
   (
-    { label, placeholder, type = "text", autoComplete, register, error },
+    {
+      label,
+      placeholder,
+      type = "text",
+      autoComplete,
+      register,
+      error,
+      required = false,
+      startElement,
+    },
     ref: ForwardedRef<HTMLInputElement>
   ) => {
     const { t } = useTranslation();
@@ -27,28 +38,37 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
     const inputType = isPassword && showPassword ? "text" : type;
 
     return (
-      <Field.Root invalid={!!error}>
+      <Field.Root invalid={!!error} ref={ref} gap={0.5} required={required}>
         <Field.Label>{label}</Field.Label>
-        <HStack>
+        <InputGroup
+          startElement={startElement}
+          endElement={
+            isPassword ? (
+              <IconButton
+                variant="ghost"
+                size="sm"
+                onClick={handleTogglePassword}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <LuEye /> : <LuEyeOff />}
+              </IconButton>
+            ) : null
+          }
+        >
           <Input
             {...register}
             type={inputType}
             autoComplete={autoComplete}
             placeholder={placeholder}
-            ref={ref}
           />
-          {isPassword && (
-            <IconButton
-              variant="ghost"
-              size="sm"
-              onClick={handleTogglePassword}
-              aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-            </IconButton>
-          )}
-        </HStack>
-        <Field.ErrorText>{error ? t(error) : null}</Field.ErrorText>
+        </InputGroup>
+        {error ? (
+          <Field.ErrorText width={"100%"} justifyContent={"end"}>
+            {t(error)}
+          </Field.ErrorText>
+        ) : (
+          <Field.HelperText>&nbsp;</Field.HelperText>
+        )}
       </Field.Root>
     );
   }

@@ -4,7 +4,8 @@
       "login": "Login",
       "signUp": "Sign Up",
       "askChat": "Ask Chat",
-      "continue": "Continue"
+      "continue": "Continue",
+      "logout": "Logout"
     },
     "titles": {
       "medicine": "Medicines"
@@ -32,7 +33,7 @@
     "auth": {
       "join": "Join and make life better",
       "AIMedicineOrganizer": "#1 AI Medicine Organizer",
-      "goodUsersExperience": "good users experience",
+      "goodUsersExperience": "good experience",
       "forgotPassword": "Forgot password",
       "noAccount": "Don't have an account?",
       "hasAccount": "Already have an account?",
