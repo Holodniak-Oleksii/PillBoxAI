@@ -35,7 +35,7 @@ const config = defineConfig({
   globalCss: {
     html: {
       colorPalette: "white",
-      background: "blackAlpha.50",
+      background: "whiteAlpha.50",
       fontFamily: `'Roboto', sans-serif`,
       color: "blackAlpha.700",
     },

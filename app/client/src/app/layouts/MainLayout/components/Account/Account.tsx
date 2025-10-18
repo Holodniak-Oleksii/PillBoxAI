@@ -16,7 +16,7 @@ export const Account = () => {
     <Flex
       p={4}
       w="100%"
-      borderColor={"blackAlpha.200"}
+      borderColor={"blackAlpha.300"}
       borderTopWidth={1}
       gap={4}
     >
