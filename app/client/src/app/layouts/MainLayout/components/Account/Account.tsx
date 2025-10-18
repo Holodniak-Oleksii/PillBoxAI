@@ -21,10 +21,10 @@ export const Account = () => {
       gap={4}
     >
       {isAuth ? (
-        <Flex w="100%" gap={4} align="center">
+        <Flex w="100%" gap={2} align="center">
           <Box
-            w="48px"
-            h="48px"
+            w="40px"
+            h="40px"
             borderRadius="full"
             bg="black"
             color="white"
@@ -37,15 +37,15 @@ export const Account = () => {
             {user?.name?.charAt(0).toUpperCase()}
           </Box>
           <VStack align="start" flex={1} gap={0}>
-            <Text fontSize="md" fontWeight="semibold" color="gray.700">
+            <Text fontSize="sm" fontWeight="semibold" color="gray.700">
               {user?.name}
             </Text>
-            <Text fontSize="sm" color="gray.500">
+            <Text fontSize="xs" color="gray.500">
               {user?.email}
             </Text>
           </VStack>
           <Button
-            size="sm"
+            size="xs"
             variant="outline"
             onClick={logout}
             colorScheme="gray"

@@ -1,5 +1,6 @@
 import { AuthModalLayout } from "@/app/layouts/AuthModalLayout/AuthModalLayout";
 import { ModalLayout } from "@/app/layouts/ModalLayout/ModalLayout";
+import { useGoogleAuth, useLogin } from "@/services/auth/hooks";
 import { IModalProps } from "@/shared/types/entities";
 import { EModalKey } from "@/shared/types/enums";
 import { FormInput } from "@/shared/ui-library/fields";
@@ -15,7 +16,8 @@ export const LoginModal = create<IModalProps>(() => {
   const modal = useModal();
   const { t } = useTranslation();
   const { show: showSignUp } = useModal(EModalKey.SING_UP);
-
+  const { mutate: googleAuth } = useGoogleAuth();
+  const { mutate: login } = useLogin();
   const {
     register,
     handleSubmit,
@@ -25,12 +27,15 @@ export const LoginModal = create<IModalProps>(() => {
   });
 
   const onSubmit: SubmitHandler<ILoginFormValues> = async () => {
+    await login();
     modal.hide();
   };
 
   const handleGoogleSignIn = async () => {
     // TODO: Implement Google OAuth
     console.log("Google sign in");
+    await googleAuth();
+    modal.hide();
   };
 
   const redirectToSignUpHandler = () => {
