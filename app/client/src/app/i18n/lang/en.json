@@ -5,10 +5,21 @@
       "signUp": "Sign Up",
       "askChat": "Ask Chat",
       "continue": "Continue",
-      "logout": "Logout"
+      "logout": "Logout",
+      "helpMeWrite": "Help me write",
+      "learnAbout": "Learn about",
+      "analyzeImage": "Analyze image",
+      "summarizeText": "Summarize text"
     },
     "titles": {
-      "medicine": "Medicines"
+      "medkits": "Medkits"
+    },
+    "subtitle": {
+      "goodMorning": "Good morning",
+      "goodAfternoon": "Good afternoon",
+      "goodEvening": "Good evening",
+      "aiIsTyping": "AI is typing...",
+      "howCanIHelpYouToday": "How can I help you today?"
     },
     "errors": {
       "isRequired": "This field is required",
@@ -28,7 +39,9 @@
       "email": "you@example.com",
       "password": "Enter your password",
       "name": "John Doe",
-      "confirmPassword": "Confirm your password"
+      "confirmPassword": "Confirm your password",
+      "searchMedkits": "Search in medkits",
+      "typeMessage": "Type a message"
     },
     "auth": {
       "join": "Join and make life better",

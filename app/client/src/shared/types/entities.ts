@@ -47,3 +47,18 @@ export interface INotification {
 export interface IModalProps {
   id: EModalKey;
 }
+
+export interface IChatMessage {
+  id: string;
+  content: string;
+  role: "user" | "assistant";
+  timestamp: Date;
+}
+
+export interface IChatConversation {
+  id: string;
+  title: string;
+  messages: IChatMessage[];
+  createdAt: Date;
+  updatedAt: Date;
+}
