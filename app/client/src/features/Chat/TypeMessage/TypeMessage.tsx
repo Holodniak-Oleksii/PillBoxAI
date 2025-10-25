@@ -1,5 +1,5 @@
 import { useChatStore } from "@/app/store/chat";
-import { suggestedActions } from "@/features/Chat/components/TypeMessage/data";
+import { suggestedActions } from "@/features/Chat/TypeMessage/data";
 import { SendIcon } from "@/shared/icons";
 import { Box, Button, HStack, Input } from "@chakra-ui/react";
 import { FC } from "react";

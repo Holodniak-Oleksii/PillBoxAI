@@ -1,10 +1,10 @@
 import { useChatStore } from "@/app/store/chat";
-import { Conversation } from "@/features/Chat/components/Conversation/Conversation";
-import { Greeting } from "@/features/Chat/components/Greeting/Greeting";
-import { TypeMessage } from "@/features/Chat/components/TypeMessage/TypeMessage";
 import { IChatConversation } from "@/shared/types/entities";
 import { Box, Flex } from "@chakra-ui/react";
 import { FC, useEffect, useRef, useState } from "react";
+import { Conversation } from "./Conversation";
+import { Greeting } from "./Greeting";
+import { TypeMessage } from "./TypeMessage";
 
 interface IChatProps {
   conversation: IChatConversation;

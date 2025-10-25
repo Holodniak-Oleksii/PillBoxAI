@@ -1,4 +1,3 @@
-import { Account } from "@/app/layouts/MainLayout/components/Account/Account";
 import { PATHS } from "@/app/router/paths";
 import { useChatStore } from "@/app/store/chat";
 import imageLogo from "@/assets/logo.webp";
@@ -22,6 +21,7 @@ import { LuBriefcaseMedical, LuSearch } from "react-icons/lu";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import { RiAddFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import { Account } from "./Account";
 
 import { BiScan } from "react-icons/bi";
 export const SideBar = () => {

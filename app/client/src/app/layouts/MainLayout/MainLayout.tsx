@@ -1,6 +1,6 @@
-import { SideBar } from "@/app/layouts/MainLayout/components/SideBar/SideBar";
 import { Box, Grid } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
+import { SideBar } from "./SideBar";
 
 export const MainLayout = () => {
   return (
