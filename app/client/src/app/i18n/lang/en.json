@@ -9,7 +9,9 @@
       "helpMeWrite": "Help me write",
       "learnAbout": "Learn about",
       "analyzeImage": "Analyze image",
-      "summarizeText": "Summarize text"
+      "summarizeText": "Summarize text",
+      "history": "History",
+      "scan": "Scan"
     },
     "titles": {
       "medkits": "Medkits"

@@ -1,4 +1,6 @@
 import { Account } from "@/app/layouts/MainLayout/components/Account/Account";
+import { PATHS } from "@/app/router/paths";
+import { useChatStore } from "@/app/store/chat";
 import imageLogo from "@/assets/logo.webp";
 import { useMedkits } from "@/services/medkits/hooks";
 import {
@@ -11,15 +13,22 @@ import {
   InputGroup,
   Kbd,
   Span,
+  Text,
 } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
-import { GiArtificialIntelligence } from "react-icons/gi";
-import { GrAidOption } from "react-icons/gr";
-import { LuSearch } from "react-icons/lu";
+import { BiBrain } from "react-icons/bi";
+import { GoHistory } from "react-icons/go";
+import { LuBriefcaseMedical, LuSearch } from "react-icons/lu";
+import { MdOutlineNavigateNext } from "react-icons/md";
 import { RiAddFill } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
+
+import { BiScan } from "react-icons/bi";
 export const SideBar = () => {
   const { t } = useTranslation();
   const { data } = useMedkits();
+  const navigate = useNavigate();
+  const { createConversation } = useChatStore();
 
   const renderMedkits = () =>
     data?.map((d) => (
@@ -29,10 +38,20 @@ export const SideBar = () => {
         pl={8}
         w="100%"
         justifyContent={"flex-start"}
+        color={"gray.400"}
+        _hover={{
+          bg: "gray.100",
+          color: "blackAlpha.700",
+        }}
       >
-        {d.name}
+        <Text fontSize={"sm"}>{d.name}</Text>
       </Button>
     ));
+
+  const handleAskChat = () => {
+    const conversation = createConversation();
+    navigate(PATHS.CHAT(conversation.id));
+  };
 
   return (
     <Flex
@@ -63,13 +82,29 @@ export const SideBar = () => {
             borderXWidth={0}
           />
         </InputGroup>
+        <Button
+          variant={"subtle"}
+          w="100%"
+          justifyContent={"flex-start"}
+          onClick={handleAskChat}
+        >
+          <BiBrain />
+          <Text fontSize={"sm"}>{t("button.askChat")}</Text>
+        </Button>
         <Button variant={"subtle"} w="100%" justifyContent={"flex-start"}>
-          <GiArtificialIntelligence />
-          {t("button.askChat")}
+          <BiScan />
+          <Text fontSize={"sm"}>{t("button.scan")}</Text>
+        </Button>
+        <Button variant={"subtle"} w="100%" justifyContent={"flex-start"}>
+          <GoHistory />
+          <Text fontSize={"sm"}>{t("button.history")}</Text>
+          <Flex ml="auto">
+            <MdOutlineNavigateNext />
+          </Flex>
         </Button>
         <Flex gap={3} alignItems={"center"} pb={1} pl={4.5} pr={2}>
-          <GrAidOption />
-          <Span>{t("titles.medkits")}</Span>
+          <LuBriefcaseMedical />
+          <Text fontSize={"sm"}>{t("titles.medkits")}</Text>
           <IconButton variant={"subtle"} ml="auto">
             <RiAddFill />
           </IconButton>

@@ -4,11 +4,8 @@ import { persist } from "zustand/middleware";
 
 interface IChatStore {
   conversations: IChatConversation[];
-  currentConversationId: string | null;
   isLoading: boolean;
-
-  createConversation: () => string;
-  setCurrentConversation: (id: string) => void;
+  createConversation: () => IChatConversation;
   addMessage: (
     conversationId: string,
     message: Omit<IChatMessage, "id" | "timestamp">
@@ -44,13 +41,8 @@ export const useChatStore = create<IChatStore>()(
           currentConversationId: newConversation.id,
         }));
 
-        return newConversation.id;
+        return newConversation;
       },
-
-      setCurrentConversation: (id) => {
-        set({ currentConversationId: id });
-      },
-
       addMessage: (conversationId, message) => {
         const newMessage: IChatMessage = {
           ...message,
@@ -94,17 +86,12 @@ export const useChatStore = create<IChatStore>()(
       deleteConversation: (id) => {
         set((state) => ({
           conversations: state.conversations.filter((conv) => conv.id !== id),
-          currentConversationId:
-            state.currentConversationId === id
-              ? null
-              : state.currentConversationId,
         }));
       },
 
       clearAllConversations: () => {
         set({
           conversations: [],
-          currentConversationId: null,
         });
       },
 
@@ -116,7 +103,6 @@ export const useChatStore = create<IChatStore>()(
       name: "pillbox-chat",
       partialize: (state) => ({
         conversations: state.conversations,
-        currentConversationId: state.currentConversationId,
       }),
     }
   )

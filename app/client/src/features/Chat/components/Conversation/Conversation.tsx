@@ -1,22 +1,21 @@
-import { useChatStore } from "@/app/store/chat";
+import { IChatMessage } from "@/shared/types/entities";
 import { Box, Text, VStack } from "@chakra-ui/react";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 interface IConversationProps {
   isTyping: boolean;
+  messages: IChatMessage[];
 }
 
-export const Conversation: FC<IConversationProps> = ({ isTyping }) => {
+export const Conversation: FC<IConversationProps> = ({
+  isTyping,
+  messages,
+}) => {
   const { t } = useTranslation();
-  const { conversations, currentConversationId } = useChatStore();
-
-  const currentConversation = conversations.find(
-    (conv) => conv.id === currentConversationId
-  );
 
   return (
     <VStack gap={4} align="stretch" pb={4}>
-      {currentConversation?.messages.map((msg) => (
+      {messages.map((msg) => (
         <Box
           key={msg.id}
           alignSelf={msg.role === "user" ? "flex-end" : "flex-start"}

@@ -2,34 +2,29 @@ import { useChatStore } from "@/app/store/chat";
 import { Conversation } from "@/features/Chat/components/Conversation/Conversation";
 import { Greeting } from "@/features/Chat/components/Greeting/Greeting";
 import { TypeMessage } from "@/features/Chat/components/TypeMessage/TypeMessage";
+import { IChatConversation } from "@/shared/types/entities";
 import { Box, Flex } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 
-export const Chat = () => {
+interface IChatProps {
+  conversation: IChatConversation;
+}
+
+export const Chat: FC<IChatProps> = ({ conversation }) => {
   const [message, setMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
-  const {
-    conversations,
-    currentConversationId,
-    createConversation,
-    addMessage,
-    setLoading,
-  } = useChatStore();
-
-  const currentConversation = conversations.find(
-    (conv) => conv.id === currentConversationId
-  );
+  const { addMessage, setLoading } = useChatStore();
 
   const handleSendMessage = async () => {
-    if (!message.trim() || !currentConversationId) return;
+    if (!message.trim()) return;
 
     const userMessage = message.trim();
     setMessage("");
     setIsTyping(true);
 
-    addMessage(currentConversationId, {
+    addMessage(conversation.id, {
       content: userMessage,
       role: "user",
     });
@@ -39,7 +34,7 @@ export const Chat = () => {
     setTimeout(() => {
       const aiResponse = `I understand you're asking about "${userMessage}". This is a simulated AI response. In a real implementation, this would connect to your AI service.`;
 
-      addMessage(currentConversationId, {
+      addMessage(conversation.id, {
         content: aiResponse,
         role: "assistant",
       });
@@ -53,14 +48,7 @@ export const Chat = () => {
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
     }
-  }, [currentConversation?.messages]);
-
-  useEffect(() => {
-    if (conversations.length === 0) {
-      createConversation();
-    }
-  }, [conversations.length, createConversation]);
-  console.log("conversations :", conversations);
+  }, [conversation.messages]);
 
   return (
     <Box h={"100%"} w={"100%"} display={"grid"} gridTemplateRows={"1fr auto"}>
@@ -69,12 +57,14 @@ export const Chat = () => {
         w={"100%"}
         overflowY={"auto"}
         maxH={"100%"}
-        justifyContent={conversations.length === 0 ? "center" : "flex-start"}
+        justifyContent={
+          conversation.messages.length === 0 ? "center" : "flex-start"
+        }
         ref={scrollAreaRef}
       >
         <Box w={"100%"} maxW={"800px"} mx={"auto"}>
           <Greeting />
-          <Conversation isTyping={isTyping} />
+          <Conversation isTyping={isTyping} messages={conversation.messages} />
         </Box>
       </Flex>
       <Box w={"100%"} maxW={"800px"} mx={"auto"}>
