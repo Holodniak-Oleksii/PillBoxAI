@@ -5,10 +5,23 @@
       "signUp": "Sign Up",
       "askChat": "Ask Chat",
       "continue": "Continue",
-      "logout": "Logout"
+      "logout": "Logout",
+      "helpMeWrite": "Help me write",
+      "learnAbout": "Learn about",
+      "analyzeImage": "Analyze image",
+      "summarizeText": "Summarize text",
+      "history": "History",
+      "scan": "Scan"
     },
     "titles": {
-      "medicine": "Medicines"
+      "medkits": "Medkits"
+    },
+    "subtitle": {
+      "goodMorning": "Good morning",
+      "goodAfternoon": "Good afternoon",
+      "goodEvening": "Good evening",
+      "aiIsTyping": "AI is typing...",
+      "howCanIHelpYouToday": "How can I help you today?"
     },
     "errors": {
       "isRequired": "This field is required",
@@ -28,7 +41,10 @@
       "email": "you@example.com",
       "password": "Enter your password",
       "name": "John Doe",
-      "confirmPassword": "Confirm your password"
+      "confirmPassword": "Confirm your password",
+      "searchMedkits": "Search in medkits",
+      "typeMessage": "Type a message",
+      "searchChats": "Search in chats..."
     },
     "auth": {
       "join": "Join and make life better",
@@ -44,6 +60,14 @@
       "signUpWithGoogle": "Sign up with Google",
       "signInWithGoogle": "Sign in with Google",
       "orContinueWith": "or continue with"
+    },
+    "chat": {
+      "history": "Chat History",
+      "noChats": "No chats found",
+      "noChatsDescription": "Start a new conversation to see your chat history here",
+      "newChat": "New Chat",
+      "lastMessage": "Last message",
+      "noMessages": "No messages yet"
     }
   }
 }
