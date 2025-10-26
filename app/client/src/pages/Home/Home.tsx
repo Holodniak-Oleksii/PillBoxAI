@@ -1,5 +1,5 @@
 import { useChatStore } from "@/app/store/chat";
-import { Chat } from "@/features/Chat/Chat";
+import { Chat } from "@/features/Chat";
 import { useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 

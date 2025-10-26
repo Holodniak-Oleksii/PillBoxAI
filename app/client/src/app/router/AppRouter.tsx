@@ -1,6 +1,6 @@
-import { MainLayout } from "@/app/layouts/MainLayout/MainLayout";
-import { Home } from "@/pages/Home/Home";
-import { Profile } from "@/pages/Profile/Profile";
+import { MainLayout } from "@/app/layouts/MainLayout";
+import { Home } from "@/pages/Home";
+import { Profile } from "@/pages/Profile";
 import {
   Navigate,
   Route,
