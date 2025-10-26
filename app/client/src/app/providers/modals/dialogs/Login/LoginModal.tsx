@@ -12,8 +12,8 @@ import { useTranslation } from "react-i18next";
 import { loginSchema } from "./schema";
 import { ILoginFormValues } from "./types";
 
-export const LoginModal = create<IModalProps>(() => {
-  const modal = useModal();
+export const LoginModal = create<IModalProps>(({ id }) => {
+  const modal = useModal(id);
   const { t } = useTranslation();
   const { show: showSignUp } = useModal(EModalKey.SING_UP);
   const { mutate: googleAuth } = useGoogleAuth();

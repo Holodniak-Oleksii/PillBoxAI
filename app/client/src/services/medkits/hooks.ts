@@ -1,6 +1,7 @@
 import { medkitService } from "@/services/medkits";
+import { IMedkit } from "@/shared/types/entities";
 import { EQueryKey } from "@/shared/types/enums";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useMedkits = () => {
   return useQuery({
@@ -13,5 +14,15 @@ export const useMedkit = (medkitId: string) => {
   return useQuery({
     queryKey: [EQueryKey.MEDKIT, medkitId],
     queryFn: () => medkitService.getMedkitById(medkitId),
+  });
+};
+
+export const useCreateMedkit = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (medkit: IMedkit) => medkitService.createMedkit(medkit),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [EQueryKey.MEDKITS] });
+    },
   });
 };

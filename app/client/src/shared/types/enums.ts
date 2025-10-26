@@ -9,6 +9,7 @@ export enum EEndpoints {
 export enum EModalKey {
   LOGIN = "LOGIN",
   SING_UP = "SING_UP",
+  CREATE_MEDKIT = "CREATE_MEDKIT",
 }
 
 export enum EQueryKey {
