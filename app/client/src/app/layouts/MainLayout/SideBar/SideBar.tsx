@@ -25,6 +25,8 @@ import { useNavigate } from "react-router-dom";
 import { Account } from "./Account";
 
 import { History } from "@/features/Chat/History";
+import { EModalKey } from "@/shared/types/enums";
+import { useModal } from "@ebay/nice-modal-react";
 import { useRef, useState } from "react";
 import { BiScan } from "react-icons/bi";
 export const SideBar = () => {
@@ -34,6 +36,7 @@ export const SideBar = () => {
   const { createConversation } = useChatStore();
   const container = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
+  const { show: showCreateMedkit } = useModal(EModalKey.CREATE_MEDKIT);
 
   const renderMedkits = () =>
     data?.map((d) => (
@@ -48,6 +51,7 @@ export const SideBar = () => {
           bg: "gray.100",
           color: "blackAlpha.700",
         }}
+        onClick={() => navigate(PATHS.MEDKIT(d.id))}
       >
         <Text fontSize={"sm"}>{d.name}</Text>
       </Button>
@@ -118,7 +122,11 @@ export const SideBar = () => {
           <Flex gap={3} alignItems={"center"} pb={1} pl={4.5} pr={2}>
             <LuBriefcaseMedical />
             <Text fontSize={"sm"}>{t("titles.medkits")}</Text>
-            <IconButton variant={"subtle"} ml="auto">
+            <IconButton
+              variant={"subtle"}
+              ml="auto"
+              onClick={() => showCreateMedkit()}
+            >
               <RiAddFill />
             </IconButton>
           </Flex>

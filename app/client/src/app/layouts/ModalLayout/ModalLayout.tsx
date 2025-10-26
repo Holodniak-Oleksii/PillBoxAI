@@ -1,10 +1,4 @@
-import {
-  DialogBackdrop,
-  DialogContent,
-  DialogPositioner,
-  DialogRoot,
-  Portal,
-} from "@chakra-ui/react";
+import { Dialog, Portal } from "@chakra-ui/react";
 import { useModal } from "@ebay/nice-modal-react";
 import { FC, PropsWithChildren } from "react";
 
@@ -19,7 +13,7 @@ export const ModalLayout: FC<ModalLayoutProps> = ({
   const { visible, hide } = useModal();
 
   return (
-    <DialogRoot
+    <Dialog.Root
       lazyMount
       open={visible}
       placement={"center"}
@@ -29,13 +23,13 @@ export const ModalLayout: FC<ModalLayoutProps> = ({
       }}
     >
       <Portal>
-        <DialogBackdrop bg="blackAlpha.600" />
-        <DialogPositioner>
-          <DialogContent bg="white" maxW={maxWidth} w="calc(100% - 32px)">
+        <Dialog.Backdrop bg="blackAlpha.600" />
+        <Dialog.Positioner>
+          <Dialog.Content bg="white" maxW={maxWidth} w="calc(100% - 32px)">
             {children}
-          </DialogContent>
-        </DialogPositioner>
+          </Dialog.Content>
+        </Dialog.Positioner>
       </Portal>
-    </DialogRoot>
+    </Dialog.Root>
   );
 };

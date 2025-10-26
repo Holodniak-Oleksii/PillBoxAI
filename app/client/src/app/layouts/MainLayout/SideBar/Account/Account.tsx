@@ -1,8 +1,10 @@
+import { PATHS } from "@/app/router/paths";
 import { useUserStore } from "@/app/store/user";
 import { EModalKey } from "@/shared/types/enums";
 import { Box, Button, Flex, Text, VStack } from "@chakra-ui/react";
 import { useModal } from "@ebay/nice-modal-react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 export const Account = () => {
   const isAuth = useUserStore((state) => state.isAuth);
@@ -11,6 +13,7 @@ export const Account = () => {
   const { t } = useTranslation();
   const { show: showLogin } = useModal(EModalKey.LOGIN);
   const { show: showSignUp } = useModal(EModalKey.SING_UP);
+  const navigate = useNavigate();
 
   return (
     <Flex
@@ -21,7 +24,7 @@ export const Account = () => {
       gap={4}
     >
       {isAuth ? (
-        <Flex w="100%" gap={2} align="center">
+        <Flex w="100%" gap={2} align="center" cursor="pointer">
           <Box
             w="40px"
             h="40px"
@@ -33,10 +36,16 @@ export const Account = () => {
             justifyContent="center"
             fontSize="lg"
             fontWeight="bold"
+            onClick={() => navigate(PATHS.PROFILE)}
           >
             {user?.name?.charAt(0).toUpperCase()}
           </Box>
-          <VStack align="start" flex={1} gap={0}>
+          <VStack
+            align="start"
+            flex={1}
+            gap={0}
+            onClick={() => navigate(PATHS.PROFILE)}
+          >
             <Text fontSize="sm" fontWeight="semibold" color="gray.700">
               {user?.name}
             </Text>

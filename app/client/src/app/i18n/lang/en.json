@@ -11,7 +11,9 @@
       "analyzeImage": "Analyze image",
       "summarizeText": "Summarize text",
       "history": "History",
-      "scan": "Scan"
+      "scan": "Scan",
+      "cancel": "Cancel",
+      "save": "Save"
     },
     "titles": {
       "medkits": "Medkits"
@@ -35,7 +37,8 @@
       "password": "Password",
       "email": "Email address",
       "name": "Full name",
-      "confirmPassword": "Confirm password"
+      "confirmPassword": "Confirm password",
+      "title": "Title"
     },
     "placeholders": {
       "email": "you@example.com",
@@ -44,7 +47,8 @@
       "confirmPassword": "Confirm your password",
       "searchMedkits": "Search in medkits",
       "typeMessage": "Type a message",
-      "searchChats": "Search in chats..."
+      "searchChats": "Search in chats...",
+      "title": "Enter title"
     },
     "auth": {
       "join": "Join and make life better",
@@ -68,6 +72,11 @@
       "newChat": "New Chat",
       "lastMessage": "Last message",
       "noMessages": "No messages yet"
+    },
+    "modals": {
+      "createMedkit": {
+        "title": "Create Medkit"
+      }
     }
   }
 }

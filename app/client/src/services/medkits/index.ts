@@ -9,4 +9,8 @@ export const medkitService = {
   getMedkitById: async (medkitId: string): Promise<IMedkit | undefined> => {
     return MEDKIT_MOCK.find((medkit) => medkit.id === medkitId);
   },
+
+  createMedkit: async (medkit: IMedkit) => {
+    MEDKIT_MOCK.push(medkit);
+  },
 };
