@@ -46,7 +46,7 @@
       "name": "John Doe",
       "confirmPassword": "Confirm your password",
       "searchMedkits": "Search in medkits",
-      "typeMessage": "Type a message",
+      "typeMessage": "Type a message...",
       "searchChats": "Search in chats...",
       "title": "Enter title"
     },

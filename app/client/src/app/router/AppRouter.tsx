@@ -1,6 +1,7 @@
 import { MainLayout } from "@/app/layouts/MainLayout";
 import { Home } from "@/pages/Home";
 import { Medkit } from "@/pages/Medkit";
+import { Notifications } from "@/pages/Notifications";
 import { Profile } from "@/pages/Profile";
 import {
   Navigate,
@@ -18,6 +19,7 @@ const AppRouter = () => (
         <Route path={PATHS.MEDKIT(":id")} element={<Medkit />} />
       </Route>
       <Route path={PATHS.PROFILE} element={<Profile />} />
+      <Route path={PATHS.NOTIFICATIONS} element={<Notifications />} />
       <Route path="*" element={<Navigate to={PATHS.HOME} />} />
     </Routes>
   </Router>

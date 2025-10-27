@@ -1,6 +1,7 @@
 import outline from "@/app/providers/theme/buttons/outline";
 import solid from "@/app/providers/theme/buttons/solid";
 import subtle from "@/app/providers/theme/buttons/subtle";
+import surface from "@/app/providers/theme/buttons/surface";
 
 import {
   ChakraProvider,
@@ -20,6 +21,7 @@ const buttonRecipe = defineRecipe({
       solid,
       outline,
       subtle,
+      surface,
     },
   },
   defaultVariants: {

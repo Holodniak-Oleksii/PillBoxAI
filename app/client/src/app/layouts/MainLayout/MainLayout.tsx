@@ -1,5 +1,6 @@
 import { Box, Grid } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
+import { Notify } from "./Notify";
 import { SideBar } from "./SideBar";
 
 export const MainLayout = () => {
@@ -10,6 +11,7 @@ export const MainLayout = () => {
       <SideBar />
       <Box position={"relative"} h={"100dvh"} w={"100%"}>
         <Outlet />
+        <Notify />
       </Box>
     </Grid>
   );
