@@ -28,40 +28,49 @@ export const TypeMessage: FC<ITypeMessageProps> = ({
 
   const renderSuggestedActions = () => {
     return suggestedActions(onChangeMessage).map((action) => (
-      <Button variant="subtle" key={action.text} onClick={action.action}>
+      <Button
+        variant="outline"
+        borderRadius="3xl"
+        key={action.text}
+        onClick={action.action}
+      >
         {t(action.text)}
       </Button>
     ));
   };
 
   return (
-    <Box p={6} pt={0}>
-      <Box borderRadius="xl" p={4} border="1px solid" borderColor="gray.200">
-        <HStack gap={2}>
-          <Input
-            border="none"
-            outline="none"
-            placeholder={t("placeholders.typeMessage")}
-            value={message}
-            onChange={(e) => onChangeMessage(e.target.value)}
-            onKeyPress={handleKeyPress}
-            bg="transparent"
-            _focus={{ boxShadow: "none" }}
-            fontSize="sm"
-            flex="1"
-          />
-          <Button
-            p={2}
-            rounded={"md"}
-            onClick={handleSendMessage}
-            disabled={!message.trim() || isLoading}
-          >
-            <SendIcon />
-          </Button>
-        </HStack>
-      </Box>
-
-      <HStack gap={3} mt={4} justify="center">
+    <Box
+      borderRadius="2xl"
+      m={6}
+      mt={2}
+      p={4}
+      border="1px solid"
+      borderColor="gray.200"
+    >
+      <HStack gap={2}>
+        <Input
+          border="none"
+          outline="none"
+          placeholder={t("placeholders.typeMessage")}
+          value={message}
+          onChange={(e) => onChangeMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
+          bg="transparent"
+          _focus={{ boxShadow: "none" }}
+          fontSize="sm"
+          flex="1"
+        />
+        <Button
+          p={2}
+          rounded={"md"}
+          onClick={handleSendMessage}
+          disabled={!message.trim() || isLoading}
+        >
+          <SendIcon />
+        </Button>
+      </HStack>
+      <HStack gap={3} mt={4}>
         {renderSuggestedActions()}
       </HStack>
     </Box>
