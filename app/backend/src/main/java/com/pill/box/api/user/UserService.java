@@ -2,10 +2,13 @@ package com.pill.box.api.user;
 
 import com.pill.box.api.exception.ResourceNotFoundException;
 import com.pill.box.api.exception.UnauthorizedException;
+import com.pill.box.api.security.JwtService;
 import com.pill.box.api.user.dto.LoginRequest;
 import com.pill.box.api.user.dto.RegisterRequest;
 import com.pill.box.api.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,11 +20,18 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     @Transactional
     public UserResponse register(RegisterRequest request) {
-        userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new ResourceNotFoundException("Username already exists"));
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+        
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email already exists");
+        }
 
         User user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -31,14 +41,18 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserResponse login(LoginRequest request) {
+    public String login(LoginRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
+        );
+        
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new UnauthorizedException("Invalid username or password"));
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new UnauthorizedException("Invalid username or password");
-        }
-
-        return userMapper.toResponse(user);
+        
+        return jwtService.generateToken(user);
     }
 
     @Transactional(readOnly = true)
