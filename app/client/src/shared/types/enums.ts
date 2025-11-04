@@ -16,4 +16,5 @@ export enum EQueryKey {
   PROFILE = "PROFILE",
   MEDKITS = "MEDKITS",
   MEDKIT = "MEDKIT",
+  NOTIFICATIONS = "NOTIFICATIONS",
 }

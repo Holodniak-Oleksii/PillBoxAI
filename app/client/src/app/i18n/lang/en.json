@@ -13,10 +13,16 @@
       "history": "History",
       "scan": "Scan",
       "cancel": "Cancel",
-      "save": "Save"
+      "save": "Save",
+      "back": "Back",
+      "clear": "Clear",
+      "apply": "Apply"
     },
     "titles": {
-      "medkits": "Medkits"
+      "medkits": "Medkits",
+      "notifications": "Notifications",
+      "settings": "Settings",
+      "analytics": "Analytics"
     },
     "subtitle": {
       "goodMorning": "Good morning",
@@ -38,7 +44,8 @@
       "email": "Email address",
       "name": "Full name",
       "confirmPassword": "Confirm password",
-      "title": "Title"
+      "title": "Title",
+      "date": "Date"
     },
     "placeholders": {
       "email": "you@example.com",
@@ -48,7 +55,8 @@
       "searchMedkits": "Search in medkits",
       "typeMessage": "Type a message...",
       "searchChats": "Search in chats...",
-      "title": "Enter title"
+      "title": "Enter title",
+      "selectDateRange": "Select date range"
     },
     "auth": {
       "join": "Join and make life better",
@@ -77,6 +85,35 @@
       "createMedkit": {
         "title": "Create Medkit"
       }
+    },
+    "account": {
+      "settings": "Account Settings",
+      "notifications": "Notifications",
+      "support": "Support",
+      "logout": "Logout",
+      "analytics": "Analytics",
+      "tabs": {
+        "general": "General",
+        "account": "Account"
+      }
+    },
+    "notifications": {
+      "noNotifications": "No notifications found",
+      "noNotificationsDescription": "There are no notifications matching your filters",
+      "noOptions": "No options found",
+      "clear": "Clear",
+      "filter": {
+        "medkit": "Medkit",
+        "date": "Date",
+        "selectMedkit": "Select medkit",
+        "selectDate": "Select date"
+      },
+      "type": {
+        "expiry": "Expiry",
+        "lowStock": "Low Stock",
+        "refill": "Refill"
+      },
+      "allMedkits": "All Medkits"
     }
   }
 }
