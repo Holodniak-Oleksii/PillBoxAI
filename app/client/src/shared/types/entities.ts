@@ -21,7 +21,14 @@ export interface IMedMember {
 export interface IMedicines {
   id: string;
   name: string;
+  activeIngredient: string;
+  description: string;
+  usageInstructions: string;
+  sideEffects: string;
+  contraindications: string;
+  storageConditions: string;
   quantity: number;
+  medkitId: string;
   expiryDate: Date;
   ts: ITimeStamp;
 }
@@ -30,7 +37,6 @@ export interface IMedkit {
   id: string;
   ownerID: string;
   name: string;
-  medicines: IMedicines[];
   members: IMedMember[];
   ts: ITimeStamp;
 }

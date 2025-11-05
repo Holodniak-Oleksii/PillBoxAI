@@ -67,19 +67,6 @@ export const Notifications = () => {
     if (!notifications) return [];
 
     return notifications.filter((notification: INotification) => {
-      // Filter by medkit (assuming medicineId relates to medkit somehow)
-      if (filters.medkitId) {
-        // This is a simplified filter - adjust based on your data structure
-        const medkit = medkits?.find((mk) => mk.id === filters.medkitId);
-        if (medkit) {
-          const hasMedicine = medkit.medicines.some(
-            (med) => med.id === notification.medicineId
-          );
-          if (!hasMedicine) return false;
-        }
-      }
-
-      // Filter by date range
       if (filters.dateRange?.startDate || filters.dateRange?.endDate) {
         const notificationDate = new Date(notification.ts.createdAt);
         notificationDate.setHours(0, 0, 0, 0);
