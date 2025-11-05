@@ -48,7 +48,6 @@ interface Medkit {
   id: string; // PK
   ownerID: string; // FK -> User
   name: string;
-  medkitId: string;
   members: MedMember[];
   ts: TimeStamp;
 }
@@ -89,6 +88,7 @@ interface Medicines {
   storageConditions: string;
   quantity: number;
   expiryDate: Date;
+  medkitId: string;
   ts: TimeStamp;
 }
 ```
