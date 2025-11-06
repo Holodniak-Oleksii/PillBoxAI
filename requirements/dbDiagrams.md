@@ -348,7 +348,7 @@ Table notification_queue {
 3. **Smart Reminders**: Configurable reminders for expiry (30/7/1 days), low stock, and intake schedules
 4. **AI Photo Recognition**: Track recognition attempts with confidence scores and user confirmation
 5. **Usage Analytics**: Monitor medicine consumption patterns
-6. **Multi-language Support**: Built-in localization for uk/en/pl
+6. **Multi-language Support**: Built-in localization for uk/en
 7. **Audit Trail**: Complete activity logging for security and compliance
 8. **Flexible Notifications**: Multiple channels (email/push/SMS) with user preferences
 
