@@ -4,6 +4,7 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: pillbox-postgres
+    restart: unless-stopped
     environment:
       POSTGRES_DB: pillbox
       POSTGRES_USER: pillbox_user
