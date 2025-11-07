@@ -36,7 +36,7 @@ export const Account = () => {
             justifyContent="center"
             fontSize="lg"
             fontWeight="bold"
-            onClick={() => navigate(PATHS.PROFILE)}
+            onClick={() => navigate(PATHS.SETTINGS)}
           >
             {user?.name?.charAt(0).toUpperCase()}
           </Box>
@@ -44,7 +44,7 @@ export const Account = () => {
             align="start"
             flex={1}
             gap={0}
-            onClick={() => navigate(PATHS.PROFILE)}
+            onClick={() => navigate(PATHS.SETTINGS)}
           >
             <Text fontSize="sm" fontWeight="semibold" color="gray.700">
               {user?.name}
