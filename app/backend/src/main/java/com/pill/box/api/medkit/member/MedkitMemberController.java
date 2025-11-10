@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,7 +47,7 @@ public class MedkitMemberController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{memberId}/role")
+    @PutMapping("/{memberId}/role")
     public ResponseEntity<MedkitMemberResponse> updateMemberRole(
             @PathVariable Long memberId,
             @RequestParam MedkitRole role) {
