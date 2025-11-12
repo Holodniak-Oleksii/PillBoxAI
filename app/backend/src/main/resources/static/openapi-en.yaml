@@ -1,0 +1,580 @@
+openapi: 3.0.3
+info:
+  title: PillBox API
+  description: REST API for managing medicine boxes and medications
+  version: 1.0.0
+  contact:
+    name: PillBox Team
+    email: support@pillbox.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Authentication
+    description: API for user registration, authorization and management
+  - name: Medicine Boxes
+    description: API for managing medicine boxes
+  - name: Medicine Box Members
+    description: API for managing medicine box participants
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: User registration
+      description: Create a new user account
+      security: []
+      requestBody:
+        description: Registration data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: User successfully registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Invalid data
+        '409':
+          description: User already exists
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: Login to system and get JWT token
+      security: []
+      requestBody:
+        description: Login credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Successful authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+
+  /auth/user/{id}:
+    get:
+      tags:
+        - Authentication
+      summary: Get user by ID
+      description: Returns user information by their identifier
+      parameters:
+        - name: id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: User not found
+
+  /auth/user/username/{username}:
+    get:
+      tags:
+        - Authentication
+      summary: Get user by username
+      description: Returns user information by their username
+      parameters:
+        - name: username
+          in: path
+          description: Username
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: User not found
+
+  /api/medkits:
+    post:
+      tags:
+        - Medicine Boxes
+      summary: Create medicine box
+      description: Create a new medicine box for specified owner
+      parameters:
+        - name: ownerId
+          in: query
+          description: Owner ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Medicine box data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedkitRequest'
+      responses:
+        '201':
+          description: Medicine box successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedkitResponse'
+        '400':
+          description: Invalid data
+        '404':
+          description: Owner not found
+
+    get:
+      tags:
+        - Medicine Boxes
+      summary: Get all medicine boxes
+      description: Returns list of all medicine boxes
+      responses:
+        '200':
+          description: Successfully retrieved list of medicine boxes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MedkitResponse'
+
+  /api/medkits/{id}:
+    get:
+      tags:
+        - Medicine Boxes
+      summary: Get medicine box by ID
+      description: Returns medicine box information by its identifier
+      parameters:
+        - name: id
+          in: path
+          description: Medicine box ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Medicine box found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedkitResponse'
+        '404':
+          description: Medicine box not found
+
+    put:
+      tags:
+        - Medicine Boxes
+      summary: Update medicine box
+      description: Update medicine box information
+      parameters:
+        - name: id
+          in: path
+          description: Medicine box ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Updated medicine box data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedkitRequest'
+      responses:
+        '200':
+          description: Medicine box successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedkitResponse'
+        '404':
+          description: Medicine box not found
+        '400':
+          description: Invalid data
+
+    delete:
+      tags:
+        - Medicine Boxes
+      summary: Delete medicine box
+      description: Delete medicine box by its identifier
+      parameters:
+        - name: id
+          in: path
+          description: Medicine box ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Medicine box successfully deleted
+        '404':
+          description: Medicine box not found
+
+  /api/medkits/owner/{ownerId}:
+    get:
+      tags:
+        - Medicine Boxes
+      summary: Get medicine boxes by owner ID
+      description: Returns all medicine boxes belonging to specific user
+      parameters:
+        - name: ownerId
+          in: path
+          description: Owner ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successfully retrieved list of medicine boxes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MedkitResponse'
+
+  /api/medkits/search:
+    get:
+      tags:
+        - Medicine Boxes
+      summary: Search medicine boxes by name
+      description: Find medicine boxes whose name contains specified text
+      parameters:
+        - name: name
+          in: query
+          description: Name to search
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully found medicine boxes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MedkitResponse'
+
+  /api/medkit-members/medkit/{medkitId}:
+    post:
+      tags:
+        - Medicine Box Members
+      summary: Add member to medicine box
+      description: Add new member to specified medicine box
+      parameters:
+        - name: medkitId
+          in: path
+          description: Medicine box ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Member data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedkitMemberRequest'
+      responses:
+        '201':
+          description: Member successfully added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedkitMemberResponse'
+        '400':
+          description: Invalid data
+        '404':
+          description: Medicine box or user not found
+
+    get:
+      tags:
+        - Medicine Box Members
+      summary: Get medicine box members
+      description: Returns list of all members of specified medicine box
+      parameters:
+        - name: medkitId
+          in: path
+          description: Medicine box ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successfully retrieved list of members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MedkitMemberResponse'
+
+  /api/medkit-members/user/{userId}:
+    get:
+      tags:
+        - Medicine Box Members
+      summary: Get user's medicine boxes
+      description: Returns list of medicine boxes where user is a member
+      parameters:
+        - name: userId
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successfully retrieved list of medicine boxes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MedkitMemberResponse'
+
+  /api/medkit-members/medkit/{medkitId}/user/{userId}:
+    get:
+      tags:
+        - Medicine Box Members
+      summary: Get member by medicine box ID and user ID
+      description: Find specific member in medicine box
+      parameters:
+        - name: medkitId
+          in: path
+          description: Medicine box ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: userId
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Member found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedkitMemberResponse'
+        '404':
+          description: Member not found
+
+  /api/medkit-members/{memberId}/role:
+    put:
+      tags:
+        - Medicine Box Members
+      summary: Update member role
+      description: Change member role in medicine box
+      parameters:
+        - name: memberId
+          in: path
+          description: Member ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: role
+          in: query
+          description: New member role
+          required: true
+          schema:
+            type: string
+            enum: [OWNER, EDITOR, VIEWER]
+      responses:
+        '200':
+          description: Role successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedkitMemberResponse'
+        '404':
+          description: Member not found
+
+  /api/medkit-members/{memberId}:
+    delete:
+      tags:
+        - Medicine Box Members
+      summary: Remove member
+      description: Remove member from medicine box
+      parameters:
+        - name: memberId
+          in: path
+          description: Member ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Member successfully removed
+        '404':
+          description: Member not found
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT authentication token
+
+  schemas:
+    RegisterRequest:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 50
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 6
+
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    AuthResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        token:
+          type: string
+        user:
+          $ref: '#/components/schemas/UserResponse'
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        email:
+          type: string
+
+    MedkitRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+
+    MedkitResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        ownerId:
+          type: integer
+          format: int64
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    MedkitMemberRequest:
+      type: object
+      required:
+        - userId
+        - role
+      properties:
+        userId:
+          type: integer
+          format: int64
+        role:
+          type: string
+          enum: [OWNER, EDITOR, VIEWER]
+
+    MedkitMemberResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        medkitId:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+        role:
+          type: string
+          enum: [OWNER, EDITOR, VIEWER]
+        addedAt:
+          type: string
+          format: date-time

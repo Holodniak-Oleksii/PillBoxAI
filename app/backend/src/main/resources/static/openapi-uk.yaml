@@ -1,0 +1,573 @@
+openapi: 3.0.3
+info:
+  title: PillBox API
+  description: REST API для управління аптечками та медикаментами
+  version: 1.0.0
+  contact:
+    name: Команда PillBox
+    email: support@pillbox.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:8080
+    description: Локальний сервер розробки
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Аутентифікація
+    description: API для реєстрації, авторизації та управління користувачами
+  - name: Аптечки
+    description: API для управління аптечками
+  - name: Члени аптечок
+    description: API для управління учасниками аптечок
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Аутентифікація
+      summary: Реєстрація користувача
+      description: Створення нового облікового запису користувача
+      security: []
+      requestBody:
+        description: Дані для реєстрації
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Користувач успішно зареєстрований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Невалідні дані
+        '409':
+          description: Користувач вже існує
+
+  /auth/login:
+    post:
+      tags:
+        - Аутентифікація
+      summary: Авторизація користувача
+      description: Вхід в систему з отриманням JWT токена
+      security: []
+      requestBody:
+        description: Дані для входу
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Успішна авторизація
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Невірні облікові дані
+
+  /auth/user/{id}:
+    get:
+      tags:
+        - Аутентифікація
+      summary: Отримати користувача за ID
+      description: Повертає інформацію про користувача за його ідентифікатором
+      parameters:
+        - name: id
+          in: path
+          description: ID користувача
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Користувач знайдений
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: Користувача не знайдено
+
+  /auth/user/username/{username}:
+    get:
+      tags:
+        - Аутентифікація
+      summary: Отримати користувача за ім'ям
+      description: Повертає інформацію про користувача за його username
+      parameters:
+        - name: username
+          in: path
+          description: Username користувача
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Користувач знайдений
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: Користувача не знайдено
+
+  /api/medkits:
+    post:
+      tags:
+        - Аптечки
+      summary: Створити аптечку
+      description: Створення нової аптечки для вказаного власника
+      parameters:
+        - name: ownerId
+          in: query
+          description: ID власника аптечки
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Дані аптечки
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedkitRequest'
+      responses:
+        '201':
+          description: Аптечку успішно створено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedkitResponse'
+        '400':
+          description: Невалідні дані
+        '404':
+          description: Власника не знайдено
+
+    get:
+      tags:
+        - Аптечки
+      summary: Отримати всі аптечки
+      description: Повертає список усіх аптечок
+      responses:
+        '200':
+          description: Успішно отримано список аптечок
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MedkitResponse'
+
+  /api/medkits/{id}:
+    get:
+      tags:
+        - Аптечки
+      summary: Отримати аптечку за ID
+      description: Повертає інформацію про аптечку за її ідентифікатором
+      parameters:
+        - name: id
+          in: path
+          description: ID аптечки
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Аптечку знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedkitResponse'
+        '404':
+          description: Аптечку не знайдено
+
+    put:
+      tags:
+        - Аптечки
+      summary: Оновити аптечку
+      description: Оновлення інформації про аптечку
+      parameters:
+        - name: id
+          in: path
+          description: ID аптечки
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Оновлені дані аптечки
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedkitRequest'
+      responses:
+        '200':
+          description: Аптечку успішно оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedkitResponse'
+        '404':
+          description: Аптечку не знайдено
+        '400':
+          description: Невалідні дані
+
+    delete:
+      tags:
+        - Аптечки
+      summary: Видалити аптечку
+      description: Видалення аптечки за її ідентифікатором
+      parameters:
+        - name: id
+          in: path
+          description: ID аптечки
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Аптечку успішно видалено
+        '404':
+          description: Аптечку не знайдено
+
+  /api/medkits/owner/{ownerId}:
+    get:
+      tags:
+        - Аптечки
+      summary: Отримати аптечки за ID власника
+      description: Повертає всі аптечки, які належать конкретному користувачу
+      parameters:
+        - name: ownerId
+          in: path
+          description: ID власника
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Успішно отримано список аптечок
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MedkitResponse'
+
+  /api/medkits/search:
+    get:
+      tags:
+        - Аптечки
+      summary: Пошук аптечок за назвою
+      description: Знаходить аптечки, назва яких містить вказаний текст
+      parameters:
+        - name: name
+          in: query
+          description: Назва для пошуку
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успішно знайдено аптечки
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MedkitResponse'
+
+  /api/medkit-members/medkit/{medkitId}:
+    post:
+      tags:
+        - Члени аптечок
+      summary: Додати учасника в аптечку
+      description: Додавання нового учасника до вказаної аптечки
+      parameters:
+        - name: medkitId
+          in: path
+          description: ID аптечки
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Дані учасника
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedkitMemberRequest'
+      responses:
+        '201':
+          description: Учасника успішно додано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedkitMemberResponse'
+        '400':
+          description: Невалідні дані
+        '404':
+          description: Аптечку або користувача не знайдено
+
+    get:
+      tags:
+        - Члени аптечок
+      summary: Отримати учасників аптечки
+      description: Повертає список усіх учасників вказаної аптечки
+      parameters:
+        - name: medkitId
+          in: path
+          description: ID аптечки
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Успішно отримано список учасників
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MedkitMemberResponse'
+
+  /api/medkit-members/user/{userId}:
+    get:
+      tags:
+        - Члени аптечок
+      summary: Отримати аптечки користувача
+      description: Повертає список аптечок, в яких користувач є учасником
+      parameters:
+        - name: userId
+          in: path
+          description: ID користувача
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Успішно отримано список аптечок
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MedkitMemberResponse'
+
+  /api/medkit-members/medkit/{medkitId}/user/{userId}:
+    get:
+      tags:
+        - Члени аптечок
+      summary: Отримати учасника за ID аптечки та користувача
+      description: Знаходить конкретного учасника в аптечці
+      parameters:
+        - name: medkitId
+          in: path
+          description: ID аптечки
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: userId
+          in: path
+          description: ID користувача
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Учасника знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedkitMemberResponse'
+        '404':
+          description: Учасника не знайдено
+
+  /api/medkit-members/{memberId}/role:
+    put:
+      tags:
+        - Члени аптечок
+      summary: Оновити роль учасника
+      description: Змінити роль учасника в аптечці
+      parameters:
+        - name: memberId
+          in: path
+          description: ID учасника
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: role
+          in: query
+          description: Нова роль учасника
+          required: true
+          schema:
+            type: string
+            enum: [OWNER, EDITOR, VIEWER]
+      responses:
+        '200':
+          description: Роль успішно оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedkitMemberResponse'
+        '404':
+          description: Учасника не знайдено
+
+  /api/medkit-members/{memberId}:
+    delete:
+      tags:
+        - Члени аптечок
+      summary: Видалити учасника
+      description: Видалення учасника з аптечки
+      parameters:
+        - name: memberId
+          in: path
+          description: ID учасника
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Учасника успішно видалено
+        '404':
+          description: Учасника не знайдено
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT токен авторизації
+
+  schemas:
+    RegisterRequest:
+      type: object
+      required: [username, email, password]
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 50
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 6
+
+    LoginRequest:
+      type: object
+      required: [username, password]
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    AuthResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        token:
+          type: string
+        user:
+          $ref: '#/components/schemas/UserResponse'
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        email:
+          type: string
+
+    MedkitRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+
+    MedkitResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        ownerId:
+          type: integer
+          format: int64
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    MedkitMemberRequest:
+      type: object
+      required: [userId, role]
+      properties:
+        userId:
+          type: integer
+          format: int64
+        role:
+          type: string
+          enum: [OWNER, EDITOR, VIEWER]
+
+    MedkitMemberResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        medkitId:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+        role:
+          type: string
+          enum: [OWNER, EDITOR, VIEWER]
+        addedAt:
+          type: string
+          format: date-time
