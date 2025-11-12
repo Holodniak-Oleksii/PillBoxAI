@@ -8,15 +8,14 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
+import { memo, ReactElement, useEffect, useState } from "react";
 
 import { TableBody } from "./TableBody";
 import { TableHeader } from "./TableHeader";
 import { TablePagination } from "./TablePagination";
-import { TableSearch } from "./TableSearch";
 import { TableProps } from "./types";
 
-export function Table<TData>({
+const TableComponent = <TData,>({
   data,
   columns,
   enableSorting = true,
@@ -31,8 +30,7 @@ export function Table<TData>({
   initialSorting = [],
   initialPagination = { pageIndex: 0, pageSize },
   showGlobalFilter = false,
-  globalFilterPlaceholder,
-}: TableProps<TData>) {
+}: TableProps<TData>) => {
   const [sorting, setSorting] = useState<SortingState>(initialSorting);
   const [pagination, setPagination] =
     useState<PaginationState>(initialPagination);
@@ -72,31 +70,31 @@ export function Table<TData>({
 
   if (isLoading) {
     return (
-      <Center py={10}>
-        <Spinner size="xl" color="blue.500" />
+      <Center>
+        <Spinner size="xl" color="blackAlpha.900" />
       </Center>
     );
   }
 
   return (
-    <Box width="100%">
-      {showGlobalFilter && (
-        <TableSearch
-          value={globalFilter}
-          onChange={setGlobalFilter}
-          placeholder={globalFilterPlaceholder}
-        />
-      )}
-      <Box overflowX="auto" borderWidth="1px" borderRadius="lg">
-        <ChakraTable.Root variant="outline">
-          <TableHeader headerGroups={table.getHeaderGroups()} />
-          <TableBody
-            rows={table.getRowModel().rows}
-            columnsLength={columns.length}
-            emptyMessage={emptyMessage}
-            onRowClick={onRowClick}
-          />
-        </ChakraTable.Root>
+    <Box width="100%" height="100%" display="flex" flexDirection="column">
+      <Box flex="1" minH={0}>
+        <ChakraTable.ScrollArea
+          rounded="md"
+          borderWidth="1px"
+          h="100%"
+          maxW="full"
+        >
+          <ChakraTable.Root stickyHeader interactive>
+            <TableHeader headerGroups={table.getHeaderGroups()} />
+            <TableBody
+              rows={table.getRowModel().rows}
+              columnsLength={columns.length}
+              emptyMessage={emptyMessage}
+              onRowClick={onRowClick}
+            />
+          </ChakraTable.Root>
+        </ChakraTable.ScrollArea>
       </Box>
       {enablePagination && (
         <TablePagination
@@ -119,4 +117,22 @@ export function Table<TData>({
       )}
     </Box>
   );
-}
+};
+
+export const Table = memo(<TData,>(props: TableProps<TData>) => {
+  return (
+    <Box width="100%" height="100%" position="relative">
+      <Box
+        width="100%"
+        height="100%"
+        position="absolute"
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+      >
+        <TableComponent<TData> {...props} />
+      </Box>
+    </Box>
+  );
+}) as <TData>(props: TableProps<TData>) => ReactElement;

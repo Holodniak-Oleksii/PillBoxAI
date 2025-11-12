@@ -1,1 +1,0 @@
-export { TableSearch } from "./TableSearch";

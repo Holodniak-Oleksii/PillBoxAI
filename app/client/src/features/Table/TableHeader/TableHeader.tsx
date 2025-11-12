@@ -20,7 +20,7 @@ export function TableHeader<TData>({ headerGroups }: TableHeaderProps<TData>) {
   };
 
   return (
-    <ChakraTable.Header bg="gray.50">
+    <ChakraTable.Header>
       {headerGroups.map((headerGroup) => (
         <ChakraTable.Row key={headerGroup.id}>
           {headerGroup.headers.map((header) => {
