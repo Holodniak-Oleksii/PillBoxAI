@@ -24,6 +24,8 @@ tags:
     description: API for managing medicine boxes
   - name: Medicine Box Members
     description: API for managing medicine box participants
+  - name: Pills
+    description: API for managing pills and medications
 
 paths:
   /auth/register:
@@ -455,6 +457,249 @@ paths:
         '404':
           description: Member not found
 
+  /api/pills:
+    post:
+      tags:
+        - Pills
+      summary: Create pill
+      description: Create a new pill in specified medicine box
+      parameters:
+        - name: medkitId
+          in: query
+          description: Medicine box ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: createdById
+          in: query
+          description: User ID who creates the pill
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Pill data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PillRequest'
+      responses:
+        '201':
+          description: Pill successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PillResponse'
+        '400':
+          description: Invalid data
+        '404':
+          description: Medicine box or user not found
+
+    get:
+      tags:
+        - Pills
+      summary: Get all pills
+      description: Returns list of all pills
+      responses:
+        '200':
+          description: Successfully retrieved list of pills
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PillResponse'
+
+  /api/pills/{id}:
+    get:
+      tags:
+        - Pills
+      summary: Get pill by ID
+      description: Returns pill information by its identifier
+      parameters:
+        - name: id
+          in: path
+          description: Pill ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Pill found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PillResponse'
+        '404':
+          description: Pill not found
+
+    put:
+      tags:
+        - Pills
+      summary: Update pill
+      description: Update pill information
+      parameters:
+        - name: id
+          in: path
+          description: Pill ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Updated pill data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PillRequest'
+      responses:
+        '200':
+          description: Pill successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PillResponse'
+        '404':
+          description: Pill not found
+        '400':
+          description: Invalid data
+
+    delete:
+      tags:
+        - Pills
+      summary: Delete pill
+      description: Delete pill by its identifier
+      parameters:
+        - name: id
+          in: path
+          description: Pill ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Pill successfully deleted
+        '404':
+          description: Pill not found
+
+  /api/pills/medkit/{medkitId}:
+    get:
+      tags:
+        - Pills
+      summary: Get pills by medicine box ID
+      description: Returns all pills belonging to specific medicine box
+      parameters:
+        - name: medkitId
+          in: path
+          description: Medicine box ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successfully retrieved list of pills
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PillResponse'
+
+  /api/pills/search:
+    get:
+      tags:
+        - Pills
+      summary: Search pills by name
+      description: Find pills whose name contains specified text
+      parameters:
+        - name: name
+          in: query
+          description: Name to search
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully found pills
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PillResponse'
+
+  /api/pills/{id}/take:
+    patch:
+      tags:
+        - Pills
+      summary: Take pill (decrease quantity)
+      description: Decrease pill quantity by specified amount (symbolizes taking medication)
+      parameters:
+        - name: id
+          in: path
+          description: Pill ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: quantity
+          in: query
+          description: Number of pills to take
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Quantity successfully decreased
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PillResponse'
+        '400':
+          description: Invalid quantity or not enough pills available
+        '404':
+          description: Pill not found
+
+  /api/pills/{id}/add:
+    patch:
+      tags:
+        - Pills
+      summary: Add quantity (increase stock)
+      description: Increase pill quantity by specified amount (replenish stock)
+      parameters:
+        - name: id
+          in: path
+          description: Pill ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: quantity
+          in: query
+          description: Number of pills to add
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Quantity successfully increased
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PillResponse'
+        '400':
+          description: Invalid quantity
+        '404':
+          description: Pill not found
+
 components:
   securitySchemes:
     bearerAuth:
@@ -576,5 +821,82 @@ components:
           type: string
           enum: [OWNER, EDITOR, VIEWER]
         addedAt:
+          type: string
+          format: date-time
+
+    PillRequest:
+      type: object
+      required:
+        - name
+        - expiryDate
+        - quantity
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Pill name
+        activeSubstance:
+          type: string
+          maxLength: 255
+          description: Active substance name
+        description:
+          type: string
+          description: Detailed description of the pill
+        usageInstructions:
+          type: string
+          description: Instructions for use
+        sideEffects:
+          type: string
+          description: Possible side effects
+        contraindications:
+          type: string
+          description: Contraindications for use
+        expiryDate:
+          type: string
+          format: date
+          description: Expiration date
+        quantity:
+          type: integer
+          minimum: 0
+          description: Number of pills in stock
+
+    PillResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        medkitId:
+          type: integer
+          format: int64
+        medkitName:
+          type: string
+        name:
+          type: string
+        activeSubstance:
+          type: string
+        description:
+          type: string
+        usageInstructions:
+          type: string
+        sideEffects:
+          type: string
+        contraindications:
+          type: string
+        expiryDate:
+          type: string
+          format: date
+        quantity:
+          type: integer
+        createdById:
+          type: integer
+          format: int64
+        createdByUsername:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
           type: string
           format: date-time

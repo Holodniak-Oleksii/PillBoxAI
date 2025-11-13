@@ -24,6 +24,8 @@ tags:
     description: API для управління аптечками
   - name: Члени аптечок
     description: API для управління учасниками аптечок
+  - name: Ліки
+    description: API для управління ліками та медикаментами
 
 paths:
   /auth/register:
@@ -455,6 +457,249 @@ paths:
         '404':
           description: Учасника не знайдено
 
+  /api/pills:
+    post:
+      tags:
+        - Ліки
+      summary: Створити ліки
+      description: Створення нових ліків у вказаній аптечці
+      parameters:
+        - name: medkitId
+          in: query
+          description: ID аптечки
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: createdById
+          in: query
+          description: ID користувача, який створює ліки
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Дані ліків
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PillRequest'
+      responses:
+        '201':
+          description: Ліки успішно створено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PillResponse'
+        '400':
+          description: Невалідні дані
+        '404':
+          description: Аптечку або користувача не знайдено
+
+    get:
+      tags:
+        - Ліки
+      summary: Отримати всі ліки
+      description: Повертає список усіх ліків
+      responses:
+        '200':
+          description: Успішно отримано список ліків
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PillResponse'
+
+  /api/pills/{id}:
+    get:
+      tags:
+        - Ліки
+      summary: Отримати ліки за ID
+      description: Повертає інформацію про ліки за їх ідентифікатором
+      parameters:
+        - name: id
+          in: path
+          description: ID ліків
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Ліки знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PillResponse'
+        '404':
+          description: Ліки не знайдено
+
+    put:
+      tags:
+        - Ліки
+      summary: Оновити ліки
+      description: Оновлення інформації про ліки
+      parameters:
+        - name: id
+          in: path
+          description: ID ліків
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Оновлені дані ліків
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PillRequest'
+      responses:
+        '200':
+          description: Ліки успішно оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PillResponse'
+        '404':
+          description: Ліки не знайдено
+        '400':
+          description: Невалідні дані
+
+    delete:
+      tags:
+        - Ліки
+      summary: Видалити ліки
+      description: Видалення ліків за їх ідентифікатором
+      parameters:
+        - name: id
+          in: path
+          description: ID ліків
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Ліки успішно видалено
+        '404':
+          description: Ліки не знайдено
+
+  /api/pills/medkit/{medkitId}:
+    get:
+      tags:
+        - Ліки
+      summary: Отримати ліки за ID аптечки
+      description: Повертає всі ліки, які належать конкретній аптечці
+      parameters:
+        - name: medkitId
+          in: path
+          description: ID аптечки
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Успішно отримано список ліків
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PillResponse'
+
+  /api/pills/search:
+    get:
+      tags:
+        - Ліки
+      summary: Пошук ліків за назвою
+      description: Знаходить ліки, назва яких містить вказаний текст
+      parameters:
+        - name: name
+          in: query
+          description: Назва для пошуку
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успішно знайдено ліки
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PillResponse'
+
+  /api/pills/{id}/take:
+    patch:
+      tags:
+        - Ліки
+      summary: Прийняти ліки (зменшити кількість)
+      description: Зменшує кількість ліків на вказану величину (символізує прийняття медикаментів)
+      parameters:
+        - name: id
+          in: path
+          description: ID ліків
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: quantity
+          in: query
+          description: Кількість ліків для прийняття
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Кількість успішно зменшено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PillResponse'
+        '400':
+          description: Невалідна кількість або недостатньо ліків
+        '404':
+          description: Ліки не знайдено
+
+  /api/pills/{id}/add:
+    patch:
+      tags:
+        - Ліки
+      summary: Додати кількість (поповнити запаси)
+      description: Збільшує кількість ліків на вказану величину (поповнення запасів)
+      parameters:
+        - name: id
+          in: path
+          description: ID ліків
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: quantity
+          in: query
+          description: Кількість ліків для додавання
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Кількість успішно збільшено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PillResponse'
+        '400':
+          description: Невалідна кількість
+        '404':
+          description: Ліки не знайдено
+
 components:
   securitySchemes:
     bearerAuth:
@@ -569,5 +814,82 @@ components:
           type: string
           enum: [OWNER, EDITOR, VIEWER]
         addedAt:
+          type: string
+          format: date-time
+
+    PillRequest:
+      type: object
+      required:
+        - name
+        - expiryDate
+        - quantity
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Назва ліків
+        activeSubstance:
+          type: string
+          maxLength: 255
+          description: Назва активної речовини
+        description:
+          type: string
+          description: Детальний опис ліків
+        usageInstructions:
+          type: string
+          description: Інструкція по застосуванню
+        sideEffects:
+          type: string
+          description: Можливі побічні ефекти
+        contraindications:
+          type: string
+          description: Протипоказання до застосування
+        expiryDate:
+          type: string
+          format: date
+          description: Термін придатності
+        quantity:
+          type: integer
+          minimum: 0
+          description: Кількість ліків в наявності
+
+    PillResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        medkitId:
+          type: integer
+          format: int64
+        medkitName:
+          type: string
+        name:
+          type: string
+        activeSubstance:
+          type: string
+        description:
+          type: string
+        usageInstructions:
+          type: string
+        sideEffects:
+          type: string
+        contraindications:
+          type: string
+        expiryDate:
+          type: string
+          format: date
+        quantity:
+          type: integer
+        createdById:
+          type: integer
+          format: int64
+        createdByUsername:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
           type: string
           format: date-time
