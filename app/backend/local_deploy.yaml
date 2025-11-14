@@ -1,0 +1,41 @@
+name: pillbox
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: pillbox-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: pillbox
+      POSTGRES_USER: pillbox_user
+      POSTGRES_PASSWORD: pillbox_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pillbox_user -d pillbox"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pillbox-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/pillbox
+      DB_USERNAME: pillbox_user
+      DB_PASSWORD: pillbox_password
+      JWT_SECRET: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      JWT_EXPIRATION: 86400000
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

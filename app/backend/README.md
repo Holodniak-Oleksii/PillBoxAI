@@ -29,8 +29,36 @@ PillBoxAI is a comprehensive medication management system that helps users track
    The application will start on `http://localhost:8080`
 
 ### Using Docker
+
+#### Option 1: Local Deployment (Recommended for Development)
 1. Make sure Docker and Docker Compose are installed
-2. From the project root, run:
+2. From the backend directory, run:
+   ```bash
+   docker compose -f local_deploy.yaml up --build
+   ```
+   This will:
+   - Build the Spring Boot application using multi-stage Docker build
+   - Start a PostgreSQL 16 database on port 5433
+   - Start the application on port 8080
+   - Automatically configure database connections and environment variables
+
+3. To run in detached mode:
+   ```bash
+   docker compose -f local_deploy.yaml up -d --build
+   ```
+
+4. To stop the services:
+   ```bash
+   docker compose -f local_deploy.yaml down
+   ```
+
+5. To stop and remove volumes (clean database):
+   ```bash
+   docker compose -f local_deploy.yaml down -v
+   ```
+
+#### Option 2: Default Docker Compose
+1. From the project root, run:
    ```bash
    docker-compose up -d
    ```
