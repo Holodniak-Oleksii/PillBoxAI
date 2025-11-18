@@ -14,6 +14,7 @@ export interface TableProps<TData> {
   isLoading?: boolean;
   emptyMessage?: string;
   onRowClick?: (row: TData) => void;
+  onRowDoubleClick?: (row: TData) => void;
   enableRowSelection?: boolean;
   onSelectionChange?: (selectedRows: TData[]) => void;
   initialSorting?: SortingState;

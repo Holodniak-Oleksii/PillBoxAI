@@ -1,3 +1,4 @@
+import { PATHS } from "@/app/router/paths";
 import { FilterCreator } from "@/features/FilterCreator";
 import { Table } from "@/features/Table";
 import { useMedicinesByMedkitId } from "@/services/medicines/hooks";
@@ -17,7 +18,7 @@ import { useModal } from "@ebay/nice-modal-react";
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { LuPlus } from "react-icons/lu";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getColumns, getFilterConfig } from "./data";
 
 interface IMedicinesFilterValues extends Record<string, unknown> {
@@ -31,6 +32,7 @@ interface IMedicinesFilterValues extends Record<string, unknown> {
 
 export const Medkit = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { id } = useParams();
   const { data: medkit, isLoading: isLoadingMedkit } = useMedkit(id);
   const { data: medicines, isLoading: isLoadingMedicines } =
@@ -69,6 +71,15 @@ export const Medkit = () => {
     console.log("Delete medicine:", medicine);
     // TODO: Implement delete API call
   }, []);
+
+  const handleMedicineDoubleClick = useCallback(
+    (medicine: IMedicines) => {
+      if (id) {
+        navigate(PATHS.MEDICINE(id, medicine.id));
+      }
+    },
+    [id, navigate]
+  );
 
   const columns = useMemo(
     () => getColumns(t, handleEditMedicine, handleDeleteMedicine),
@@ -114,6 +125,7 @@ export const Medkit = () => {
         data={medicines || []}
         columns={columns}
         isLoading={isLoadingMedicines}
+        onRowDoubleClick={handleMedicineDoubleClick}
       />
     </Flex>
   );

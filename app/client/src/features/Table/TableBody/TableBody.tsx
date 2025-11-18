@@ -6,6 +6,7 @@ interface TableBodyProps<TData> {
   columnsLength: number;
   emptyMessage?: string;
   onRowClick?: (row: TData) => void;
+  onRowDoubleClick?: (row: TData) => void;
 }
 
 export function TableBody<TData>({
@@ -13,6 +14,7 @@ export function TableBody<TData>({
   columnsLength,
   emptyMessage = "Немає даних для відображення",
   onRowClick,
+  onRowDoubleClick,
 }: TableBodyProps<TData>) {
   if (rows.length === 0) {
     return (
@@ -32,8 +34,11 @@ export function TableBody<TData>({
         <ChakraTable.Row
           key={row.id}
           onClick={() => onRowClick?.(row.original)}
-          cursor={onRowClick ? "pointer" : "default"}
-          _hover={onRowClick ? { bg: "gray.50" } : undefined}
+          onDoubleClick={() => onRowDoubleClick?.(row.original)}
+          cursor={onRowClick || onRowDoubleClick ? "pointer" : "default"}
+          _hover={
+            onRowClick || onRowDoubleClick ? { bg: "gray.50" } : undefined
+          }
         >
           {row.getVisibleCells().map((cell) => (
             <ChakraTable.Cell key={cell.id}>

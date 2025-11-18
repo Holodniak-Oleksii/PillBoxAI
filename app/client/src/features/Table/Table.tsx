@@ -25,6 +25,7 @@ const TableComponent = <TData,>({
   isLoading = false,
   emptyMessage,
   onRowClick,
+  onRowDoubleClick,
   enableRowSelection = false,
   onSelectionChange,
   initialSorting = [],
@@ -92,6 +93,7 @@ const TableComponent = <TData,>({
               columnsLength={columns.length}
               emptyMessage={emptyMessage}
               onRowClick={onRowClick}
+              onRowDoubleClick={onRowDoubleClick}
             />
           </ChakraTable.Root>
         </ChakraTable.ScrollArea>

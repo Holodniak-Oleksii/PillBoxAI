@@ -1,5 +1,12 @@
 {
   "translation": {
+    "common": {
+      "back": "Back",
+      "edit": "Edit",
+      "delete": "Delete",
+      "createdAt": "Created",
+      "updatedAt": "Updated"
+    },
     "button": {
       "login": "Login",
       "signUp": "Sign Up",
@@ -162,6 +169,20 @@
         "edit": "Edit medicine",
         "delete": "Delete medicine"
       }
+    },
+    "medicine": {
+      "notFound": "Medicine not found",
+      "expired": "Expired",
+      "expiringSoon": "Expiring Soon",
+      "quantity": "Quantity",
+      "units": "pcs.",
+      "expiryDate": "Expiry Date",
+      "details": "Detailed Information",
+      "description": "Description",
+      "usageInstructions": "Usage Instructions",
+      "sideEffects": "Side Effects",
+      "contraindications": "Contraindications",
+      "storageConditions": "Storage Conditions"
     }
   }
 }
