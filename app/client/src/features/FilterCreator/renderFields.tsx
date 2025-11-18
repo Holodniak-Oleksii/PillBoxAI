@@ -1,117 +1,92 @@
 import {
   DateRange,
   FormDateRangePicker,
+  FormInput,
+  FormInputDate,
+  FormInputNumeric,
   FormSelect,
+  FormTextArea,
   ISelectOption,
 } from "@/shared/ui-library/fields";
-import { Checkbox as ChakraCheckbox, Field, Input } from "@chakra-ui/react";
-import { Control, Controller } from "react-hook-form";
-import { EFilterFieldType, IFilterField, TFilterValues } from "./types";
+import { Checkbox as ChakraCheckbox, Field } from "@chakra-ui/react";
+import { Control, Controller, FieldValues, Path } from "react-hook-form";
+import { EFilterFieldType, IFilterField } from "./types";
 
-interface IRenderFieldProps {
+interface IRenderFieldProps<T extends FieldValues = FieldValues> {
   field: IFilterField;
-  control: Control<TFilterValues>;
+  control: Control<T>;
   error?: string;
 }
 
-export const renderFilterField = ({
+export const renderFilterField = <T extends FieldValues = FieldValues>({
   field,
   control,
   error,
-}: IRenderFieldProps) => {
+}: IRenderFieldProps<T>) => {
   switch (field.type) {
     case EFilterFieldType.TEXT:
       return (
-        <Controller
-          name={field.name}
+        <FormInput
+          label={field.label}
+          placeholder={field.placeholder || ""}
+          name={field.name as Path<T>}
           control={control}
-          render={({ field: formField }) => (
-            <Field.Root invalid={!!error} gap={0.5}>
-              <Field.Label>{field.label}</Field.Label>
-              <Input
-                {...formField}
-                value={(formField.value as string) || ""}
-                placeholder={field.placeholder}
-                type="text"
-              />
-              {error ? (
-                <Field.ErrorText width="100%" justifyContent="end">
-                  {error}
-                </Field.ErrorText>
-              ) : (
-                <Field.HelperText>&nbsp;</Field.HelperText>
-              )}
-            </Field.Root>
-          )}
+          type={field.inputType || "text"}
+          error={error}
+          autoComplete={field.autoComplete}
+          required={field.required}
+          startElement={field.startElement}
+        />
+      );
+
+    case EFilterFieldType.TEXTAREA:
+      return (
+        <FormTextArea
+          label={field.label}
+          placeholder={field.placeholder || ""}
+          name={field.name as Path<T>}
+          control={control}
+          error={error}
+          rows={field.rows}
+          resize={field.resize}
+          required={field.required}
         />
       );
 
     case EFilterFieldType.NUMBER:
       return (
-        <Controller
-          name={field.name}
+        <FormInputNumeric
+          label={field.label}
+          placeholder={field.placeholder || ""}
+          name={field.name as Path<T>}
           control={control}
-          render={({ field: formField }) => (
-            <Field.Root invalid={!!error} gap={0.5}>
-              <Field.Label>{field.label}</Field.Label>
-              <Input
-                {...formField}
-                value={(formField.value as number) || ""}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  formField.onChange(value === "" ? "" : Number(value));
-                }}
-                placeholder={field.placeholder}
-                type="number"
-                min={field.min}
-                max={field.max}
-              />
-              {error ? (
-                <Field.ErrorText width="100%" justifyContent="end">
-                  {error}
-                </Field.ErrorText>
-              ) : (
-                <Field.HelperText>&nbsp;</Field.HelperText>
-              )}
-            </Field.Root>
-          )}
+          error={error}
+          min={field.min}
+          max={field.max}
+          step={field.step}
+          allowMouseWheel={field.allowMouseWheel}
+          required={field.required}
         />
       );
 
     case EFilterFieldType.DATE:
       return (
-        <Controller
-          name={field.name}
+        <FormInputDate
+          label={field.label}
+          placeholder={field.placeholder || ""}
+          name={field.name as Path<T>}
           control={control}
-          render={({ field: formField }) => (
-            <Field.Root invalid={!!error} gap={0.5}>
-              <Field.Label>{field.label}</Field.Label>
-              <Input
-                {...formField}
-                value={
-                  formField.value instanceof Date
-                    ? formField.value.toISOString().split("T")[0]
-                    : (formField.value as string) || ""
-                }
-                onChange={(e) => formField.onChange(e.target.value)}
-                type="date"
-              />
-              {error ? (
-                <Field.ErrorText width="100%" justifyContent="end">
-                  {error}
-                </Field.ErrorText>
-              ) : (
-                <Field.HelperText>&nbsp;</Field.HelperText>
-              )}
-            </Field.Root>
-          )}
+          error={error}
+          min={field.min?.toString()}
+          max={field.max?.toString()}
+          required={field.required}
         />
       );
 
     case EFilterFieldType.DATE_RANGE:
       return (
         <Controller
-          name={field.name}
+          name={field.name as Path<T>}
           control={control}
           render={({ field: formField }) => {
             const value = formField.value as
@@ -142,6 +117,7 @@ export const renderFilterField = ({
                   }
                 }}
                 error={error}
+                required={field.required}
               />
             );
           }}
@@ -151,7 +127,7 @@ export const renderFilterField = ({
     case EFilterFieldType.SELECT:
       return (
         <Controller
-          name={field.name}
+          name={field.name as Path<T>}
           control={control}
           render={({ field: formField }) => (
             <FormSelect
@@ -161,6 +137,8 @@ export const renderFilterField = ({
               value={formField.value as string | null}
               onChange={(value) => formField.onChange(value)}
               error={error}
+              required={field.required}
+              searchable={field.searchable}
             />
           )}
         />
@@ -169,7 +147,7 @@ export const renderFilterField = ({
     case EFilterFieldType.MULTI_SELECT:
       return (
         <Controller
-          name={field.name}
+          name={field.name as Path<T>}
           control={control}
           render={({ field: formField }) => {
             const selectedValues = (formField.value as string[]) || [];
@@ -227,7 +205,7 @@ export const renderFilterField = ({
     case EFilterFieldType.CHECKBOX:
       return (
         <Controller
-          name={field.name}
+          name={field.name as Path<T>}
           control={control}
           render={({ field: formField }) => (
             <Field.Root invalid={!!error} gap={0.5}>

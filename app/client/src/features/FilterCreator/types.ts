@@ -3,6 +3,7 @@ import { ISelectOption } from "@/shared/ui-library/fields";
 
 export enum EFilterFieldType {
   TEXT = "TEXT",
+  TEXTAREA = "TEXTAREA",
   NUMBER = "NUMBER",
   DATE = "DATE",
   DATE_RANGE = "DATE_RANGE",
@@ -25,6 +26,15 @@ export interface IFilterField {
   options?: ISelectOption[];
   min?: number;
   max?: number;
+  step?: number;
+  rows?: number;
+  resize?: "none" | "both" | "horizontal" | "vertical";
+  autoComplete?: string;
+  required?: boolean;
+  inputType?: "text" | "email" | "password";
+  searchable?: boolean;
+  allowMouseWheel?: boolean;
+  startElement?: React.ReactNode;
 }
 
 export type TFilterValues = Record<string, unknown>;

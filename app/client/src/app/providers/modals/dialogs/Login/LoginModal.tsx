@@ -19,7 +19,7 @@ export const LoginModal = create<IModalProps>(({ id }) => {
   const { mutate: googleAuth } = useGoogleAuth();
   const { mutate: login } = useLogin();
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<ILoginFormValues>({
@@ -57,7 +57,8 @@ export const LoginModal = create<IModalProps>(({ id }) => {
             placeholder={t("placeholders.email")}
             type="email"
             autoComplete="email"
-            register={register("email")}
+            name="email"
+            control={control}
             error={errors.email?.message}
           />
 
@@ -66,7 +67,8 @@ export const LoginModal = create<IModalProps>(({ id }) => {
             placeholder={t("placeholders.password")}
             type="password"
             autoComplete="current-password"
-            register={register("password")}
+            name="password"
+            control={control}
             error={errors.password?.message}
           />
 

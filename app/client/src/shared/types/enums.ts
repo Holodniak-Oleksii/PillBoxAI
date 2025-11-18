@@ -10,6 +10,7 @@ export enum EModalKey {
   LOGIN = "LOGIN",
   SING_UP = "SING_UP",
   CREATE_MEDKIT = "CREATE_MEDKIT",
+  CREATE_MEDICINE = "CREATE_MEDICINE",
 }
 
 export enum EQueryKey {
