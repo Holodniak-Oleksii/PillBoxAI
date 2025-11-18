@@ -2,6 +2,7 @@ import { AccountLayout } from "@/app/layouts/AccountLayout";
 import { MainLayout } from "@/app/layouts/MainLayout";
 import { Analytics } from "@/pages/Analytics";
 import { Home } from "@/pages/Home";
+import { Medicine } from "@/pages/Medicine";
 import { Medkit } from "@/pages/Medkit";
 import { Notifications } from "@/pages/Notifications";
 import { Settings } from "@/pages/Settings";
@@ -19,6 +20,10 @@ const AppRouter = () => (
       <Route path={PATHS.HOME} element={<MainLayout />}>
         <Route path={PATHS.HOME} element={<Home />} />
         <Route path={PATHS.MEDKIT(":id")} element={<Medkit />} />
+        <Route
+          path={PATHS.MEDICINE(":medkitId", ":medicineId")}
+          element={<Medicine />}
+        />
       </Route>
       <Route path={PATHS.ACCOUNT} element={<AccountLayout />}>
         <Route path={PATHS.SETTINGS} element={<Settings />} />

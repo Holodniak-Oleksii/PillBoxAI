@@ -20,7 +20,7 @@ export const SignUpModal = create<IModalProps>(({ id }) => {
   const { t } = useTranslation();
 
   const {
-    register,
+    control,
     handleSubmit,
     getValues,
     formState: { errors },
@@ -57,7 +57,8 @@ export const SignUpModal = create<IModalProps>(({ id }) => {
             placeholder={t("placeholders.name")}
             type="text"
             autoComplete="name"
-            register={register("name")}
+            name="name"
+            control={control}
             error={errors.name?.message}
           />
 
@@ -66,7 +67,8 @@ export const SignUpModal = create<IModalProps>(({ id }) => {
             placeholder={t("placeholders.email")}
             type="email"
             autoComplete="email"
-            register={register("email")}
+            name="email"
+            control={control}
             error={errors.email?.message}
           />
 
@@ -75,7 +77,8 @@ export const SignUpModal = create<IModalProps>(({ id }) => {
             placeholder={t("placeholders.password")}
             type="password"
             autoComplete="new-password"
-            register={register("password")}
+            name="password"
+            control={control}
             error={errors.password?.message}
           />
 
@@ -84,7 +87,8 @@ export const SignUpModal = create<IModalProps>(({ id }) => {
             placeholder={t("placeholders.confirmPassword")}
             type="password"
             autoComplete="new-password"
-            register={register("confirmPassword")}
+            name="confirmPassword"
+            control={control}
             error={errors.confirmPassword?.message}
           />
 

@@ -7,6 +7,7 @@ export const MainLayout = () => {
   return (
     <Grid
       templateColumns={"minmax(max-content, 260px) minmax(max-content, 1fr)"}
+      position={"relative"}
     >
       <SideBar />
       <Box position={"relative"} h={"100dvh"} w={"100%"}>

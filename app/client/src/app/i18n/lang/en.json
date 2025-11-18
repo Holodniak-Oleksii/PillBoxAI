@@ -1,5 +1,12 @@
 {
   "translation": {
+    "common": {
+      "back": "Back",
+      "edit": "Edit",
+      "delete": "Delete",
+      "createdAt": "Created",
+      "updatedAt": "Updated"
+    },
     "button": {
       "login": "Login",
       "signUp": "Sign Up",
@@ -37,7 +44,8 @@
       "invalidEmail": "Enter a valid email",
       "passwordMin": "Minimum 6 characters",
       "passwordComplexity": "Password must contain uppercase, lowercase and number",
-      "passwordMismatch": "Passwords do not match"
+      "passwordMismatch": "Passwords do not match",
+      "minValue": "Value must be greater than or equal to 0"
     },
     "labels": {
       "password": "Password",
@@ -45,7 +53,15 @@
       "name": "Full name",
       "confirmPassword": "Confirm password",
       "title": "Title",
-      "date": "Date"
+      "date": "Date",
+      "activeIngredient": "Active Ingredient",
+      "quantity": "Quantity",
+      "expiryDate": "Expiry Date",
+      "description": "Description",
+      "usageInstructions": "Usage Instructions",
+      "sideEffects": "Side Effects",
+      "contraindications": "Contraindications",
+      "storageConditions": "Storage Conditions"
     },
     "placeholders": {
       "email": "you@example.com",
@@ -56,7 +72,17 @@
       "typeMessage": "Type a message...",
       "searchChats": "Search in chats...",
       "title": "Enter title",
-      "selectDateRange": "Select date range"
+      "selectDateRange": "Select date range",
+      "medicineName": "Medicine name",
+      "activeIngredient": "Active ingredient",
+      "quantity": "0",
+      "expiryDate": "Select date",
+      "description": "Medicine description",
+      "usageInstructions": "How to use",
+      "sideEffects": "Side effects",
+      "contraindications": "Contraindications",
+      "storageConditions": "Storage conditions",
+      "searchByName": "Search by name..."
     },
     "auth": {
       "join": "Join and make life better",
@@ -84,6 +110,12 @@
     "modals": {
       "createMedkit": {
         "title": "Create Medkit"
+      },
+      "createMedicine": {
+        "title": "Create Medicine"
+      },
+      "editMedicine": {
+        "title": "Edit Medicine"
       }
     },
     "account": {
@@ -114,6 +146,43 @@
         "refill": "Refill"
       },
       "allMedkits": "All Medkits"
+    },
+    "medkit": {
+      "addMedicine": "Add Medicine",
+      "table": {
+        "name": "Name",
+        "activeIngredient": "Active Ingredient",
+        "quantity": "Quantity",
+        "expiryDate": "Expiry Date",
+        "description": "Description",
+        "createdAt": "Date Added",
+        "actions": "Actions"
+      },
+      "filters": {
+        "search": "Search",
+        "minimumQuantity": "Minimum Quantity",
+        "expiryDate": "Expiry Date",
+        "searchByName": "Search by name...",
+        "enterQuantity": "Enter quantity"
+      },
+      "actions": {
+        "edit": "Edit medicine",
+        "delete": "Delete medicine"
+      }
+    },
+    "medicine": {
+      "notFound": "Medicine not found",
+      "expired": "Expired",
+      "expiringSoon": "Expiring Soon",
+      "quantity": "Quantity",
+      "units": "pcs.",
+      "expiryDate": "Expiry Date",
+      "details": "Detailed Information",
+      "description": "Description",
+      "usageInstructions": "Usage Instructions",
+      "sideEffects": "Side Effects",
+      "contraindications": "Contraindications",
+      "storageConditions": "Storage Conditions"
     }
   }
 }
