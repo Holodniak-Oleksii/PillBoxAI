@@ -19,3 +19,9 @@ export enum EQueryKey {
   MEDICINES = "MEDICINES",
   NOTIFICATIONS = "NOTIFICATIONS",
 }
+
+export enum ETableName {
+  MEDKITS = "MEDKITS",
+  MEDICINES = "MEDICINES",
+  NOTIFICATIONS = "NOTIFICATIONS",
+}

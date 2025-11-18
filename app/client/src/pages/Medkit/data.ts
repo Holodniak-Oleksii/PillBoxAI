@@ -1,3 +1,4 @@
+import { EFilterFieldType, IFilterField } from "@/features/FilterCreator";
 import { IMedicines } from "@/shared/types/entities";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -40,5 +41,28 @@ export const columns: ColumnDef<IMedicines>[] = [
       const date = info.getValue() as Date;
       return new Date(date).toLocaleDateString("uk-UA");
     },
+  },
+];
+
+export const filterConfig: IFilterField[] = [
+  {
+    name: "search",
+    label: "Search",
+    type: EFilterFieldType.TEXT,
+    placeholder: "Search by name...",
+    defaultValue: "",
+  },
+  {
+    name: "quantity",
+    label: "Minimum Quantity",
+    type: EFilterFieldType.NUMBER,
+    placeholder: "Enter quantity",
+    defaultValue: 0,
+  },
+  {
+    name: "expiryDate",
+    label: "Expiry Date",
+    type: EFilterFieldType.DATE_RANGE,
+    defaultValue: { startDate: "", endDate: "" },
   },
 ];
