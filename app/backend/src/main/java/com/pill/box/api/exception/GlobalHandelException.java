@@ -39,6 +39,16 @@ public class GlobalHandelException {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(AiProcessingException.class)
+    public ResponseEntity<ErrorResponse> handleAiProcessingException(AiProcessingException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.UNPROCESSABLE_ENTITY.value())
+                .details("AI processing failed")
+                .message(ex.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorResponse);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex) {
         ErrorResponse errorResponse = ErrorResponse.builder()
