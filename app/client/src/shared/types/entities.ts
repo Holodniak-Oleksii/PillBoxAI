@@ -5,40 +5,83 @@ export interface ITimeStamp {
   updatedAt: Date;
 }
 
+// Auth related types
 export interface IUser {
-  id: string;
-  name: string;
+  id: number;
+  username: string;
   email: string;
-  ts: ITimeStamp;
 }
+
+export interface IAuthResponse {
+  message: string;
+  token: string;
+  user: IUser;
+}
+
+export interface IRegisterRequest {
+  username: string;
+  email: string;
+  password: string;
+}
+
+export interface ILoginRequest {
+  username: string;
+  password: string;
+}
+
+// Medkit related types
+export type MedkitMemberRole = "OWNER" | "EDITOR" | "VIEWER";
 
 export interface IMedMember {
-  userID: string;
-  name: string;
-  rules: string[];
+  id: number;
+  medkitId: number;
+  userId: number;
+  role: MedkitMemberRole;
+  addedAt: string;
 }
 
-export interface IMedicines {
-  id: string;
+export interface IMedkitRequest {
   name: string;
-  activeIngredient: string;
-  description: string;
-  usageInstructions: string;
-  sideEffects: string;
-  contraindications: string;
-  storageConditions: string;
-  quantity: number;
-  medkitId: string;
-  expiryDate: Date;
-  ts: ITimeStamp;
+  description?: string;
 }
 
 export interface IMedkit {
-  id: string;
-  ownerID: string;
+  id: number;
   name: string;
-  members: IMedMember[];
-  ts: ITimeStamp;
+  description?: string;
+  ownerId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Pills/Medicines related types
+export interface IPillRequest {
+  name: string;
+  activeSubstance?: string;
+  description?: string;
+  usageInstructions?: string;
+  sideEffects?: string;
+  contraindications?: string;
+  expiryDate: string;
+  quantity: number;
+}
+
+export interface IMedicines {
+  id: number;
+  medkitId: number;
+  medkitName: string;
+  name: string;
+  activeSubstance?: string;
+  description?: string;
+  usageInstructions?: string;
+  sideEffects?: string;
+  contraindications?: string;
+  expiryDate: string;
+  quantity: number;
+  createdById: number;
+  createdByUsername: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface INotification {

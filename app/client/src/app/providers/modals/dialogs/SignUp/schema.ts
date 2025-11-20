@@ -2,7 +2,7 @@ import z from "zod";
 
 export const signUpSchema = z
   .object({
-    name: z
+    username: z
       .string({ error: "errors.isRequired" })
       .min(1, "errors.isRequired")
       .min(2, "errors.minLength"),

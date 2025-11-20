@@ -1,17 +1,33 @@
-import { USER_MOCK } from "@/_mocks/user";
-import { IUser } from "@/shared/types/entities";
+import { API } from "@/services";
+import {
+  IAuthResponse,
+  ILoginRequest,
+  IRegisterRequest,
+} from "@/shared/types/entities";
 
 export const authService = {
-  login: async (): Promise<IUser> => {
-    return USER_MOCK;
+  login: async (credentials: ILoginRequest): Promise<IAuthResponse> => {
+    const response = await API.post<IAuthResponse>("/auth/login", credentials);
+
+    if (response.data.token) {
+      localStorage.setItem("authToken", response.data.token);
+    }
+
+    return response.data;
   },
 
-  register: async (): Promise<IUser> => {
-    return USER_MOCK;
+  register: async (data: IRegisterRequest): Promise<IAuthResponse> => {
+    const response = await API.post<IAuthResponse>("/auth/register", data);
+
+    if (response.data.token) {
+      localStorage.setItem("authToken", response.data.token);
+    }
+
+    return response.data;
   },
 
-  googleAuth: async (): Promise<IUser> => {
-    return USER_MOCK;
+  googleAuth: async (): Promise<IAuthResponse> => {
+    throw new Error("Google Auth not yet implemented on backend");
   },
 
   logout: async (): Promise<void> => {

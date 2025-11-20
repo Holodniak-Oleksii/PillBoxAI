@@ -50,7 +50,7 @@
     "labels": {
       "password": "Password",
       "email": "Email address",
-      "name": "Full name",
+      "username": "Username",
       "confirmPassword": "Confirm password",
       "title": "Title",
       "date": "Date",
@@ -66,7 +66,7 @@
     "placeholders": {
       "email": "you@example.com",
       "password": "Enter your password",
-      "name": "John Doe",
+      "username": "Enter your username",
       "confirmPassword": "Confirm your password",
       "searchMedkits": "Search in medkits",
       "typeMessage": "Type a message...",
