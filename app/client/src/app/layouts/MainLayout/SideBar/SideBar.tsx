@@ -25,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 import { Account } from "./Account";
 
 import { History } from "@/features/Chat/History";
+import { useEventHandler } from "@/shared/hooks";
 import { EModalKey } from "@/shared/types/enums";
 import { useModal } from "@ebay/nice-modal-react";
 import { useRef, useState } from "react";
@@ -62,6 +63,12 @@ export const SideBar = () => {
     navigate(PATHS.CHAT(conversation.id));
   };
 
+  const handleEventAskChat = useEventHandler(handleAskChat);
+  const handleEventOpenHistory = useEventHandler(() => {
+    setOpen(true);
+  });
+  const handleEventCreateMedkit = useEventHandler(showCreateMedkit);
+
   return (
     <Box position={"relative"} ref={container} as={"aside"}>
       <Flex
@@ -98,7 +105,7 @@ export const SideBar = () => {
             variant={"subtle"}
             w="100%"
             justifyContent={"flex-start"}
-            onClick={handleAskChat}
+            onClick={handleEventAskChat}
           >
             <BiBrain />
             <Text fontSize={"sm"}>{t("button.askChat")}</Text>
@@ -111,7 +118,7 @@ export const SideBar = () => {
             variant={"subtle"}
             w="100%"
             justifyContent={"flex-start"}
-            onClick={() => setOpen(true)}
+            onClick={() => handleEventOpenHistory()}
           >
             <GoHistory />
             <Text fontSize={"sm"}>{t("button.history")}</Text>
@@ -125,7 +132,7 @@ export const SideBar = () => {
             <IconButton
               variant={"subtle"}
               ml="auto"
-              onClick={() => showCreateMedkit()}
+              onClick={() => handleEventCreateMedkit()}
             >
               <RiAddFill />
             </IconButton>

@@ -5,12 +5,11 @@ import { persist } from "zustand/middleware";
 interface IUserStore {
   user: IUser | null;
   isAuth: boolean;
-  refreshToken: null | string;
   accessToken: null | string;
 
   setUser: (user: IUser) => void;
   logout: () => void;
-  setCredentials: (refreshToken: string, accessToken: string) => void;
+  setCredentials: (accessToken: string) => void;
   removeCredentials: () => void;
 }
 
@@ -20,7 +19,6 @@ export const useUserStore = create<IUserStore>()(
       user: null,
       isAuth: false,
       accessToken: null,
-      refreshToken: null,
 
       setUser: (user) => set({ user, isAuth: true }),
       logout: () =>
@@ -28,17 +26,14 @@ export const useUserStore = create<IUserStore>()(
           user: null,
           isAuth: false,
           accessToken: null,
-          refreshToken: null,
         }),
-      setCredentials: (refreshToken, accessToken) =>
-        set({ accessToken, refreshToken }),
-      removeCredentials: () => set({ accessToken: null, refreshToken: null }),
+      setCredentials: (accessToken) => set({ accessToken, isAuth: true }),
+      removeCredentials: () => set({ accessToken: null, isAuth: false }),
     }),
     {
       name: "pillbox",
       partialize: (state) => ({
         accessToken: state.accessToken,
-        refreshToken: state.refreshToken,
       }),
     }
   )

@@ -1,3 +1,4 @@
+import { useUserStore } from "@/app/store/user";
 import { API } from "@/services";
 import {
   IAuthResponse,
@@ -10,7 +11,7 @@ export const authService = {
     const response = await API.post<IAuthResponse>("/auth/login", credentials);
 
     if (response.data.token) {
-      localStorage.setItem("authToken", response.data.token);
+      useUserStore.getState().setCredentials(response.data.token);
     }
 
     return response.data;
@@ -20,7 +21,7 @@ export const authService = {
     const response = await API.post<IAuthResponse>("/auth/register", data);
 
     if (response.data.token) {
-      localStorage.setItem("authToken", response.data.token);
+      useUserStore.getState().setCredentials(response.data.token);
     }
 
     return response.data;
@@ -31,6 +32,6 @@ export const authService = {
   },
 
   logout: async (): Promise<void> => {
-    localStorage.removeItem("authToken");
+    useUserStore.getState().removeCredentials();
   },
 };
