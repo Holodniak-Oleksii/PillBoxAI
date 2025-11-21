@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,8 +21,10 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         UserResponse user = userService.register(request);
+        String token = userService.generateJwt(request.getUsername(), request.getPassword());
         AuthResponse response = AuthResponse.builder()
                 .message("User registered successfully")
+                .token(token)
                 .user(user)
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -50,5 +53,11 @@ public class UserController {
     public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String username) {
         UserResponse user = userService.getUserByUsername(username);
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<UserResponse> getProfile(@AuthenticationPrincipal User user) {
+        UserResponse profile = userService.getCurrentUserProfile(user);
+        return ResponseEntity.ok(profile);
     }
 }

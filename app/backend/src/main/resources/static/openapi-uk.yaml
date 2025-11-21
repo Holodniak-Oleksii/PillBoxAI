@@ -125,6 +125,24 @@ paths:
         '404':
           description: Користувача не знайдено
 
+  /auth/profile:
+    get:
+      tags:
+        - Аутентифікація
+      summary: Отримати профіль поточного користувача
+      description: Повертає інформацію про профіль автентифікованого користувача на основі JWT токена
+      responses:
+        '200':
+          description: Профіль користувача успішно отримано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Неавторизовано - невалідний або відсутній JWT токен
+        '403':
+          description: Заборонено - токен валідний, але користувача не знайдено
+
   /api/medkits:
     post:
       tags:
