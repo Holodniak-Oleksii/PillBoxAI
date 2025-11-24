@@ -26,6 +26,8 @@ tags:
     description: API for managing medicine box participants
   - name: Pills
     description: API for managing pills and medications
+  - name: AI Services
+    description: AI-powered services for pill identification
 
 paths:
   /auth/register:
@@ -718,6 +720,47 @@ paths:
         '404':
           description: Pill not found
 
+  /api/ai/pills/identify:
+    post:
+      tags:
+        - AI Services
+      summary: Identify pills from images
+      description: Upload images of pills to identify them using AI. The AI will analyze the images and return information about detected medications.
+      requestBody:
+        description: Images of pills to identify
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - images
+              properties:
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: List of pill images to analyze
+                language:
+                  type: string
+                  default: en
+                  enum: [en, uk]
+                  description: Response language (en - English, uk - Ukrainian)
+      responses:
+        '200':
+          description: Pills successfully identified
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IdentifiedPill'
+        '400':
+          description: Invalid request - no images provided or invalid format
+        '500':
+          description: AI service error
+
 components:
   securitySchemes:
     bearerAuth:
@@ -918,3 +961,21 @@ components:
         updatedAt:
           type: string
           format: date-time
+
+    IdentifiedPill:
+      type: object
+      description: Information about a pill identified by AI from an image
+      properties:
+        name:
+          type: string
+          description: Name of the identified medication
+        description:
+          type: string
+          description: Detailed description of the medication
+        expiryDate:
+          type: string
+          format: date
+          description: Expiration date (if detected from image)
+        quantity:
+          type: integer
+          description: Detected quantity of pills

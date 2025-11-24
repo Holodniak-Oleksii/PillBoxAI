@@ -1,16 +1,15 @@
 package com.pill.box.api.ai;
 
-import com.pill.box.api.ai.dto.PillScanRequest;
-import com.pill.box.api.ai.dto.PillScanResponse;
-import com.pill.box.api.ai.dto.PillScanResult;
-import com.pill.box.api.user.User;
-import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
+import com.pill.box.api.ai.dto.IdentifiedPill;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/ai")
@@ -19,37 +18,12 @@ public class AiPillController {
 
     private final AiPillService aiPillService;
 
-    @PostMapping("/scan")
-    public ResponseEntity<PillScanResponse> scanAndCreatePill(
-            @Valid @RequestBody PillScanRequest request,
-            @AuthenticationPrincipal User user) {
+    @PostMapping("/pills/identify")
+    public ResponseEntity<List<IdentifiedPill>> identifyPillsFromImages(
+            @RequestParam List<MultipartFile> images,
+            @RequestParam(defaultValue = "en") String language) {
 
-        PillScanResponse response = aiPillService.scanAndCreatePill(request, user.getId());
-
-        if (response.isSuccess()) {
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.badRequest().body(response);
-        }
-    }
-
-    @PostMapping("/scan/preview")
-    public ResponseEntity<PillScanResult> previewScan(
-            @RequestParam MultipartFile image,
-            @RequestParam(defaultValue = "uk") String language) {
-
-        PillScanResult result = aiPillService.scanOnly(image, language);
-
-        if (result.isSuccess()) {
-            return ResponseEntity.ok(result);
-        } else {
-            return ResponseEntity.badRequest().body(result);
-        }
-    }
-
-    @GetMapping("/health")
-    @Operation(summary = "Check AI service health")
-    public ResponseEntity<String> healthCheck() {
-        return ResponseEntity.ok("AI service is operational");
+        List<IdentifiedPill> results = aiPillService.identifyPills(images, language);
+        return ResponseEntity.ok(results);
     }
 }

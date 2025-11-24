@@ -26,6 +26,8 @@ tags:
     description: API для управління учасниками аптечок
   - name: Ліки
     description: API для управління ліками та медикаментами
+  - name: AI Сервіси
+    description: AI-сервіси для ідентифікації ліків
 
 paths:
   /auth/register:
@@ -718,6 +720,47 @@ paths:
         '404':
           description: Ліки не знайдено
 
+  /api/ai/pills/identify:
+    post:
+      tags:
+        - AI Сервіси
+      summary: Ідентифікація ліків за зображеннями
+      description: Завантажте зображення ліків для їх ідентифікації за допомогою AI. Штучний інтелект проаналізує зображення та поверне інформацію про виявлені медикаменти.
+      requestBody:
+        description: Зображення ліків для ідентифікації
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - images
+              properties:
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: Список зображень ліків для аналізу
+                language:
+                  type: string
+                  default: en
+                  enum: [en, uk]
+                  description: Мова відповіді (en - англійська, uk - українська)
+      responses:
+        '200':
+          description: Ліки успішно ідентифіковано
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IdentifiedPill'
+        '400':
+          description: Невалідний запит - не надано зображення або невірний формат
+        '500':
+          description: Помилка AI сервісу
+
 components:
   securitySchemes:
     bearerAuth:
@@ -911,3 +954,21 @@ components:
         updatedAt:
           type: string
           format: date-time
+
+    IdentifiedPill:
+      type: object
+      description: Інформація про ліки, ідентифіковані AI за зображенням
+      properties:
+        name:
+          type: string
+          description: Назва ідентифікованого медикаменту
+        description:
+          type: string
+          description: Детальний опис медикаменту
+        expiryDate:
+          type: string
+          format: date
+          description: Термін придатності (якщо виявлено на зображенні)
+        quantity:
+          type: integer
+          description: Виявлена кількість ліків

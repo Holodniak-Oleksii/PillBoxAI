@@ -5,13 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PillScanResponse {
-    private PillScanResult scanResult;
-    private Long pillId;
-    private String message;
-    private boolean success;
+public class IdentifiedPill {
+    private String name;
+    private String description;
+    private LocalDate expiryDate;
+    private Integer quantity;
 }
