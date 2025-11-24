@@ -11,7 +11,7 @@ export const Notify = () => {
   };
 
   return (
-    <Box position={"absolute"} right={5} top={5}>
+    <Box position={"absolute"} right={5} top={3}>
       <Button
         borderRadius={"full"}
         variant={"surface"}

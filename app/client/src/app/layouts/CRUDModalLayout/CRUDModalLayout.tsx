@@ -16,7 +16,7 @@ export const CRUDModalLayout: FC<CRUDModalLayoutProps> = ({
   children,
 }) => {
   const { t } = useTranslation();
-  const modal = useModal();
+  const { remove } = useModal();
 
   return (
     <Box as="form" onSubmit={onSubmit}>
@@ -32,7 +32,7 @@ export const CRUDModalLayout: FC<CRUDModalLayoutProps> = ({
             position={"absolute"}
             right={2}
             top={2}
-            onClick={modal.hide}
+            onClick={remove}
           />
         </Dialog.Header>
       )}
@@ -44,7 +44,7 @@ export const CRUDModalLayout: FC<CRUDModalLayoutProps> = ({
         borderColor="gray.200"
         p={4}
       >
-        <Button variant="outline" type="button" onClick={modal.hide}>
+        <Button variant="outline" type="button" onClick={remove}>
           {t("button.cancel")}
         </Button>
         <Button type="submit">{t("button.save")}</Button>

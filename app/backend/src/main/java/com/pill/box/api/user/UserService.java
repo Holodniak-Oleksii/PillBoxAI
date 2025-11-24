@@ -28,7 +28,7 @@ public class UserService {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             throw new IllegalArgumentException("Username already exists");
         }
-        
+
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email already exists");
         }
@@ -42,16 +42,22 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public String login(LoginRequest request) {
+        return generateJwt(request.getUsername(), request.getPassword());
+    }
+
+
+    @Transactional(readOnly = true)
+    public String generateJwt(String username, String password) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
+                        username,
+                        password
                 )
         );
-        
-        User user = userRepository.findByUsername(request.getUsername())
+
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UnauthorizedException("Invalid username or password"));
-        
+
         return jwtService.generateToken(user);
     }
 
@@ -67,5 +73,10 @@ public class UserService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         return userMapper.toResponse(user);
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponse getCurrentUserProfile(User authenticatedUser) {
+        return userMapper.toResponse(authenticatedUser);
     }
 }

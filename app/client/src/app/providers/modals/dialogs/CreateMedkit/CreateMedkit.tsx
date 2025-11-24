@@ -26,7 +26,7 @@ export const CreateMedkitModal = create<IModalProps>(() => {
   const { mutate: createMedkit } = useCreateMedkit();
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<ICreateMedkitFormValues>({
@@ -49,7 +49,8 @@ export const CreateMedkitModal = create<IModalProps>(() => {
           placeholder={t("placeholders.title")}
           type="text"
           autoComplete="name"
-          register={register("name")}
+          name="name"
+          control={control}
           error={errors.name?.message}
         />
       </CRUDModalLayout>

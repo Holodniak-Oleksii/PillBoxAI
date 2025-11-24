@@ -1,0 +1,1 @@
+export { CreateMedicineModal } from "./CreateMedecine";

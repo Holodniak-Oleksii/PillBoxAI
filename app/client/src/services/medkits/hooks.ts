@@ -10,10 +10,10 @@ export const useMedkits = () => {
   });
 };
 
-export const useMedkit = (medkitId: string) => {
+export const useMedkit = (medkitId?: string) => {
   return useQuery({
     queryKey: [EQueryKey.MEDKIT, medkitId],
-    queryFn: () => medkitService.getMedkitById(medkitId),
+    queryFn: () => medkitService.getMedkitById(medkitId as string),
   });
 };
 

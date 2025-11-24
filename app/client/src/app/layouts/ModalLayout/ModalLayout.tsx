@@ -10,7 +10,7 @@ export const ModalLayout: FC<ModalLayoutProps> = ({
   children,
   maxWidth = 500,
 }) => {
-  const { visible, hide } = useModal();
+  const { visible, remove } = useModal();
 
   return (
     <Dialog.Root
@@ -19,12 +19,12 @@ export const ModalLayout: FC<ModalLayoutProps> = ({
       placement={"center"}
       motionPreset="slide-in-bottom"
       onOpenChange={(e) => {
-        if (!e.open) hide();
+        if (!e.open) remove();
       }}
     >
       <Portal>
         <Dialog.Backdrop bg="blackAlpha.600" />
-        <Dialog.Positioner>
+        <Dialog.Positioner p={[4, 8]} scrollbarWidth={"thin"}>
           <Dialog.Content bg="white" maxW={maxWidth} w="calc(100% - 32px)">
             {children}
           </Dialog.Content>
