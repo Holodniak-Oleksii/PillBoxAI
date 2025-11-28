@@ -890,22 +890,9 @@ components:
           minLength: 1
           maxLength: 255
           description: Назва ліків
-        activeSubstance:
-          type: string
-          maxLength: 255
-          description: Назва активної речовини
         description:
           type: string
           description: Детальний опис ліків
-        usageInstructions:
-          type: string
-          description: Інструкція по застосуванню
-        sideEffects:
-          type: string
-          description: Можливі побічні ефекти
-        contraindications:
-          type: string
-          description: Протипоказання до застосування
         expiryDate:
           type: string
           format: date
@@ -928,15 +915,7 @@ components:
           type: string
         name:
           type: string
-        activeSubstance:
-          type: string
         description:
-          type: string
-        usageInstructions:
-          type: string
-        sideEffects:
-          type: string
-        contraindications:
           type: string
         expiryDate:
           type: string

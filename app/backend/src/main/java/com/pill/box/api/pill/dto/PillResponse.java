@@ -17,11 +17,7 @@ public class PillResponse {
     private Long medkitId;
     private String medkitName;
     private String name;
-    private String activeSubstance;
     private String description;
-    private String usageInstructions;
-    private String sideEffects;
-    private String contraindications;
     private LocalDate expiryDate;
     private Integer quantity;
     private Long createdById;

@@ -14,11 +14,7 @@ public class PillMapper {
         pill.setMedkit(medkit);
         pill.setCreatedBy(createdBy);
         pill.setName(request.getName());
-        pill.setActiveSubstance(request.getActiveSubstance());
         pill.setDescription(request.getDescription());
-        pill.setUsageInstructions(request.getUsageInstructions());
-        pill.setSideEffects(request.getSideEffects());
-        pill.setContraindications(request.getContraindications());
         pill.setExpiryDate(request.getExpiryDate());
         pill.setQuantity(request.getQuantity());
         return pill;
@@ -30,11 +26,7 @@ public class PillMapper {
                 .medkitId(pill.getMedkit().getId())
                 .medkitName(pill.getMedkit().getName())
                 .name(pill.getName())
-                .activeSubstance(pill.getActiveSubstance())
                 .description(pill.getDescription())
-                .usageInstructions(pill.getUsageInstructions())
-                .sideEffects(pill.getSideEffects())
-                .contraindications(pill.getContraindications())
                 .expiryDate(pill.getExpiryDate())
                 .quantity(pill.getQuantity())
                 .createdById(pill.getCreatedBy() != null ? pill.getCreatedBy().getId() : null)
@@ -46,11 +38,7 @@ public class PillMapper {
 
     public void updateEntity(Pill pill, PillRequest request) {
         pill.setName(request.getName());
-        pill.setActiveSubstance(request.getActiveSubstance());
         pill.setDescription(request.getDescription());
-        pill.setUsageInstructions(request.getUsageInstructions());
-        pill.setSideEffects(request.getSideEffects());
-        pill.setContraindications(request.getContraindications());
         pill.setExpiryDate(request.getExpiryDate());
         pill.setQuantity(request.getQuantity());
     }

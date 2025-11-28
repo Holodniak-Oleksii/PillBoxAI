@@ -897,22 +897,9 @@ components:
           minLength: 1
           maxLength: 255
           description: Pill name
-        activeSubstance:
-          type: string
-          maxLength: 255
-          description: Active substance name
         description:
           type: string
           description: Detailed description of the pill
-        usageInstructions:
-          type: string
-          description: Instructions for use
-        sideEffects:
-          type: string
-          description: Possible side effects
-        contraindications:
-          type: string
-          description: Contraindications for use
         expiryDate:
           type: string
           format: date
@@ -935,15 +922,7 @@ components:
           type: string
         name:
           type: string
-        activeSubstance:
-          type: string
         description:
-          type: string
-        usageInstructions:
-          type: string
-        sideEffects:
-          type: string
-        contraindications:
           type: string
         expiryDate:
           type: string
