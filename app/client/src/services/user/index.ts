@@ -13,8 +13,7 @@ export const userService = {
   },
 
   getCurrentUser: async (): Promise<IUser> => {
-    throw new Error(
-      "getCurrentUser needs implementation - use getUserById or getUserByUsername"
-    );
+    const response = await API.get<IUser>(`/auth/profile`);
+    return response.data;
   },
 };

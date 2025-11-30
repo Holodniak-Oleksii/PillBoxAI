@@ -125,6 +125,24 @@ paths:
         '404':
           description: User not found
 
+  /auth/profile:
+    get:
+      tags:
+        - Authentication
+      summary: Get current user profile
+      description: Returns profile information of the authenticated user based on JWT token
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Unauthorized - invalid or missing JWT token
+        '403':
+          description: Forbidden - token is valid but user not found
+
   /api/medkits:
     post:
       tags:
