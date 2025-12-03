@@ -181,8 +181,8 @@ paths:
     get:
       tags:
         - Medicine Boxes
-      summary: Get all medicine boxes
-      description: Returns list of all medicine boxes
+      summary: Get all medicine boxes for current user
+      description: Returns list of all medicine boxes where the authenticated user is either the owner or a member (with any role)
       responses:
         '200':
           description: Successfully retrieved list of medicine boxes

@@ -2,10 +2,12 @@ package com.pill.box.api.medkit;
 
 import com.pill.box.api.medkit.dto.MedkitRequest;
 import com.pill.box.api.medkit.dto.MedkitResponse;
+import com.pill.box.api.user.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,8 +33,8 @@ public class MedkitController {
     }
 
     @GetMapping
-    public ResponseEntity<List<MedkitResponse>> getAllMedkits() {
-        List<MedkitResponse> response = medkitService.getAllMedkits();
+    public ResponseEntity<List<MedkitResponse>> getAllMedkits(@AuthenticationPrincipal User user) {
+        List<MedkitResponse> response = medkitService.getMedkitsByUserId(user.getId());
         return ResponseEntity.ok(response);
     }
 

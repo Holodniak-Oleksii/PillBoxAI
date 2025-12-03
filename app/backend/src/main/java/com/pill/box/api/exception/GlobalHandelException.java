@@ -43,6 +43,16 @@ public class GlobalHandelException {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ErrorResponse> handleValidationException(ValidationException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .details("Invalid request")
+                .message(ex.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
     @ExceptionHandler(AiProcessingException.class)
     public ResponseEntity<ErrorResponse> handleAiProcessingException(AiProcessingException ex) {
         ErrorResponse errorResponse = ErrorResponse.builder()

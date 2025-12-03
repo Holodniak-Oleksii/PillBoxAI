@@ -3,21 +3,25 @@ package com.pill.box.api.medkit;
 import com.pill.box.api.exception.ResourceNotFoundException;
 import com.pill.box.api.medkit.dto.MedkitRequest;
 import com.pill.box.api.medkit.dto.MedkitResponse;
+import com.pill.box.api.medkit.member.MedkitMember;
+import com.pill.box.api.medkit.member.MedkitMemberRepository;
 import com.pill.box.api.user.User;
 import com.pill.box.api.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
 public class MedkitService {
 
     private final MedkitRepository medkitRepository;
+    private final MedkitMemberRepository medkitMemberRepository;
     private final UserRepository userRepository;
     private final MedkitMapper medkitMapper;
 
@@ -39,8 +43,17 @@ public class MedkitService {
     }
 
     @Transactional(readOnly = true)
-    public List<MedkitResponse> getAllMedkits() {
-        return StreamSupport.stream(medkitRepository.findAll().spliterator(), false)
+    public List<MedkitResponse> getMedkitsByUserId(Long userId) {
+        Map<Long, Medkit> medkitMap = new LinkedHashMap<>();
+        
+        medkitRepository.findByOwnerId(userId)
+                .forEach(medkit -> medkitMap.put(medkit.getId(), medkit));
+        
+        medkitMemberRepository.findByUserId(userId).stream()
+                .map(MedkitMember::getMedkit)
+                .forEach(medkit -> medkitMap.putIfAbsent(medkit.getId(), medkit));
+        
+        return medkitMap.values().stream()
                 .map(medkitMapper::toResponse)
                 .collect(Collectors.toList());
     }
