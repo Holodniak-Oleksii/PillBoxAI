@@ -761,6 +761,33 @@ paths:
         '500':
           description: AI service error
 
+  /api/ai/pills/recommend:
+    post:
+      tags:
+        - AI Services
+      summary: Get AI-powered pill recommendations
+      description: Get personalized medication recommendations based on symptoms or health queries. The AI analyzes the user's query and their medicine boxes to provide relevant suggestions.
+      requestBody:
+        description: Recommendation request with query and optional medicine box filter
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PillRecommendationRequest'
+      responses:
+        '200':
+          description: Recommendations successfully generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PillRecommendationResponse'
+        '400':
+          description: Invalid request - missing or invalid query
+        '401':
+          description: Unauthorized - authentication required
+        '500':
+          description: AI service error
+
 components:
   securitySchemes:
     bearerAuth:
@@ -958,3 +985,71 @@ components:
         quantity:
           type: integer
           description: Detected quantity of pills
+
+    PillRecommendationRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          minLength: 1
+          description: Health query or symptoms description to get medication recommendations
+          example: "I have a headache and fever"
+        medkit_id:
+          type: integer
+          format: int64
+          description: Optional medicine box ID to filter recommendations from specific box
+        language:
+          type: string
+          default: en
+          enum: [en, uk]
+          description: Response language (en - English, uk - Ukrainian)
+
+    PillRecommendationResponse:
+      type: object
+      description: AI-generated medication recommendations based on user query
+      properties:
+        recommendation:
+          type: string
+          description: AI-generated recommendation text with advice and guidance
+        relevant_pills:
+          type: array
+          items:
+            $ref: '#/components/schemas/RelevantPill'
+          description: List of relevant medications from user's medicine boxes
+        searched_medkit_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: List of medicine box IDs that were searched
+        disclaimer:
+          type: string
+          description: Medical disclaimer about the recommendations
+
+    RelevantPill:
+      type: object
+      description: Medication from user's medicine box relevant to the query
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Pill ID
+        name:
+          type: string
+          description: Pill name
+        description:
+          type: string
+          description: Pill description
+        medkit_id:
+          type: integer
+          format: int64
+          description: Medicine box ID containing this pill
+        medkit_name:
+          type: string
+          description: Medicine box name
+        similarity_score:
+          type: number
+          format: float
+          description: Relevance score (0.0 to 1.0) indicating how well the pill matches the query
