@@ -3,7 +3,5 @@ export const formatDate = (date: Date) => {
     year: "numeric",
     month: "short",
     day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
   }).format(new Date(date));
 };

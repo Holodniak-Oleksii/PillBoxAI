@@ -22,6 +22,8 @@
       "scan": "Scan",
       "cancel": "Cancel",
       "save": "Save",
+      "saving": "Saving...",
+      "remove": "Remove",
       "back": "Back",
       "clear": "Clear",
       "apply": "Apply",
@@ -131,6 +133,20 @@
       "deleteMedicine": {
         "title": "Delete Medicine",
         "description": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone."
+      },
+      "identifyPills": {
+        "title": "Identify Pills from Images",
+        "description": "Upload images of pills to identify them using AI",
+        "selectImages": "Select Images",
+        "selectedImages": "Selected Images",
+        "identify": "Identify Pills",
+        "identifying": "Identifying..."
+      },
+      "editIdentifiedPills": {
+        "title": "Edit Identified Pills",
+        "allSaved": "All pills have been saved",
+        "saveAll": "Save All",
+        "remaining": "pills remaining"
       }
     },
     "account": {

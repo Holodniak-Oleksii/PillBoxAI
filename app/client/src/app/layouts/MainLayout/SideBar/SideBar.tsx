@@ -27,7 +27,7 @@ import { Account } from "./Account";
 import { History } from "@/features/Chat/History";
 import { useDebounce, useEventHandler } from "@/shared/hooks";
 import { EModalKey } from "@/shared/types/enums";
-import { useModal } from "@ebay/nice-modal-react";
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { useRef, useState } from "react";
 import { BiScan } from "react-icons/bi";
 
@@ -76,6 +76,11 @@ export const SideBar = () => {
     setOpen(true);
   });
   const handleEventCreateMedkit = useEventHandler(showCreateMedkit);
+  const handleEventScanPills = useEventHandler(() => {
+    NiceModal.show(EModalKey.IDENTIFY_PILLS, {
+      medkitId: medkitId ? Number(medkitId) : undefined,
+    });
+  });
 
   return (
     <Box position={"relative"} ref={container} as={"aside"}>
@@ -120,7 +125,12 @@ export const SideBar = () => {
             <BiBrain />
             <Text fontSize={"sm"}>{t("button.askChat")}</Text>
           </Button>
-          <Button variant={"subtle"} w="100%" justifyContent={"flex-start"}>
+          <Button
+            variant={"subtle"}
+            w="100%"
+            justifyContent={"flex-start"}
+            onClick={handleEventScanPills}
+          >
             <BiScan />
             <Text fontSize={"sm"}>{t("button.scan")}</Text>
           </Button>
