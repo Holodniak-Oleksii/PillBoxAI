@@ -61,31 +61,32 @@ export interface IMedkit {
 // Matches PillRequest from OpenAPI
 export interface IPillRequest {
   name: string; // required, minLength: 1, maxLength: 255
-  activeSubstance?: string; // optional, maxLength: 255
   description?: string; // optional
-  usageInstructions?: string; // optional
-  sideEffects?: string; // optional
-  contraindications?: string; // optional
   expiryDate: string; // required, format: date
   quantity: number; // required, minimum: 0
 }
 
+// Matches PillResponse from OpenAPI
 export interface IMedicines {
   id: number;
   medkitId: number;
   medkitName: string;
   name: string;
-  activeSubstance: string;
   description: string;
-  usageInstructions: string;
-  sideEffects: string;
-  contraindications: string;
-  expiryDate: string;
+  expiryDate: string; // format: date
   quantity: number;
   createdById: number;
   createdByUsername: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: string; // format: date-time
+  updatedAt: string; // format: date-time
+}
+
+// Matches IdentifiedPill from OpenAPI
+export interface IIdentifiedPill {
+  name: string;
+  description: string;
+  expiryDate?: string; // format: date (optional, if detected from image)
+  quantity?: number; // optional, detected quantity of pills
 }
 
 export interface INotification {
@@ -106,6 +107,7 @@ export interface IChatMessage {
   content: string;
   role: "user" | "assistant";
   timestamp: Date;
+  relevant_pills?: IRelevantPill[];
 }
 
 export interface IChatConversation {
@@ -114,4 +116,26 @@ export interface IChatConversation {
   messages: IChatMessage[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface IPillRecommendationRequest {
+  query: string;
+  medkit_id?: number;
+  language?: string;
+}
+
+export interface IRelevantPill {
+  id: number;
+  name: string;
+  description: string;
+  medkit_id: number;
+  medkit_name: string;
+  similarity_score: number;
+}
+
+export interface IPillRecommendationResponse {
+  recommendation: string;
+  relevant_pills: IRelevantPill[];
+  searched_medkit_ids: number[];
+  disclaimer: string;
 }

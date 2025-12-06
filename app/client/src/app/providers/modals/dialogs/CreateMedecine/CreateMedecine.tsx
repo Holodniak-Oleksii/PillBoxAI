@@ -16,11 +16,7 @@ import { createMedicineFields, createMedicineSchema } from "./data";
 
 interface ICreateMedicineFormValues {
   name: string;
-  activeSubstance?: string;
   description?: string;
-  usageInstructions?: string;
-  sideEffects?: string;
-  contraindications?: string;
   quantity: number;
   expiryDate: string;
 }
@@ -48,11 +44,7 @@ export const CreateMedicineModal = create<ICreateMedicineModalProps>(
       defaultValues: medicine
         ? {
             name: medicine.name,
-            activeSubstance: medicine.activeSubstance || "",
             description: medicine.description || "",
-            usageInstructions: medicine.usageInstructions || "",
-            sideEffects: medicine.sideEffects || "",
-            contraindications: medicine.contraindications || "",
             quantity: medicine.quantity,
             expiryDate: new Date(medicine.expiryDate)
               .toISOString()
@@ -64,11 +56,7 @@ export const CreateMedicineModal = create<ICreateMedicineModalProps>(
     const onSubmit: SubmitHandler<ICreateMedicineFormValues> = async (data) => {
       const pillRequest: IPillRequest = {
         name: data.name,
-        activeSubstance: data.activeSubstance || undefined,
         description: data.description || undefined,
-        usageInstructions: data.usageInstructions || undefined,
-        sideEffects: data.sideEffects || undefined,
-        contraindications: data.contraindications || undefined,
         expiryDate: data.expiryDate,
         quantity: data.quantity,
       };
@@ -115,8 +103,8 @@ export const CreateMedicineModal = create<ICreateMedicineModalProps>(
           }
         >
           <Grid templateColumns="1fr 1fr" gap={6} w="100%">
-            <Box>{renderFields(0, 5)}</Box>
-            <Box>{renderFields(5, 8)}</Box>
+            <Box>{renderFields(0, 2)}</Box>
+            <Box>{renderFields(2, 4)}</Box>
           </Grid>
         </CRUDModalLayout>
       </ModalLayout>

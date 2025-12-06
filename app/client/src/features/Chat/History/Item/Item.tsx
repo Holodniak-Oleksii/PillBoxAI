@@ -49,6 +49,7 @@ export const Item: FC<IItemProps> = ({ conversation, handleChatSelect }) => {
           overflow="hidden"
           textOverflow="ellipsis"
           whiteSpace="nowrap"
+          w="calc(100% - 32px)"
           lineHeight={1.2}
         >
           {conversation.title}

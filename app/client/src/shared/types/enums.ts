@@ -1,5 +1,6 @@
 export enum EAvailableLanguage {
   EN = "en",
+  UK = "uk",
 }
 
 export enum EEndpoints {
@@ -12,6 +13,8 @@ export enum EModalKey {
   CREATE_MEDKIT = "CREATE_MEDKIT",
   CREATE_MEDICINE = "CREATE_MEDICINE",
   CONFIRM_DIALOG = "CONFIRM_DIALOG",
+  IDENTIFY_PILLS = "IDENTIFY_PILLS",
+  EDIT_IDENTIFIED_PILLS = "EDIT_IDENTIFIED_PILLS",
 }
 
 export enum EQueryKey {
@@ -20,6 +23,7 @@ export enum EQueryKey {
   MEDKIT = "MEDKIT",
   MEDICINES = "MEDICINES",
   NOTIFICATIONS = "NOTIFICATIONS",
+  AI_RECOMMENDATIONS = "AI_RECOMMENDATIONS",
 }
 
 export enum ETableName {

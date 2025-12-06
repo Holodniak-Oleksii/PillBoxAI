@@ -4,17 +4,22 @@ import { SendIcon } from "@/shared/icons";
 import { Box, Button, HStack, Input } from "@chakra-ui/react";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
+import { MedkitSelect } from "./MedkitSelect";
 
 interface ITypeMessageProps {
   message: string;
   onChangeMessage: (message: string) => void;
   handleSendMessage: () => void;
+  selectedMedkitId: string | null;
+  onMedkitChange: (medkitId: string | null) => void;
 }
 
 export const TypeMessage: FC<ITypeMessageProps> = ({
   message,
   onChangeMessage,
   handleSendMessage,
+  selectedMedkitId,
+  onMedkitChange,
 }) => {
   const { t } = useTranslation();
   const { isLoading } = useChatStore();
@@ -70,8 +75,9 @@ export const TypeMessage: FC<ITypeMessageProps> = ({
           <SendIcon />
         </Button>
       </HStack>
-      <HStack gap={3} mt={4}>
+      <HStack gap={3} mt={4} flexWrap="wrap">
         {renderSuggestedActions()}
+        <MedkitSelect value={selectedMedkitId} onChange={onMedkitChange} />
       </HStack>
     </Box>
   );
