@@ -11,14 +11,6 @@ export const createMedicineFields: IFilterField[] = [
     inputType: "text",
   },
   {
-    name: "activeSubstance",
-    label: "labels.activeSubstance",
-    type: EFilterFieldType.TEXT,
-    placeholder: "placeholders.activeSubstance",
-    required: false,
-    inputType: "text",
-  },
-  {
     name: "quantity",
     label: "labels.quantity",
     type: EFilterFieldType.NUMBER,
@@ -41,30 +33,6 @@ export const createMedicineFields: IFilterField[] = [
     required: false,
     rows: 3,
   },
-  {
-    name: "usageInstructions",
-    label: "labels.usageInstructions",
-    type: EFilterFieldType.TEXTAREA,
-    placeholder: "placeholders.usageInstructions",
-    required: false,
-    rows: 4,
-  },
-  {
-    name: "sideEffects",
-    label: "labels.sideEffects",
-    type: EFilterFieldType.TEXTAREA,
-    placeholder: "placeholders.sideEffects",
-    required: false,
-    rows: 4,
-  },
-  {
-    name: "contraindications",
-    label: "labels.contraindications",
-    type: EFilterFieldType.TEXTAREA,
-    placeholder: "placeholders.contraindications",
-    required: false,
-    rows: 5,
-  },
 ];
 
 // Matches PillRequest schema from OpenAPI
@@ -73,15 +41,7 @@ export const createMedicineSchema = z.object({
     .string({ message: "errors.isRequired" })
     .min(1, "errors.isRequired")
     .max(255, "errors.maxLength"),
-  activeSubstance: z
-    .string()
-    .max(255, "errors.maxLength")
-    .optional()
-    .or(z.literal("")),
   description: z.string().optional().or(z.literal("")),
-  usageInstructions: z.string().optional().or(z.literal("")),
-  sideEffects: z.string().optional().or(z.literal("")),
-  contraindications: z.string().optional().or(z.literal("")),
   quantity: z
     .number({ message: "errors.isRequired" })
     .min(0, "errors.minValue"),

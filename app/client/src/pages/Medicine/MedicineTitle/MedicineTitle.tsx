@@ -42,12 +42,6 @@ export const MedicineTitle: FC<IMedicineTitleProps> = (props) => {
           </Badge>
         )}
       </Flex>
-
-      {medicine.activeSubstance && (
-        <Text fontSize="lg" color="gray.600">
-          {medicine.activeSubstance}
-        </Text>
-      )}
     </Box>
   );
 };
