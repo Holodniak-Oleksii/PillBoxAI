@@ -1,6 +1,6 @@
 import { EFilterFieldType, IFilterField } from "@/features/FilterCreator";
 import { IMedicines } from "@/shared/types/entities";
-import { IconButton } from "@chakra-ui/react";
+import { IconButton, Text } from "@chakra-ui/react";
 import { ColumnDef } from "@tanstack/react-table";
 import { TFunction } from "i18next";
 import { BiEdit } from "react-icons/bi";
@@ -26,7 +26,12 @@ export const getColumns = (
     header: t("medkit.table.expiryDate"),
     cell: (info) => {
       const date = info.getValue() as Date;
-      return new Date(date).toLocaleDateString("uk-UA");
+      const isExpired = new Date(date) < new Date();
+      const formattedDate = new Date(date).toLocaleDateString("uk-UA");
+
+      return (
+        <Text color={isExpired ? "red.500" : "inherit"}>{formattedDate}</Text>
+      );
     },
   },
   {
@@ -47,11 +52,12 @@ export const getColumns = (
   },
   {
     id: "actions",
-    header: t("medkit.table.actions"),
+    header: "",
+    size: 100,
     cell: (info) => {
       const medicine = info.row.original;
       return (
-        <div style={{ display: "flex", gap: "8px" }}>
+        <>
           <IconButton
             aria-label={t("medkit.actions.edit")}
             size="md"
@@ -75,7 +81,7 @@ export const getColumns = (
           >
             <LuTrash2 />
           </IconButton>
-        </div>
+        </>
       );
     },
   },

@@ -52,7 +52,7 @@ export const FilterCreator = <T extends TFilterValues = TFilterValues>({
 
       debounceTimerRef.current = setTimeout(() => {
         setFilters(tableName, values as TFilterValues);
-        onSubmit(values as T);
+        onSubmit?.(values as T);
       }, DEBOUNCE_DELAY);
     });
 

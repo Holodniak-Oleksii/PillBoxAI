@@ -12,7 +12,7 @@ interface TableBodyProps<TData> {
 export function TableBody<TData>({
   rows,
   columnsLength,
-  emptyMessage = "Немає даних для відображення",
+  emptyMessage,
   onRowClick,
   onRowDoubleClick,
 }: TableBodyProps<TData>) {
@@ -41,7 +41,7 @@ export function TableBody<TData>({
           }
         >
           {row.getVisibleCells().map((cell) => (
-            <ChakraTable.Cell key={cell.id}>
+            <ChakraTable.Cell key={cell.id} w={cell.column.getSize()}>
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </ChakraTable.Cell>
           ))}

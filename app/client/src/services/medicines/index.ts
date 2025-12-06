@@ -48,7 +48,7 @@ export const medicinesService = {
     return response.data;
   },
 
-  deleteMedicine: async (medicineId: number): Promise<void> => {
+  deleteMedicine: async (medicineId: string | number): Promise<void> => {
     await API.delete(`/api/pills/${medicineId}`);
   },
 

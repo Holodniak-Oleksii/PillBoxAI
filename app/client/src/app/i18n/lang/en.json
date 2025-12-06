@@ -125,6 +125,10 @@
       "deleteMedkit": {
         "title": "Delete Medkit",
         "description": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone."
+      },
+      "deleteMedicine": {
+        "title": "Delete Medicine",
+        "description": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone."
       }
     },
     "account": {
@@ -175,7 +179,10 @@
       },
       "actions": {
         "edit": "Edit medicine",
-        "delete": "Delete medicine"
+        "delete": "Delete medicine",
+        "addMedicine": "Add Medicine",
+        "editMedkit": "Edit Medkit",
+        "deleteMedkit": "Delete Medkit"
       }
     },
     "medicine": {

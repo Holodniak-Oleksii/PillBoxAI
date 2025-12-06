@@ -83,7 +83,7 @@ export const useUpdateMedicine = () => {
 export const useDeleteMedicine = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (medicineId: number) =>
+    mutationFn: (medicineId: string | number) =>
       medicinesService.deleteMedicine(medicineId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [EQueryKey.MEDICINES] });

@@ -39,7 +39,7 @@ export const useSearchMedkits = (name: string, enabled: boolean = true) => {
   return useQuery({
     queryKey: [EQueryKey.MEDKITS, "search", name],
     queryFn: () => medkitService.searchMedkits(name),
-    enabled: enabled && name.length > 0,
+    enabled: enabled,
   });
 };
 

@@ -64,7 +64,7 @@ export const History: FC<IHistoryProps> = ({
           pos={"absolute"}
           transform={"translateX(calc(100% + 1px))"}
           boxSize="full"
-          zIndex={1}
+          zIndex={2}
         >
           <Drawer.Content
             borderRightColor={"blackAlpha.300"}

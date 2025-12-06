@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useDeleteMedkit } from "@/services/medkits/hooks";
-import { IMedkit } from "@/shared/types/entities";
+import { useDeleteMedicine } from "@/services/medicines/hooks";
+import { IMedicines } from "@/shared/types/entities";
 import { EModalKey } from "@/shared/types/enums";
 import {
   Button,
@@ -15,46 +15,42 @@ import { useModal } from "@ebay/nice-modal-react";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { BiEdit } from "react-icons/bi";
-import { LuEllipsisVertical, LuPlus, LuTrash2 } from "react-icons/lu";
+import { LuEllipsisVertical, LuTrash2 } from "react-icons/lu";
 import { useParams } from "react-router-dom";
 
-interface IActionHeaderProps {
-  medkit: IMedkit;
+interface IMedicineActionHeaderProps {
+  medicine: IMedicines;
 }
-export const ActionHeader = ({ medkit }: IActionHeaderProps) => {
-  const { id } = useParams();
+
+export const MedicineActionHeader = ({
+  medicine,
+}: IMedicineActionHeaderProps) => {
+  const { medkitId, medicineId } = useParams();
   const { t } = useTranslation();
-  const { mutateAsync: deleteMedkit } = useDeleteMedkit();
+  const { mutateAsync: deleteMedicine } = useDeleteMedicine();
 
   const { show: showConfirmDialog } = useModal(EModalKey.CONFIRM_DIALOG);
-  const { show: showCreateMedicine } = useModal(EModalKey.CREATE_MEDICINE);
-  const { show: showEditMedkit } = useModal(EModalKey.CREATE_MEDKIT);
+  const { show: showEditMedicine } = useModal(EModalKey.CREATE_MEDICINE);
 
-  const handleDeleteMedkit = useCallback(() => {
+  const handleDeleteMedicine = useCallback(() => {
     showConfirmDialog({
-      title: t("modals.deleteMedkit.title"),
-      description: t("modals.deleteMedkit.description", {
-        name: medkit.name,
+      title: t("modals.deleteMedicine.title"),
+      description: t("modals.deleteMedicine.description", {
+        name: medicine.name,
       }),
       onConfirm: async () => {
-        if (!id) return;
-        await deleteMedkit(id);
+        if (!medicineId) return;
+        await deleteMedicine(medicineId);
       },
     });
-  }, [id, medkit.name]);
+  }, [medicineId, medicine.name]);
 
-  const handleCreateMedicine = useCallback(() => {
-    showCreateMedicine({
-      medkitId: id,
+  const handleEditMedicine = useCallback(() => {
+    showEditMedicine({
+      medicine,
+      medkitId,
     });
-  }, [id]);
-
-  const handleEditMedkit = useCallback(() => {
-    showEditMedkit({
-      medkitId: id,
-      defaultValues: medkit,
-    });
-  }, [id, medkit]);
+  }, [medicine, medkitId]);
 
   return (
     <Popover.Root>
@@ -71,32 +67,22 @@ export const ActionHeader = ({ medkit }: IActionHeaderProps) => {
                 <Button
                   variant="ghost"
                   justifyContent="flex-start"
-                  onClick={handleCreateMedicine}
-                >
-                  <HStack gap={2}>
-                    <Icon as={LuPlus} boxSize={4} />
-                    <Text>{t("medkit.actions.addMedicine")}</Text>
-                  </HStack>
-                </Button>
-                <Button
-                  variant="ghost"
-                  justifyContent="flex-start"
-                  onClick={handleEditMedkit}
+                  onClick={handleEditMedicine}
                 >
                   <HStack gap={2}>
                     <Icon as={BiEdit} boxSize={4} />
-                    <Text>{t("medkit.actions.editMedkit")}</Text>
+                    <Text>{t("medkit.actions.edit")}</Text>
                   </HStack>
                 </Button>
                 <Button
                   variant="ghost"
                   color="red.500"
                   justifyContent="flex-start"
-                  onClick={handleDeleteMedkit}
+                  onClick={handleDeleteMedicine}
                 >
                   <HStack gap={2}>
                     <Icon as={LuTrash2} boxSize={4} />
-                    <Text>{t("medkit.actions.deleteMedkit")}</Text>
+                    <Text>{t("medkit.actions.delete")}</Text>
                   </HStack>
                 </Button>
               </VStack>

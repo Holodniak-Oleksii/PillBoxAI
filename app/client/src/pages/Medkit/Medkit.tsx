@@ -19,7 +19,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useModal } from "@ebay/nice-modal-react";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { getColumns, getFilterConfig } from "./data";
@@ -42,6 +42,10 @@ export const Medkit = () => {
   const { data: medicines, isLoading: isLoadingMedicines } =
     useMedicinesByMedkitId(id);
   const { show: showCreateMedicine } = useModal(EModalKey.CREATE_MEDICINE);
+
+  const [filteredMedicines, setFilteredMedicines] = useState<IMedicines[]>(
+    medicines || []
+  );
 
   const handleEditMedicine = useCallback(
     (medicine: IMedicines) => {
@@ -66,15 +70,26 @@ export const Medkit = () => {
     [id]
   );
 
-  const handleFilterSubmit = useCallback((values: IMedicinesFilterValues) => {
-    console.log(values);
-  }, []);
+  const handleFilterSubmit = useCallback(
+    (values: IMedicinesFilterValues) => {
+      const { search } = values;
+      const filtered = medicines?.filter((medicine) =>
+        medicine.name.toLowerCase().includes(search?.toLowerCase() || "")
+      );
+      setFilteredMedicines(filtered || []);
+    },
+    [medicines]
+  );
 
   const filterConfig = useMemo(() => getFilterConfig(t), []);
   const columns = useMemo(
     () => getColumns(t, handleEditMedicine, handleDeleteMedicine),
     []
   );
+
+  useEffect(() => {
+    setFilteredMedicines(medicines || []);
+  }, [medicines]);
 
   if (isErrorMedkit) {
     return <Navigate to={PATHS.HOME} />;
@@ -106,7 +121,7 @@ export const Medkit = () => {
       />
 
       <Table<IMedicines>
-        data={medicines || []}
+        data={filteredMedicines}
         columns={columns}
         isLoading={isLoadingMedicines}
         onRowDoubleClick={handleMedicineDoubleClick}

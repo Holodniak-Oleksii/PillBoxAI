@@ -1,7 +1,7 @@
 import { PATHS } from "@/app/router/paths";
 import { useChatStore } from "@/app/store/chat";
 import imageLogo from "@/assets/logo.webp";
-import { useMedkits } from "@/services/medkits/hooks";
+import { useSearchMedkits } from "@/services/medkits/hooks";
 import {
   Box,
   Button,
@@ -21,33 +21,41 @@ import { GoHistory } from "react-icons/go";
 import { LuBriefcaseMedical, LuSearch } from "react-icons/lu";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import { RiAddFill } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Account } from "./Account";
 
 import { History } from "@/features/Chat/History";
-import { useEventHandler } from "@/shared/hooks";
+import { useDebounce, useEventHandler } from "@/shared/hooks";
 import { EModalKey } from "@/shared/types/enums";
 import { useModal } from "@ebay/nice-modal-react";
 import { useRef, useState } from "react";
 import { BiScan } from "react-icons/bi";
+
 export const SideBar = () => {
   const { t } = useTranslation();
-  const { data } = useMedkits();
   const navigate = useNavigate();
-  const { createConversation } = useChatStore();
+  const { id: medkitId } = useParams();
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery);
   const container = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
+
+  const { data: medkits } = useSearchMedkits(debouncedSearchQuery);
+  const { createConversation } = useChatStore();
+
   const { show: showCreateMedkit } = useModal(EModalKey.CREATE_MEDKIT);
 
   const renderMedkits = () =>
-    data?.map((d) => (
+    medkits?.map((d) => (
       <Button
         key={d.id}
         variant={"subtle"}
         pl={8}
         w="100%"
         justifyContent={"flex-start"}
-        color={"gray.400"}
+        color={medkitId === String(d.id) ? "blackAlpha.700" : "gray.400"}
+        bg={medkitId === String(d.id) ? "gray.50" : "transparent"}
         _hover={{
           bg: "gray.100",
           color: "blackAlpha.700",
@@ -77,7 +85,7 @@ export const SideBar = () => {
         h={"100dvh"}
         direction={"column"}
         position={"relative"}
-        zIndex={2}
+        zIndex={3}
         bg="white"
       >
         <Flex p={4}>
@@ -99,6 +107,8 @@ export const SideBar = () => {
               outline={0}
               borderRadius={0}
               borderXWidth={0}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </InputGroup>
           <Button
