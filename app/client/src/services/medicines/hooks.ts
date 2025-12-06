@@ -13,7 +13,7 @@ export const useMedicines = (enabled: boolean = true) => {
 };
 
 export const useMedicinesByMedkitId = (
-  medkitId?: number,
+  medkitId?: string,
   enabled: boolean = true
 ) => {
   return useQuery({
@@ -23,7 +23,7 @@ export const useMedicinesByMedkitId = (
   });
 };
 
-export const useMedicine = (medicineId?: number, enabled: boolean = true) => {
+export const useMedicine = (medicineId?: string, enabled: boolean = true) => {
   return useQuery({
     queryKey: [EQueryKey.MEDICINES, medicineId],
     queryFn: () => medicinesService.getMedicineById(medicineId!),
@@ -48,10 +48,10 @@ export const useCreateMedicine = () => {
       createdById,
       pill,
     }: {
-      medkitId: number;
+      medkitId: number | string;
       createdById: number;
       pill: IPillRequest;
-    }) => medicinesService.createMedicine(medkitId, createdById, pill),
+    }) => medicinesService.createMedicine(String(medkitId), createdById, pill),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: [EQueryKey.MEDICINES] });
       queryClient.invalidateQueries({
@@ -68,9 +68,9 @@ export const useUpdateMedicine = () => {
       medicineId,
       pill,
     }: {
-      medicineId: number;
+      medicineId: number | string;
       pill: IPillRequest;
-    }) => medicinesService.updateMedicine(medicineId, pill),
+    }) => medicinesService.updateMedicine(String(medicineId), pill),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: [EQueryKey.MEDICINES] });
       queryClient.invalidateQueries({
@@ -98,9 +98,9 @@ export const useTakeMedicine = () => {
       medicineId,
       quantity,
     }: {
-      medicineId: number;
+      medicineId: number | string;
       quantity: number;
-    }) => medicinesService.takeMedicine(medicineId, quantity),
+    }) => medicinesService.takeMedicine(String(medicineId), quantity),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: [EQueryKey.MEDICINES] });
       queryClient.invalidateQueries({
@@ -117,9 +117,9 @@ export const useAddMedicineQuantity = () => {
       medicineId,
       quantity,
     }: {
-      medicineId: number;
+      medicineId: number | string;
       quantity: number;
-    }) => medicinesService.addMedicineQuantity(medicineId, quantity),
+    }) => medicinesService.addMedicineQuantity(String(medicineId), quantity),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: [EQueryKey.MEDICINES] });
       queryClient.invalidateQueries({

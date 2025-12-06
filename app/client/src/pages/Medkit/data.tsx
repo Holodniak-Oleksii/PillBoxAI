@@ -17,11 +17,6 @@ export const getColumns = (
     cell: (info) => info.getValue(),
   },
   {
-    accessorKey: "activeIngredient",
-    header: t("medkit.table.activeIngredient"),
-    cell: (info) => info.getValue(),
-  },
-  {
     accessorKey: "quantity",
     header: t("medkit.table.quantity"),
     cell: (info) => info.getValue(),
@@ -43,7 +38,7 @@ export const getColumns = (
     },
   },
   {
-    accessorKey: "ts.createdAt",
+    accessorKey: "createdAt",
     header: t("medkit.table.createdAt"),
     cell: (info) => {
       const date = info.getValue() as Date;
@@ -93,18 +88,5 @@ export const getFilterConfig = (t: TFunction): IFilterField[] => [
     type: EFilterFieldType.TEXT,
     placeholder: t("medkit.filters.searchByName"),
     defaultValue: "",
-  },
-  {
-    name: "quantity",
-    label: t("medkit.filters.minimumQuantity"),
-    type: EFilterFieldType.NUMBER,
-    placeholder: t("medkit.filters.enterQuantity"),
-    defaultValue: 0,
-  },
-  {
-    name: "expiryDate",
-    label: t("medkit.filters.expiryDate"),
-    type: EFilterFieldType.DATE_RANGE,
-    defaultValue: { startDate: "", endDate: "" },
   },
 ];

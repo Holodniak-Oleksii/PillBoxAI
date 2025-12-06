@@ -5,7 +5,8 @@
       "edit": "Edit",
       "delete": "Delete",
       "createdAt": "Created",
-      "updatedAt": "Updated"
+      "updatedAt": "Updated",
+      "createdBy": "Created by"
     },
     "button": {
       "login": "Login",
@@ -23,7 +24,8 @@
       "save": "Save",
       "back": "Back",
       "clear": "Clear",
-      "apply": "Apply"
+      "apply": "Apply",
+      "confirm": "Confirm"
     },
     "titles": {
       "medkits": "Medkits",
@@ -48,7 +50,9 @@
       "minValue": "Value must be greater than or equal to 0"
     },
     "labels": {
+      "activeSubstance": "Active Substance",
       "password": "Password",
+      "medicineName": "Medicine name",
       "email": "Email address",
       "username": "Username",
       "confirmPassword": "Confirm password",
@@ -64,6 +68,7 @@
       "storageConditions": "Storage Conditions"
     },
     "placeholders": {
+      "activeSubstance": "Enter Active Substance",
       "email": "you@example.com",
       "password": "Enter your password",
       "username": "Enter your username",
@@ -116,6 +121,10 @@
       },
       "editMedicine": {
         "title": "Edit Medicine"
+      },
+      "deleteMedkit": {
+        "title": "Delete Medkit",
+        "description": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone."
       }
     },
     "account": {
@@ -148,7 +157,6 @@
       "allMedkits": "All Medkits"
     },
     "medkit": {
-      "addMedicine": "Add Medicine",
       "table": {
         "name": "Name",
         "activeIngredient": "Active Ingredient",

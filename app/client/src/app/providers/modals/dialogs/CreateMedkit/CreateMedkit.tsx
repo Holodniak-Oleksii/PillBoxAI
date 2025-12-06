@@ -1,59 +1,72 @@
 import { CRUDModalLayout } from "@/app/layouts/CRUDModalLayout";
 import { ModalLayout } from "@/app/layouts/ModalLayout/ModalLayout";
-import { useCreateMedkit } from "@/services/medkits/hooks";
-import { IMedkit, IModalProps } from "@/shared/types/entities";
-import { FormInput } from "@/shared/ui-library/fields";
+import { renderFilterField } from "@/features/FilterCreator";
+import { useCreateMedkit, useUpdateMedkit } from "@/services/medkits/hooks";
+import { IModalProps } from "@/shared/types/entities";
 import { create, useModal } from "@ebay/nice-modal-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import z from "zod";
+import { createMedkitFields, createMedkitSchema } from "./data";
 
 interface ICreateMedkitFormValues {
   name: string;
+  description?: string;
 }
 
-const createMedkitSchema = z.object({
-  name: z
-    .string({ error: "errors.isRequired" })
-    .min(1, "errors.isRequired")
-    .min(2, "errors.minLength"),
-});
+interface ICreateMedkitModalProps extends IModalProps {
+  defaultValues?: ICreateMedkitFormValues;
+  medkitId?: number;
+}
 
-export const CreateMedkitModal = create<IModalProps>(() => {
-  const modal = useModal();
-  const { t } = useTranslation();
-  const { mutate: createMedkit } = useCreateMedkit();
+export const CreateMedkitModal = create<ICreateMedkitModalProps>(
+  ({ defaultValues, medkitId }) => {
+    const { remove } = useModal();
+    const { t } = useTranslation();
+    const { mutateAsync: createMedkit } = useCreateMedkit();
+    const { mutateAsync: updateMedkit } = useUpdateMedkit();
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ICreateMedkitFormValues>({
-    resolver: zodResolver(createMedkitSchema),
-  });
+    const {
+      control,
+      handleSubmit,
+      formState: { errors },
+    } = useForm<ICreateMedkitFormValues>({
+      defaultValues,
+      resolver: zodResolver(createMedkitSchema),
+    });
 
-  const onSubmit: SubmitHandler<ICreateMedkitFormValues> = async (data) => {
-    createMedkit(data as IMedkit);
-    modal.remove();
-  };
+    const onSubmit: SubmitHandler<ICreateMedkitFormValues> = async (data) => {
+      if (defaultValues) {
+        await updateMedkit({
+          medkitId,
+          medkit: data,
+        });
+      } else {
+        await createMedkit(data);
+      }
+      remove();
+    };
 
-  return (
-    <ModalLayout maxWidth={"400px"}>
-      <CRUDModalLayout
-        onSubmit={handleSubmit(onSubmit)}
-        title={t("modals.createMedkit.title")}
-      >
-        <FormInput
-          label={t("labels.title")}
-          placeholder={t("placeholders.title")}
-          type="text"
-          autoComplete="name"
-          name="name"
-          control={control}
-          error={errors.name?.message}
-        />
-      </CRUDModalLayout>
-    </ModalLayout>
-  );
-});
+    return (
+      <ModalLayout maxWidth={"400px"}>
+        <CRUDModalLayout
+          onSubmit={handleSubmit(onSubmit)}
+          title={t("modals.createMedkit.title")}
+        >
+          {createMedkitFields.map((field) =>
+            renderFilterField<ICreateMedkitFormValues>({
+              field: {
+                ...field,
+                label: t(field.label),
+                placeholder: t(field.placeholder || ""),
+              },
+              control,
+              error:
+                errors[field.name as keyof ICreateMedkitFormValues]?.message,
+            })
+          )}
+        </CRUDModalLayout>
+      </ModalLayout>
+    );
+  }
+);

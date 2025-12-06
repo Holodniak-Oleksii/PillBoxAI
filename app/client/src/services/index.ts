@@ -1,3 +1,4 @@
+import { PATHS } from "@/app/router/paths";
 import { useUserStore } from "@/app/store/user";
 import { QueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -39,7 +40,7 @@ API.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       useUserStore.getState().removeCredentials();
-      window.location.href = "/login";
+      window.location.href = PATHS.HOME;
     }
     return Promise.reject(error);
   }

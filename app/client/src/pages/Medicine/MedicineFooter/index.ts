@@ -1,0 +1,1 @@
+export { MedicineFooter } from "./MedicineFooter";

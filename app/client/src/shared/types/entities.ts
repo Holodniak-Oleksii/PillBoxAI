@@ -29,15 +29,18 @@ export interface ILoginRequest {
   password: string;
 }
 
-// Medkit related types
 export type MedkitMemberRole = "OWNER" | "EDITOR" | "VIEWER";
 
+export interface IMedkitMemberRequest {
+  userId: number; // required
+  role: MedkitMemberRole; // required, enum: [OWNER, EDITOR, VIEWER]
+}
 export interface IMedMember {
   id: number;
   medkitId: number;
   userId: number;
   role: MedkitMemberRole;
-  addedAt: string;
+  addedAt: string; // format: date-time
 }
 
 export interface IMedkitRequest {
@@ -55,15 +58,16 @@ export interface IMedkit {
 }
 
 // Pills/Medicines related types
+// Matches PillRequest from OpenAPI
 export interface IPillRequest {
-  name: string;
-  activeSubstance?: string;
-  description?: string;
-  usageInstructions?: string;
-  sideEffects?: string;
-  contraindications?: string;
-  expiryDate: string;
-  quantity: number;
+  name: string; // required, minLength: 1, maxLength: 255
+  activeSubstance?: string; // optional, maxLength: 255
+  description?: string; // optional
+  usageInstructions?: string; // optional
+  sideEffects?: string; // optional
+  contraindications?: string; // optional
+  expiryDate: string; // required, format: date
+  quantity: number; // required, minimum: 0
 }
 
 export interface IMedicines {
@@ -71,11 +75,11 @@ export interface IMedicines {
   medkitId: number;
   medkitName: string;
   name: string;
-  activeSubstance?: string;
-  description?: string;
-  usageInstructions?: string;
-  sideEffects?: string;
-  contraindications?: string;
+  activeSubstance: string;
+  description: string;
+  usageInstructions: string;
+  sideEffects: string;
+  contraindications: string;
   expiryDate: string;
   quantity: number;
   createdById: number;

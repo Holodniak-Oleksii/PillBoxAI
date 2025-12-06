@@ -7,12 +7,12 @@ export const medicinesService = {
     return response.data;
   },
 
-  getMedicineById: async (medicineId: number): Promise<IMedicines> => {
+  getMedicineById: async (medicineId: string): Promise<IMedicines> => {
     const response = await API.get<IMedicines>(`/api/pills/${medicineId}`);
     return response.data;
   },
 
-  getMedicinesByMedkitId: async (medkitId: number): Promise<IMedicines[]> => {
+  getMedicinesByMedkitId: async (medkitId: string): Promise<IMedicines[]> => {
     const response = await API.get<IMedicines[]>(
       `/api/pills/medkit/${medkitId}`
     );
@@ -27,7 +27,7 @@ export const medicinesService = {
   },
 
   createMedicine: async (
-    medkitId: number,
+    medkitId: string,
     createdById: number,
     pill: IPillRequest
   ): Promise<IMedicines> => {
@@ -38,7 +38,7 @@ export const medicinesService = {
   },
 
   updateMedicine: async (
-    medicineId: number,
+    medicineId: string,
     pill: IPillRequest
   ): Promise<IMedicines> => {
     const response = await API.put<IMedicines>(
@@ -53,7 +53,7 @@ export const medicinesService = {
   },
 
   takeMedicine: async (
-    medicineId: number,
+    medicineId: string,
     quantity: number
   ): Promise<IMedicines> => {
     const response = await API.patch<IMedicines>(
@@ -65,7 +65,7 @@ export const medicinesService = {
   },
 
   addMedicineQuantity: async (
-    medicineId: number,
+    medicineId: string,
     quantity: number
   ): Promise<IMedicines> => {
     const response = await API.patch<IMedicines>(

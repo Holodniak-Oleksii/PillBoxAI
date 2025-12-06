@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import { LuChevronDown } from "react-icons/lu";
 
 export interface ISelectOption {
-  value: string;
+  value: string | number;
   label: string;
 }
 
@@ -20,7 +20,7 @@ export interface FormSelectProps {
   placeholder: string;
   options: ISelectOption[];
   value?: string | null;
-  onChange: (value: string | null) => void;
+  onChange: (value: string | number | null) => void;
   error?: string;
   required?: boolean;
   searchable?: boolean;
@@ -68,7 +68,7 @@ export const FormSelect = forwardRef<HTMLDivElement, FormSelectProps>(
       [options, value]
     );
 
-    const handleSelect = (selectedValue: string) => {
+    const handleSelect = (selectedValue: string | number) => {
       if (selectedValue === value) {
         onChange(null);
       } else {

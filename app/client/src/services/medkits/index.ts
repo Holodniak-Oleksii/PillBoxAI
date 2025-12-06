@@ -1,5 +1,10 @@
 import { API } from "@/services";
-import { IMedkit, IMedkitRequest, IMedMember } from "@/shared/types/entities";
+import {
+  IMedkit,
+  IMedkitMemberRequest,
+  IMedkitRequest,
+  IMedMember,
+} from "@/shared/types/entities";
 
 export const medkitService = {
   getMedkits: async (): Promise<IMedkit[]> => {
@@ -7,12 +12,12 @@ export const medkitService = {
     return response.data;
   },
 
-  getMedkitById: async (medkitId: number): Promise<IMedkit> => {
+  getMedkitById: async (medkitId: string | number): Promise<IMedkit> => {
     const response = await API.get<IMedkit>(`/api/medkits/${medkitId}`);
     return response.data;
   },
 
-  getMedkitsByOwnerId: async (ownerId: number): Promise<IMedkit[]> => {
+  getMedkitsByOwnerId: async (ownerId: string | number): Promise<IMedkit[]> => {
     const response = await API.get<IMedkit[]>(`/api/medkits/owner/${ownerId}`);
     return response.data;
   },
@@ -25,8 +30,8 @@ export const medkitService = {
   },
 
   createMedkit: async (
-    ownerId: number,
-    medkit: IMedkitRequest
+    medkit: IMedkitRequest,
+    ownerId?: number
   ): Promise<IMedkit> => {
     const response = await API.post<IMedkit>("/api/medkits", medkit, {
       params: { ownerId },
@@ -35,25 +40,27 @@ export const medkitService = {
   },
 
   updateMedkit: async (
-    medkitId: number,
-    medkit: IMedkitRequest
+    medkit: IMedkitRequest,
+    medkitId?: number
   ): Promise<IMedkit> => {
     const response = await API.put<IMedkit>(`/api/medkits/${medkitId}`, medkit);
     return response.data;
   },
 
-  deleteMedkit: async (medkitId: number): Promise<void> => {
+  deleteMedkit: async (medkitId: number | string): Promise<void> => {
     await API.delete(`/api/medkits/${medkitId}`);
   },
 
-  getMedkitMembers: async (medkitId: number): Promise<IMedMember[]> => {
+  getMedkitMembers: async (
+    medkitId: number | string
+  ): Promise<IMedMember[]> => {
     const response = await API.get<IMedMember[]>(
       `/api/medkit-members/medkit/${medkitId}`
     );
     return response.data;
   },
 
-  getUserMedkits: async (userId: number): Promise<IMedMember[]> => {
+  getUserMedkits: async (userId: number | string): Promise<IMedMember[]> => {
     const response = await API.get<IMedMember[]>(
       `/api/medkit-members/user/${userId}`
     );
@@ -61,8 +68,8 @@ export const medkitService = {
   },
 
   getMedkitMember: async (
-    medkitId: number,
-    userId: number
+    medkitId: number | string,
+    userId: number | string
   ): Promise<IMedMember> => {
     const response = await API.get<IMedMember>(
       `/api/medkit-members/medkit/${medkitId}/user/${userId}`
@@ -71,8 +78,8 @@ export const medkitService = {
   },
 
   addMedkitMember: async (
-    medkitId: number,
-    memberData: { userId: number; role: "OWNER" | "EDITOR" | "VIEWER" }
+    medkitId: number | string,
+    memberData: IMedkitMemberRequest
   ): Promise<IMedMember> => {
     const response = await API.post<IMedMember>(
       `/api/medkit-members/medkit/${medkitId}`,
@@ -82,7 +89,7 @@ export const medkitService = {
   },
 
   updateMemberRole: async (
-    memberId: number,
+    memberId: number | string,
     role: "OWNER" | "EDITOR" | "VIEWER"
   ): Promise<IMedMember> => {
     const response = await API.put<IMedMember>(
@@ -93,7 +100,7 @@ export const medkitService = {
     return response.data;
   },
 
-  removeMedkitMember: async (memberId: number): Promise<void> => {
+  removeMedkitMember: async (memberId: number | string): Promise<void> => {
     await API.delete(`/api/medkit-members/${memberId}`);
   },
 };
