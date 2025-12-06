@@ -2,8 +2,9 @@ import { useChatStore } from "@/app/store/chat";
 import { suggestedActions } from "@/features/Chat/TypeMessage/data";
 import { SendIcon } from "@/shared/icons";
 import { Box, Button, HStack, Input } from "@chakra-ui/react";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { MedkitSelect } from "./MedkitSelect";
 
 interface ITypeMessageProps {
   message: string;
@@ -18,6 +19,7 @@ export const TypeMessage: FC<ITypeMessageProps> = ({
 }) => {
   const { t } = useTranslation();
   const { isLoading } = useChatStore();
+  const [selectedMedkitId, setSelectedMedkitId] = useState<string | null>(null);
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -72,6 +74,7 @@ export const TypeMessage: FC<ITypeMessageProps> = ({
       </HStack>
       <HStack gap={3} mt={4}>
         {renderSuggestedActions()}
+        <MedkitSelect value={selectedMedkitId} onChange={setSelectedMedkitId} />
       </HStack>
     </Box>
   );
