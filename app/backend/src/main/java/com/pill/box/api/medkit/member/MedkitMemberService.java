@@ -1,5 +1,6 @@
 package com.pill.box.api.medkit.member;
 
+import com.pill.box.api.exception.ValidationException;
 import com.pill.box.api.exception.ResourceNotFoundException;
 import com.pill.box.api.medkit.Medkit;
 import com.pill.box.api.medkit.MedkitRepository;
@@ -32,8 +33,12 @@ public class MedkitMemberService {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
+        if (medkit.getOwner().equals(user)) {
+            throw new ValidationException("User is owner a member of this medkit");
+        }
+
         if (medkitMemberRepository.existsByMedkitIdAndUserId(medkitId, request.getUserId())) {
-            throw new IllegalStateException("User is already a member of this medkit");
+            throw new ValidationException("User is already a member of this medkit");
         }
 
         MedkitMember member = medkitMemberMapper.toEntity(request, medkit, user);

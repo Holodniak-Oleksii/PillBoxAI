@@ -25,20 +25,8 @@ public class Pill {
     @Column(nullable = false, length = 255)
     private String name;
     
-    @Column(name = "active_substance", length = 255)
-    private String activeSubstance;
-    
     @Column(columnDefinition = "TEXT")
     private String description;
-    
-    @Column(name = "usage_instructions", columnDefinition = "TEXT")
-    private String usageInstructions;
-    
-    @Column(name = "side_effects", columnDefinition = "TEXT")
-    private String sideEffects;
-    
-    @Column(columnDefinition = "TEXT")
-    private String contraindications;
     
     @Column(name = "expiry_date", nullable = false)
     private LocalDate expiryDate;

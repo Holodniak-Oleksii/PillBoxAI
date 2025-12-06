@@ -26,6 +26,8 @@ tags:
     description: API для управління учасниками аптечок
   - name: Ліки
     description: API для управління ліками та медикаментами
+  - name: AI Сервіси
+    description: AI-сервіси для ідентифікації ліків
 
 paths:
   /auth/register:
@@ -179,8 +181,8 @@ paths:
     get:
       tags:
         - Аптечки
-      summary: Отримати всі аптечки
-      description: Повертає список усіх аптечок
+      summary: Отримати всі аптечки поточного користувача
+      description: Повертає список усіх аптечок, де автентифікований користувач є власником або учасником (з будь-якою роллю)
       responses:
         '200':
           description: Успішно отримано список аптечок
@@ -718,6 +720,74 @@ paths:
         '404':
           description: Ліки не знайдено
 
+  /api/ai/pills/identify:
+    post:
+      tags:
+        - AI Сервіси
+      summary: Ідентифікація ліків за зображеннями
+      description: Завантажте зображення ліків для їх ідентифікації за допомогою AI. Штучний інтелект проаналізує зображення та поверне інформацію про виявлені медикаменти.
+      requestBody:
+        description: Зображення ліків для ідентифікації
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - images
+              properties:
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: Список зображень ліків для аналізу
+                language:
+                  type: string
+                  default: en
+                  enum: [en, uk]
+                  description: Мова відповіді (en - англійська, uk - українська)
+      responses:
+        '200':
+          description: Ліки успішно ідентифіковано
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IdentifiedPill'
+        '400':
+          description: Невалідний запит - не надано зображення або невірний формат
+        '500':
+          description: Помилка AI сервісу
+
+  /api/ai/pills/recommend:
+    post:
+      tags:
+        - AI Сервіси
+      summary: Отримати AI-рекомендації ліків
+      description: Отримайте персоналізовані рекомендації медикаментів на основі симптомів або питань про здоров'я. AI аналізує запит користувача та його аптечки, щоб надати релевантні пропозиції.
+      requestBody:
+        description: Запит на рекомендації з описом симптомів та опціональним фільтром аптечки
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PillRecommendationRequest'
+      responses:
+        '200':
+          description: Рекомендації успішно згенеровано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PillRecommendationResponse'
+        '400':
+          description: Невалідний запит - відсутній або невірний запит
+        '401':
+          description: Неавторизовано - потрібна автентифікація
+        '500':
+          description: Помилка AI сервісу
+
 components:
   securitySchemes:
     bearerAuth:
@@ -847,22 +917,9 @@ components:
           minLength: 1
           maxLength: 255
           description: Назва ліків
-        activeSubstance:
-          type: string
-          maxLength: 255
-          description: Назва активної речовини
         description:
           type: string
           description: Детальний опис ліків
-        usageInstructions:
-          type: string
-          description: Інструкція по застосуванню
-        sideEffects:
-          type: string
-          description: Можливі побічні ефекти
-        contraindications:
-          type: string
-          description: Протипоказання до застосування
         expiryDate:
           type: string
           format: date
@@ -885,15 +942,7 @@ components:
           type: string
         name:
           type: string
-        activeSubstance:
-          type: string
         description:
-          type: string
-        usageInstructions:
-          type: string
-        sideEffects:
-          type: string
-        contraindications:
           type: string
         expiryDate:
           type: string
@@ -911,3 +960,89 @@ components:
         updatedAt:
           type: string
           format: date-time
+
+    IdentifiedPill:
+      type: object
+      description: Інформація про ліки, ідентифіковані AI за зображенням
+      properties:
+        name:
+          type: string
+          description: Назва ідентифікованого медикаменту
+        description:
+          type: string
+          description: Детальний опис медикаменту
+        expiryDate:
+          type: string
+          format: date
+          description: Термін придатності (якщо виявлено на зображенні)
+        quantity:
+          type: integer
+          description: Виявлена кількість ліків
+
+    PillRecommendationRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          minLength: 1
+          description: Запит про здоров'я або опис симптомів для отримання рекомендацій медикаментів
+          example: "У мене болить голова та підвищена температура"
+        medkit_id:
+          type: integer
+          format: int64
+          description: Опціональний ID аптечки для фільтрування рекомендацій з конкретної аптечки
+        language:
+          type: string
+          default: en
+          enum: [en, uk]
+          description: Мова відповіді (en - англійська, uk - українська)
+
+    PillRecommendationResponse:
+      type: object
+      description: AI-згенеровані рекомендації медикаментів на основі запиту користувача
+      properties:
+        recommendation:
+          type: string
+          description: AI-згенерований текст рекомендацій з порадами та вказівками
+        relevant_pills:
+          type: array
+          items:
+            $ref: '#/components/schemas/RelevantPill'
+          description: Список релевантних медикаментів з аптечок користувача
+        searched_medkit_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: Список ID аптечок, які були проаналізовані
+        disclaimer:
+          type: string
+          description: Медичний дисклеймер щодо рекомендацій
+
+    RelevantPill:
+      type: object
+      description: Медикамент з аптечки користувача, релевантний до запиту
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID ліків
+        name:
+          type: string
+          description: Назва ліків
+        description:
+          type: string
+          description: Опис ліків
+        medkit_id:
+          type: integer
+          format: int64
+          description: ID аптечки, що містить ці ліки
+        medkit_name:
+          type: string
+          description: Назва аптечки
+        similarity_score:
+          type: number
+          format: float
+          description: Оцінка релевантності (0.0 до 1.0), що показує наскільки добре ліки відповідають запиту

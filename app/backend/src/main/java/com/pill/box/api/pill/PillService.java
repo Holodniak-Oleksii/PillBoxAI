@@ -1,5 +1,6 @@
 package com.pill.box.api.pill;
 
+import com.pill.box.api.ai.PillVectorStoreService;
 import com.pill.box.api.exception.ResourceNotFoundException;
 import com.pill.box.api.medkit.Medkit;
 import com.pill.box.api.medkit.MedkitRepository;
@@ -8,6 +9,7 @@ import com.pill.box.api.pill.dto.PillResponse;
 import com.pill.box.api.user.User;
 import com.pill.box.api.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PillService {
@@ -23,6 +26,7 @@ public class PillService {
     private final MedkitRepository medkitRepository;
     private final UserRepository userRepository;
     private final PillMapper pillMapper;
+    private final PillVectorStoreService vectorStoreService;
 
     @Transactional
     public PillResponse createPill(Long medkitId, Long createdById, PillRequest request) {
@@ -34,6 +38,7 @@ public class PillService {
 
         Pill pill = pillMapper.toEntity(request, medkit, createdBy);
         Pill savedPill = pillRepository.save(pill);
+        vectorStoreService.createOrUpdateEmbedding(savedPill);
         return pillMapper.toResponse(savedPill);
     }
 
@@ -72,6 +77,7 @@ public class PillService {
         
         pillMapper.updateEntity(pill, request);
         Pill updatedPill = pillRepository.save(pill);
+        vectorStoreService.createOrUpdateEmbedding(updatedPill);
         return pillMapper.toResponse(updatedPill);
     }
 
@@ -80,6 +86,7 @@ public class PillService {
         if (!pillRepository.existsById(id)) {
             throw new ResourceNotFoundException("Pill not found");
         }
+        vectorStoreService.deleteEmbedding(id);
         pillRepository.deleteById(id);
     }
 
