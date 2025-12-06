@@ -38,7 +38,7 @@ export const Account = () => {
             fontWeight="bold"
             onClick={() => navigate(PATHS.SETTINGS)}
           >
-            {user?.name?.charAt(0).toUpperCase()}
+            {user?.username?.charAt(0).toUpperCase()}
           </Box>
           <VStack
             align="start"
@@ -47,7 +47,7 @@ export const Account = () => {
             onClick={() => navigate(PATHS.SETTINGS)}
           >
             <Text fontSize="sm" fontWeight="semibold" color="gray.700">
-              {user?.name}
+              {user?.username}
             </Text>
             <Text fontSize="xs" color="gray.500">
               {user?.email}

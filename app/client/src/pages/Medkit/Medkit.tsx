@@ -1,13 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { PATHS } from "@/app/router/paths";
 import { FilterCreator } from "@/features/FilterCreator";
 import { Table } from "@/features/Table";
-import { useMedicinesByMedkitId } from "@/services/medicines/hooks";
+import { ActionHeader } from "@/pages/Medkit/ActionHeader";
+import {
+  useDeleteMedicine,
+  useMedicinesByMedkitId,
+} from "@/services/medicines/hooks";
 import { useMedkit } from "@/services/medkits/hooks";
 import { IMedicines } from "@/shared/types/entities";
 import { EModalKey, ETableName } from "@/shared/types/enums";
 import {
   AbsoluteCenter,
-  Button,
   Flex,
   HStack,
   Separator,
@@ -15,61 +19,46 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useModal } from "@ebay/nice-modal-react";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { LuPlus } from "react-icons/lu";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { getColumns, getFilterConfig } from "./data";
 
 interface IMedicinesFilterValues extends Record<string, unknown> {
   search?: string;
-  quantity?: number;
-  expiryDate?: {
-    startDate?: string | Date;
-    endDate?: string | Date;
-  } | null;
 }
 
 export const Medkit = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
-  const { data: medkit, isLoading: isLoadingMedkit } = useMedkit(id);
+
+  const {
+    data: medkit,
+    isLoading: isLoadingMedkit,
+    isError: isErrorMedkit,
+  } = useMedkit(id);
+  const { mutateAsync: deleteMedicine } = useDeleteMedicine();
   const { data: medicines, isLoading: isLoadingMedicines } =
     useMedicinesByMedkitId(id);
-  const { show } = useModal(EModalKey.CREATE_MEDICINE);
+  const { show: showCreateMedicine } = useModal(EModalKey.CREATE_MEDICINE);
 
-  const handleFilterSubmit = (values: IMedicinesFilterValues) => {
-    console.log("values :", values);
-  };
-
-  const handleCreateMedicine = () => {
-    show({
-      medkitId: id,
-      onSuccess: (medicine: IMedicines) => {
-        console.log("Medicine created:", medicine);
-      },
-    });
-  };
+  const [filteredMedicines, setFilteredMedicines] = useState<IMedicines[]>(
+    medicines || []
+  );
 
   const handleEditMedicine = useCallback(
     (medicine: IMedicines) => {
-      show({
+      showCreateMedicine({
         medicine,
         medkitId: id,
-        onSuccess: (updatedMedicine: IMedicines) => {
-          console.log("Medicine updated:", updatedMedicine);
-          // TODO: Refetch medicines or update cache
-        },
       });
     },
-    [id, show]
+    [id]
   );
 
   const handleDeleteMedicine = useCallback((medicine: IMedicines) => {
-    // TODO: Add confirmation dialog
-    console.log("Delete medicine:", medicine);
-    // TODO: Implement delete API call
+    deleteMedicine(medicine.id);
   }, []);
 
   const handleMedicineDoubleClick = useCallback(
@@ -78,17 +67,35 @@ export const Medkit = () => {
         navigate(PATHS.MEDICINE(id, medicine.id));
       }
     },
-    [id, navigate]
+    [id]
   );
 
+  const handleFilterSubmit = useCallback(
+    (values: IMedicinesFilterValues) => {
+      const { search } = values;
+      const filtered = medicines?.filter((medicine) =>
+        medicine.name.toLowerCase().includes(search?.toLowerCase() || "")
+      );
+      setFilteredMedicines(filtered || []);
+    },
+    [medicines]
+  );
+
+  const filterConfig = useMemo(() => getFilterConfig(t), []);
   const columns = useMemo(
     () => getColumns(t, handleEditMedicine, handleDeleteMedicine),
-    [t, handleEditMedicine, handleDeleteMedicine]
+    []
   );
 
-  const filterConfig = useMemo(() => getFilterConfig(t), [t]);
+  useEffect(() => {
+    setFilteredMedicines(medicines || []);
+  }, [medicines]);
 
-  if (isLoadingMedkit) {
+  if (isErrorMedkit) {
+    return <Navigate to={PATHS.HOME} />;
+  }
+
+  if (isLoadingMedkit || !medkit) {
     return (
       <AbsoluteCenter>
         <Spinner size="xl" color="blackAlpha.900" />
@@ -102,17 +109,9 @@ export const Medkit = () => {
         <Text fontSize="2xl" fontWeight="bold" lineHeight={1}>
           {medkit?.name}
         </Text>
-        <Button
-          onClick={handleCreateMedicine}
-          colorPalette="blue"
-          size="md"
-          variant="solid"
-        >
-          <LuPlus />
-          {t("medkit.addMedicine")}
-        </Button>
+        <ActionHeader medkit={medkit} />
       </HStack>
-
+      {!!medkit?.description && <Text>{medkit.description}</Text>}
       <Separator />
 
       <FilterCreator<IMedicinesFilterValues>
@@ -122,7 +121,7 @@ export const Medkit = () => {
       />
 
       <Table<IMedicines>
-        data={medicines || []}
+        data={filteredMedicines}
         columns={columns}
         isLoading={isLoadingMedicines}
         onRowDoubleClick={handleMedicineDoubleClick}

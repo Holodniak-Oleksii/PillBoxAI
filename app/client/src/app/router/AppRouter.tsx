@@ -1,5 +1,6 @@
 import { AccountLayout } from "@/app/layouts/AccountLayout";
 import { MainLayout } from "@/app/layouts/MainLayout";
+import { useUserStore } from "@/app/store/user";
 import { Analytics } from "@/pages/Analytics";
 import { Home } from "@/pages/Home";
 import { Medicine } from "@/pages/Medicine";
@@ -14,25 +15,42 @@ import {
 } from "react-router-dom";
 import { PATHS } from "./paths";
 
-const AppRouter = () => (
-  <Router>
-    <Routes>
-      <Route path={PATHS.HOME} element={<MainLayout />}>
-        <Route path={PATHS.HOME} element={<Home />} />
-        <Route path={PATHS.MEDKIT(":id")} element={<Medkit />} />
-        <Route
-          path={PATHS.MEDICINE(":medkitId", ":medicineId")}
-          element={<Medicine />}
-        />
-      </Route>
-      <Route path={PATHS.ACCOUNT} element={<AccountLayout />}>
-        <Route path={PATHS.SETTINGS} element={<Settings />} />
-        <Route path={PATHS.NOTIFICATIONS} element={<Notifications />} />
-        <Route path={PATHS.ANALYTICS} element={<Analytics />} />
-      </Route>
-      <Route path="*" element={<Navigate to={PATHS.HOME} />} />
-    </Routes>
-  </Router>
-);
+const AppRouter = () => {
+  const isAuth = useUserStore((state) => state.isAuth);
+
+  if (!isAuth) {
+    return (
+      <Router>
+        <Routes>
+          <Route path={PATHS.HOME} element={<MainLayout />}>
+            <Route path={PATHS.HOME} element={<Home />} />
+          </Route>
+          <Route path="*" element={<Navigate to={PATHS.HOME} />} />
+        </Routes>
+      </Router>
+    );
+  }
+
+  return (
+    <Router>
+      <Routes>
+        <Route path={PATHS.HOME} element={<MainLayout />}>
+          <Route path={PATHS.HOME} element={<Home />} />
+          <Route path={PATHS.MEDKIT(":id")} element={<Medkit />} />
+          <Route
+            path={PATHS.MEDICINE(":medkitId", ":medicineId")}
+            element={<Medicine />}
+          />
+        </Route>
+        <Route path={PATHS.ACCOUNT} element={<AccountLayout />}>
+          <Route path={PATHS.SETTINGS} element={<Settings />} />
+          <Route path={PATHS.NOTIFICATIONS} element={<Notifications />} />
+          <Route path={PATHS.ANALYTICS} element={<Analytics />} />
+        </Route>
+        <Route path="*" element={<Navigate to={PATHS.HOME} />} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default AppRouter;

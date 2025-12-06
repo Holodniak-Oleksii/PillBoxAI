@@ -15,7 +15,7 @@ import { ISignUpFormValues } from "./types";
 export const SignUpModal = create<IModalProps>(({ id }) => {
   const modal = useModal(id);
   const { show: showLogin } = useModal(EModalKey.LOGIN);
-  const { mutate: registerAction } = useRegister();
+  const { mutateAsync: registerAction } = useRegister();
   const { mutate: googleAuth } = useGoogleAuth();
   const { t } = useTranslation();
 
@@ -28,9 +28,10 @@ export const SignUpModal = create<IModalProps>(({ id }) => {
     resolver: zodResolver(signUpSchema),
   });
 
-  const onSubmit: SubmitHandler<ISignUpFormValues> = async () => {
+  const onSubmit: SubmitHandler<ISignUpFormValues> = async (data) => {
+    await registerAction(data);
+
     modal.hide();
-    await registerAction();
   };
 
   const handleGoogleSignUp = async () => {
@@ -53,13 +54,13 @@ export const SignUpModal = create<IModalProps>(({ id }) => {
           gap={0.5}
         >
           <FormInput
-            label={t("labels.name")}
-            placeholder={t("placeholders.name")}
+            label={t("labels.username")}
+            placeholder={t("placeholders.username")}
             type="text"
-            autoComplete="name"
-            name="name"
+            autoComplete="username"
+            name="username"
             control={control}
-            error={errors.name?.message}
+            error={errors.username?.message}
           />
 
           <FormInput

@@ -3,8 +3,8 @@ export const PATHS = {
   ACCOUNT: "/account",
   SETTINGS: "/account/settings",
   CHAT: (id: string) => `/chat?id=${id}`,
-  MEDKIT: (id: string) => `/medkit/${id}`,
-  MEDICINE: (medkitId: string, medicineId: string) =>
+  MEDKIT: (id?: string | number) => `/medkit/${id}`,
+  MEDICINE: (medkitId: string | number, medicineId: string | number) =>
     `/medkit/${medkitId}/${medicineId}`,
   NOTIFICATIONS: "/account/notifications",
   ANALYTICS: "/account/analytics",

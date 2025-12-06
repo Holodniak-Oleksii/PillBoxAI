@@ -167,7 +167,9 @@ export const renderFilterField = <T extends FieldValues = FieldValues>({
                   }}
                 >
                   {options.map((option: ISelectOption) => {
-                    const isChecked = selectedValues.includes(option.value);
+                    const isChecked = selectedValues.includes(
+                      option.value.toString()
+                    );
                     return (
                       <ChakraCheckbox.Root
                         key={option.value}

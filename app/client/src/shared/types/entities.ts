@@ -5,40 +5,87 @@ export interface ITimeStamp {
   updatedAt: Date;
 }
 
+// Auth related types
 export interface IUser {
-  id: string;
-  name: string;
+  id: number;
+  username: string;
   email: string;
-  ts: ITimeStamp;
 }
 
+export interface IAuthResponse {
+  message: string;
+  token: string;
+  user: IUser;
+}
+
+export interface IRegisterRequest {
+  username: string;
+  email: string;
+  password: string;
+}
+
+export interface ILoginRequest {
+  username: string;
+  password: string;
+}
+
+export type MedkitMemberRole = "OWNER" | "EDITOR" | "VIEWER";
+
+export interface IMedkitMemberRequest {
+  userId: number; // required
+  role: MedkitMemberRole; // required, enum: [OWNER, EDITOR, VIEWER]
+}
 export interface IMedMember {
-  userID: string;
+  id: number;
+  medkitId: number;
+  userId: number;
+  role: MedkitMemberRole;
+  addedAt: string; // format: date-time
+}
+
+export interface IMedkitRequest {
   name: string;
-  rules: string[];
+  description?: string;
+}
+
+export interface IMedkit {
+  id: number;
+  name: string;
+  description?: string;
+  ownerId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Pills/Medicines related types
+// Matches PillRequest from OpenAPI
+export interface IPillRequest {
+  name: string; // required, minLength: 1, maxLength: 255
+  activeSubstance?: string; // optional, maxLength: 255
+  description?: string; // optional
+  usageInstructions?: string; // optional
+  sideEffects?: string; // optional
+  contraindications?: string; // optional
+  expiryDate: string; // required, format: date
+  quantity: number; // required, minimum: 0
 }
 
 export interface IMedicines {
-  id: string;
+  id: number;
+  medkitId: number;
+  medkitName: string;
   name: string;
-  activeIngredient: string;
+  activeSubstance: string;
   description: string;
   usageInstructions: string;
   sideEffects: string;
   contraindications: string;
-  storageConditions: string;
+  expiryDate: string;
   quantity: number;
-  medkitId: string;
-  expiryDate: Date;
-  ts: ITimeStamp;
-}
-
-export interface IMedkit {
-  id: string;
-  ownerID: string;
-  name: string;
-  members: IMedMember[];
-  ts: ITimeStamp;
+  createdById: number;
+  createdByUsername: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface INotification {

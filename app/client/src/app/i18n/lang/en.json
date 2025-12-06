@@ -5,7 +5,8 @@
       "edit": "Edit",
       "delete": "Delete",
       "createdAt": "Created",
-      "updatedAt": "Updated"
+      "updatedAt": "Updated",
+      "createdBy": "Created by"
     },
     "button": {
       "login": "Login",
@@ -23,7 +24,8 @@
       "save": "Save",
       "back": "Back",
       "clear": "Clear",
-      "apply": "Apply"
+      "apply": "Apply",
+      "confirm": "Confirm"
     },
     "titles": {
       "medkits": "Medkits",
@@ -48,9 +50,11 @@
       "minValue": "Value must be greater than or equal to 0"
     },
     "labels": {
+      "activeSubstance": "Active Substance",
       "password": "Password",
+      "medicineName": "Medicine name",
       "email": "Email address",
-      "name": "Full name",
+      "username": "Username",
       "confirmPassword": "Confirm password",
       "title": "Title",
       "date": "Date",
@@ -64,9 +68,10 @@
       "storageConditions": "Storage Conditions"
     },
     "placeholders": {
+      "activeSubstance": "Enter Active Substance",
       "email": "you@example.com",
       "password": "Enter your password",
-      "name": "John Doe",
+      "username": "Enter your username",
       "confirmPassword": "Confirm your password",
       "searchMedkits": "Search in medkits",
       "typeMessage": "Type a message...",
@@ -116,6 +121,14 @@
       },
       "editMedicine": {
         "title": "Edit Medicine"
+      },
+      "deleteMedkit": {
+        "title": "Delete Medkit",
+        "description": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone."
+      },
+      "deleteMedicine": {
+        "title": "Delete Medicine",
+        "description": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone."
       }
     },
     "account": {
@@ -148,7 +161,6 @@
       "allMedkits": "All Medkits"
     },
     "medkit": {
-      "addMedicine": "Add Medicine",
       "table": {
         "name": "Name",
         "activeIngredient": "Active Ingredient",
@@ -167,7 +179,10 @@
       },
       "actions": {
         "edit": "Edit medicine",
-        "delete": "Delete medicine"
+        "delete": "Delete medicine",
+        "addMedicine": "Add Medicine",
+        "editMedkit": "Edit Medkit",
+        "deleteMedkit": "Delete Medkit"
       }
     },
     "medicine": {

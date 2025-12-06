@@ -1,0 +1,1 @@
+export { MedicineTitle } from "./MedicineTitle";

@@ -1,4 +1,5 @@
 import { useChatStore } from "@/app/store/chat";
+import { useEventHandler } from "@/shared/hooks";
 import { IChatConversation } from "@/shared/types/entities";
 import { Box, Flex } from "@chakra-ui/react";
 import { FC, useEffect, useRef, useState } from "react";
@@ -44,6 +45,8 @@ export const Chat: FC<IChatProps> = ({ conversation }) => {
     }, 1500);
   };
 
+  const handleEventSendMessage = useEventHandler(handleSendMessage);
+
   useEffect(() => {
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
@@ -71,7 +74,7 @@ export const Chat: FC<IChatProps> = ({ conversation }) => {
         <TypeMessage
           message={message}
           onChangeMessage={setMessage}
-          handleSendMessage={handleSendMessage}
+          handleSendMessage={handleEventSendMessage}
         />
       </Box>
     </Box>

@@ -1,9 +1,11 @@
 import { useChatStore } from "@/app/store/chat";
+import { useUserStore } from "@/app/store/user";
 import { Chat } from "@/features/Chat";
-import { useEffect, useMemo } from "react";
+import { memo, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 
-export const Home = () => {
+export const Home = memo(() => {
+  const isAuth = useUserStore((state) => state.isAuth);
   const [searchParams, setSearchParams] = useSearchParams();
   const id = searchParams.get("id");
   const { conversations, createConversation } = useChatStore();
@@ -24,10 +26,10 @@ export const Home = () => {
   }, [conversations, id, createConversation]);
 
   useEffect(() => {
-    if (conversation && conversation.id !== id) {
+    if (conversation && conversation.id !== id && isAuth) {
       setSearchParams({ id: conversation.id });
     }
-  }, [conversation, id, setSearchParams]);
+  }, [conversation, id, setSearchParams, isAuth]);
 
   return <Chat conversation={conversation} />;
-};
+});

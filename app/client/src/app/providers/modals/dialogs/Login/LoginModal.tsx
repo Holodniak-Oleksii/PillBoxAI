@@ -17,7 +17,7 @@ export const LoginModal = create<IModalProps>(({ id }) => {
   const { t } = useTranslation();
   const { show: showSignUp } = useModal(EModalKey.SING_UP);
   const { mutate: googleAuth } = useGoogleAuth();
-  const { mutate: login } = useLogin();
+  const { mutateAsync: login } = useLogin();
   const {
     control,
     handleSubmit,
@@ -26,8 +26,8 @@ export const LoginModal = create<IModalProps>(({ id }) => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit: SubmitHandler<ILoginFormValues> = async () => {
-    await login();
+  const onSubmit: SubmitHandler<ILoginFormValues> = async (data) => {
+    await login(data);
     modal.hide();
   };
 
@@ -53,13 +53,13 @@ export const LoginModal = create<IModalProps>(({ id }) => {
           gap={0}
         >
           <FormInput
-            label={t("labels.email")}
-            placeholder={t("placeholders.email")}
-            type="email"
-            autoComplete="email"
-            name="email"
+            label={t("labels.username")}
+            placeholder={t("placeholders.username")}
+            type="text"
+            autoComplete="username"
+            name="username"
             control={control}
-            error={errors.email?.message}
+            error={errors.username?.message}
           />
 
           <FormInput

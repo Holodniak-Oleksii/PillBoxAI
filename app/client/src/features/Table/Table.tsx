@@ -123,7 +123,7 @@ const TableComponent = <TData,>({
 
 export const Table = memo(<TData,>(props: TableProps<TData>) => {
   return (
-    <Box width="100%" height="100%" position="relative">
+    <Box width="100%" height="100%" position="relative" minH={400}>
       <Box
         width="100%"
         height="100%"

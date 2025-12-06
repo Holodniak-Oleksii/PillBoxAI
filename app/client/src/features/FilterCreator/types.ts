@@ -42,5 +42,5 @@ export type TFilterValues = Record<string, unknown>;
 export interface IFilterCreatorProps<T extends TFilterValues = TFilterValues> {
   tableName: ETableName;
   config: IFilterField[];
-  onSubmit: (values: T) => void;
+  onSubmit?: (values: T) => void;
 }
