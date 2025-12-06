@@ -1,11 +1,6 @@
-import { BookIcon, ListIcon, PencilIcon, SearchIcon } from "@/shared/icons";
+import { BookIcon, ListIcon, SearchIcon } from "@/shared/icons";
 
 export const suggestedActions = (onSetMessage: (text: string) => void) => [
-  {
-    icon: PencilIcon,
-    text: "button.helpMeWrite",
-    action: () => onSetMessage("Help me write "),
-  },
   {
     icon: BookIcon,
     text: "button.learnAbout",

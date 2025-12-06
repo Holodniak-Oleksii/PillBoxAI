@@ -106,6 +106,7 @@ export interface IChatMessage {
   content: string;
   role: "user" | "assistant";
   timestamp: Date;
+  relevant_pills?: IRelevantPill[];
 }
 
 export interface IChatConversation {
@@ -114,4 +115,26 @@ export interface IChatConversation {
   messages: IChatMessage[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface IPillRecommendationRequest {
+  query: string;
+  medkit_id?: number;
+  language?: string;
+}
+
+export interface IRelevantPill {
+  id: number;
+  name: string;
+  description: string;
+  medkit_id: number;
+  medkit_name: string;
+  similarity_score: number;
+}
+
+export interface IPillRecommendationResponse {
+  recommendation: string;
+  relevant_pills: IRelevantPill[];
+  searched_medkit_ids: number[];
+  disclaimer: string;
 }

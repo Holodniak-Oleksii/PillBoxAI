@@ -1,8 +1,10 @@
 import { useChatStore } from "@/app/store/chat";
+import { usePillRecommendations } from "@/services/ai/hooks";
 import { useEventHandler } from "@/shared/hooks";
 import { IChatConversation } from "@/shared/types/entities";
 import { Box, Flex } from "@chakra-ui/react";
 import { FC, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Conversation } from "./Conversation";
 import { Greeting } from "./Greeting";
 import { TypeMessage } from "./TypeMessage";
@@ -12,37 +14,61 @@ interface IChatProps {
 }
 
 export const Chat: FC<IChatProps> = ({ conversation }) => {
+  const { t, i18n } = useTranslation();
   const [message, setMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [selectedMedkitId, setSelectedMedkitId] = useState<string | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const { addMessage, setLoading } = useChatStore();
+  const { mutateAsync: getRecommendations, isPending } =
+    usePillRecommendations();
 
   const handleSendMessage = async () => {
-    if (!message.trim()) return;
+    if (!message.trim() || isPending) return;
 
     const userMessage = message.trim();
     setMessage("");
     setIsTyping(true);
+    setLoading(true);
 
     addMessage(conversation.id, {
       content: userMessage,
       role: "user",
     });
 
-    // @TODO: Implement AI response
-    setLoading(true);
-    setTimeout(() => {
-      const aiResponse = `I understand you're asking about "${userMessage}". This is a simulated AI response. In a real implementation, this would connect to your AI service.`;
+    try {
+      const response = await getRecommendations({
+        query: userMessage,
+        medkit_id: selectedMedkitId ? Number(selectedMedkitId) : undefined,
+        language: i18n.language,
+      });
+
+      let aiResponse = response.recommendation;
+
+      if (response.disclaimer) {
+        aiResponse += `\n\n${response.disclaimer}`;
+      }
 
       addMessage(conversation.id, {
         content: aiResponse,
         role: "assistant",
+        relevant_pills: response.relevant_pills || [],
       });
-
+    } catch (error) {
+      console.error("Error getting AI recommendations:", error);
+      const errorMessage = t("chat.error", {
+        defaultValue:
+          "Sorry, I encountered an error while processing your request. Please try again.",
+      });
+      addMessage(conversation.id, {
+        content: errorMessage,
+        role: "assistant",
+      });
+    } finally {
       setIsTyping(false);
       setLoading(false);
-    }, 1500);
+    }
   };
 
   const handleEventSendMessage = useEventHandler(handleSendMessage);
@@ -75,6 +101,8 @@ export const Chat: FC<IChatProps> = ({ conversation }) => {
           message={message}
           onChangeMessage={setMessage}
           handleSendMessage={handleEventSendMessage}
+          selectedMedkitId={selectedMedkitId}
+          onMedkitChange={setSelectedMedkitId}
         />
       </Box>
     </Box>

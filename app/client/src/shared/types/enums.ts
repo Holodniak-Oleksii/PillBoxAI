@@ -1,5 +1,6 @@
 export enum EAvailableLanguage {
   EN = "en",
+  UK = "uk",
 }
 
 export enum EEndpoints {
@@ -20,6 +21,7 @@ export enum EQueryKey {
   MEDKIT = "MEDKIT",
   MEDICINES = "MEDICINES",
   NOTIFICATIONS = "NOTIFICATIONS",
+  AI_RECOMMENDATIONS = "AI_RECOMMENDATIONS",
 }
 
 export enum ETableName {

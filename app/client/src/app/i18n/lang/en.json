@@ -110,7 +110,9 @@
       "noChatsDescription": "Start a new conversation to see your chat history here",
       "newChat": "New Chat",
       "lastMessage": "Last message",
-      "noMessages": "No messages yet"
+      "noMessages": "No messages yet",
+      "relevantMedicines": "Relevant medicines from your medkits:",
+      "error": "Sorry, I encountered an error while processing your request. Please try again."
     },
     "modals": {
       "createMedkit": {
@@ -140,7 +142,14 @@
       "tabs": {
         "general": "General",
         "account": "Account"
-      }
+      },
+      "userInfo": "User Information",
+      "statistics": "Statistics",
+      "totalMedkits": "Total Medkits",
+      "totalMedicines": "Total Medicines",
+      "expiredMedicines": "Expired Medicines",
+      "language": "Language",
+      "selectLanguage": "Select language"
     },
     "notifications": {
       "noNotifications": "No notifications found",

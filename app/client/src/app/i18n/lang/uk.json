@@ -1,0 +1,212 @@
+{
+  "translation": {
+    "common": {
+      "back": "Назад",
+      "edit": "Редагувати",
+      "delete": "Видалити",
+      "createdAt": "Створено",
+      "updatedAt": "Оновлено",
+      "createdBy": "Створено користувачем"
+    },
+    "button": {
+      "login": "Увійти",
+      "signUp": "Зареєструватися",
+      "askChat": "Запитати в чаті",
+      "continue": "Продовжити",
+      "logout": "Вийти",
+      "helpMeWrite": "Допомогти написати",
+      "learnAbout": "Дізнатися про",
+      "analyzeImage": "Проаналізувати зображення",
+      "summarizeText": "Підсумувати текст",
+      "history": "Історія",
+      "scan": "Сканувати",
+      "cancel": "Скасувати",
+      "save": "Зберегти",
+      "back": "Назад",
+      "clear": "Очистити",
+      "apply": "Застосувати",
+      "confirm": "Підтвердити"
+    },
+    "titles": {
+      "medkits": "Аптечки",
+      "notifications": "Сповіщення",
+      "settings": "Налаштування",
+      "analytics": "Аналітика"
+    },
+    "subtitle": {
+      "goodMorning": "Доброго ранку",
+      "goodAfternoon": "Доброго дня",
+      "goodEvening": "Доброго вечора",
+      "aiIsTyping": "ШІ друкує...",
+      "howCanIHelpYouToday": "Як я можу вам допомогти сьогодні?"
+    },
+    "errors": {
+      "isRequired": "Це поле обов'язкове",
+      "minLength": "Мінімум 2 символи",
+      "invalidEmail": "Введіть дійсну електронну адресу",
+      "passwordMin": "Мінімум 6 символів",
+      "passwordComplexity": "Пароль повинен містити великі, малі літери та цифри",
+      "passwordMismatch": "Паролі не співпадають",
+      "minValue": "Значення повинно бути більше або дорівнювати 0"
+    },
+    "labels": {
+      "activeSubstance": "Активна речовина",
+      "password": "Пароль",
+      "medicineName": "Назва ліків",
+      "email": "Електронна адреса",
+      "username": "Ім'я користувача",
+      "confirmPassword": "Підтвердити пароль",
+      "title": "Назва",
+      "date": "Дата",
+      "activeIngredient": "Активний інгредієнт",
+      "quantity": "Кількість",
+      "expiryDate": "Термін придатності",
+      "description": "Опис",
+      "usageInstructions": "Інструкції з використання",
+      "sideEffects": "Побічні ефекти",
+      "contraindications": "Протипоказання",
+      "storageConditions": "Умови зберігання"
+    },
+    "placeholders": {
+      "activeSubstance": "Введіть активну речовину",
+      "email": "you@example.com",
+      "password": "Введіть ваш пароль",
+      "username": "Введіть ваше ім'я користувача",
+      "confirmPassword": "Підтвердіть ваш пароль",
+      "searchMedkits": "Пошук в аптечках",
+      "typeMessage": "Введіть повідомлення...",
+      "searchChats": "Пошук в чатах...",
+      "title": "Введіть назву",
+      "selectDateRange": "Виберіть діапазон дат",
+      "medicineName": "Назва ліків",
+      "activeIngredient": "Активний інгредієнт",
+      "quantity": "0",
+      "expiryDate": "Виберіть дату",
+      "description": "Опис ліків",
+      "usageInstructions": "Як використовувати",
+      "sideEffects": "Побічні ефекти",
+      "contraindications": "Протипоказання",
+      "storageConditions": "Умови зберігання",
+      "searchByName": "Пошук за назвою..."
+    },
+    "auth": {
+      "join": "Приєднуйтесь і зробіть життя кращим",
+      "AIMedicineOrganizer": "#1 ШІ Організатор Ліків",
+      "goodUsersExperience": "чудовий досвід",
+      "forgotPassword": "Забули пароль",
+      "noAccount": "Немає облікового запису?",
+      "hasAccount": "Вже є обліковий запис?",
+      "signInToContinue": "Увійдіть, щоб продовжити",
+      "createAccountToContinue": "Створіть обліковий запис, щоб продовжити",
+      "perfectAllInOneApp": "Ідеальний універсальний додаток!",
+      "soEasyAndPowerful": "Так легко та потужно",
+      "signUpWithGoogle": "Зареєструватися через Google",
+      "signInWithGoogle": "Увійти через Google",
+      "orContinueWith": "або продовжити з"
+    },
+    "chat": {
+      "history": "Історія чату",
+      "noChats": "Чати не знайдено",
+      "noChatsDescription": "Почніть нову розмову, щоб побачити історію чату тут",
+      "newChat": "Новий чат",
+      "lastMessage": "Останнє повідомлення",
+      "noMessages": "Повідомлень поки немає",
+      "relevantMedicines": "Відповідні ліки з ваших аптечок:",
+      "error": "Вибачте, сталася помилка під час обробки вашого запиту. Будь ласка, спробуйте ще раз."
+    },
+    "modals": {
+      "createMedkit": {
+        "title": "Створити аптечку"
+      },
+      "createMedicine": {
+        "title": "Створити ліки"
+      },
+      "editMedicine": {
+        "title": "Редагувати ліки"
+      },
+      "deleteMedkit": {
+        "title": "Видалити аптечку",
+        "description": "Ви впевнені, що хочете видалити \"{{name}}\"? Цю дію неможливо скасувати."
+      },
+      "deleteMedicine": {
+        "title": "Видалити ліки",
+        "description": "Ви впевнені, що хочете видалити \"{{name}}\"? Цю дію неможливо скасувати."
+      }
+    },
+    "account": {
+      "settings": "Налаштування облікового запису",
+      "notifications": "Сповіщення",
+      "support": "Підтримка",
+      "logout": "Вийти",
+      "analytics": "Аналітика",
+      "tabs": {
+        "general": "Загальні",
+        "account": "Обліковий запис"
+      },
+      "userInfo": "Інформація про користувача",
+      "statistics": "Статистика",
+      "totalMedkits": "Всього аптечок",
+      "totalMedicines": "Всього ліків",
+      "expiredMedicines": "Прострочені ліки",
+      "language": "Мова",
+      "selectLanguage": "Виберіть мову"
+    },
+    "notifications": {
+      "noNotifications": "Сповіщень не знайдено",
+      "noNotificationsDescription": "Немає сповіщень, що відповідають вашим фільтрам",
+      "noOptions": "Варіантів не знайдено",
+      "clear": "Очистити",
+      "filter": {
+        "medkit": "Аптечка",
+        "date": "Дата",
+        "selectMedkit": "Виберіть аптечку",
+        "selectDate": "Виберіть дату"
+      },
+      "type": {
+        "expiry": "Термін придатності",
+        "lowStock": "Низький запас",
+        "refill": "Поповнити"
+      },
+      "allMedkits": "Всі аптечки"
+    },
+    "medkit": {
+      "table": {
+        "name": "Назва",
+        "activeIngredient": "Активний інгредієнт",
+        "quantity": "Кількість",
+        "expiryDate": "Термін придатності",
+        "description": "Опис",
+        "createdAt": "Дата додавання",
+        "actions": "Дії"
+      },
+      "filters": {
+        "search": "Пошук",
+        "minimumQuantity": "Мінімальна кількість",
+        "expiryDate": "Термін придатності",
+        "searchByName": "Пошук за назвою...",
+        "enterQuantity": "Введіть кількість"
+      },
+      "actions": {
+        "edit": "Редагувати ліки",
+        "delete": "Видалити ліки",
+        "addMedicine": "Додати ліки",
+        "editMedkit": "Редагувати аптечку",
+        "deleteMedkit": "Видалити аптечку"
+      }
+    },
+    "medicine": {
+      "notFound": "Ліки не знайдено",
+      "expired": "Прострочені",
+      "expiringSoon": "Скоро закінчиться термін",
+      "quantity": "Кількість",
+      "units": "шт.",
+      "expiryDate": "Термін придатності",
+      "details": "Детальна інформація",
+      "description": "Опис",
+      "usageInstructions": "Інструкції з використання",
+      "sideEffects": "Побічні ефекти",
+      "contraindications": "Протипоказання",
+      "storageConditions": "Умови зберігання"
+    }
+  }
+}
