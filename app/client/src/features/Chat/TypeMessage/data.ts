@@ -1,19 +1,23 @@
-import { BookIcon, ListIcon, SearchIcon } from "@/shared/icons";
+import { BookIcon, HeartIcon, PillIcon } from "@/shared/icons";
+import { TFunction } from "i18next";
 
-export const suggestedActions = (onSetMessage: (text: string) => void) => [
+export const suggestedActions = (
+  onSetMessage: (text: string) => void,
+  t: TFunction
+) => [
   {
     icon: BookIcon,
     text: "button.learnAbout",
-    action: () => onSetMessage("Learn about "),
+    action: () => onSetMessage(t("button.learnAbout")),
   },
   {
-    icon: SearchIcon,
-    text: "button.analyzeImage",
-    action: () => onSetMessage("Analyze this image: "),
+    icon: HeartIcon,
+    text: "button.iHavePain",
+    action: () => onSetMessage(t("button.iHavePain")),
   },
   {
-    icon: ListIcon,
-    text: "button.summarizeText",
-    action: () => onSetMessage("Summarize this text: "),
+    icon: PillIcon,
+    text: "button.whatShouldITakeFor",
+    action: () => onSetMessage(t("button.whatShouldITakeFor")),
   },
 ];
