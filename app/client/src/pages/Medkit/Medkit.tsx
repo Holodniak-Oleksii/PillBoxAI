@@ -1,5 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { PATHS } from "@/app/router/paths";
+import { useUserStore } from "@/app/store/user";
 import { FilterCreator } from "@/features/FilterCreator";
 import { Table } from "@/features/Table";
 import { ActionHeader } from "@/pages/Medkit/ActionHeader";
@@ -7,9 +7,10 @@ import {
   useDeleteMedicine,
   useMedicinesByMedkitId,
 } from "@/services/medicines/hooks";
-import { useMedkit } from "@/services/medkits/hooks";
+import { useMedkit, useMedkitMembers } from "@/services/medkits/hooks";
 import { IMedicines } from "@/shared/types/entities";
 import { EModalKey, ETableName } from "@/shared/types/enums";
+import { canEdit, getUserRole } from "@/shared/utils/medkitPermissions";
 import {
   AbsoluteCenter,
   Flex,
@@ -32,12 +33,14 @@ export const Medkit = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
+  const user = useUserStore((state) => state.user);
 
   const {
     data: medkit,
     isLoading: isLoadingMedkit,
     isError: isErrorMedkit,
   } = useMedkit(id);
+  const { data: members } = useMedkitMembers(id);
   const { mutateAsync: deleteMedicine } = useDeleteMedicine();
   const { data: medicines, isLoading: isLoadingMedicines } =
     useMedicinesByMedkitId(id);
@@ -47,19 +50,43 @@ export const Medkit = () => {
     medicines || []
   );
 
+  // Get current user's role in this medkit
+  const currentUserMember = useMemo(() => {
+    if (!user) return undefined;
+    // Check if user is owner (from medkit.ownerId)
+    if (medkit?.ownerId === user.id) {
+      return {
+        id: -1,
+        medkitId: medkit.id,
+        userId: user.id,
+        role: "OWNER" as const,
+        addedAt: medkit.createdAt,
+      };
+    }
+    // Check if user is in members list
+    return getUserRole(members, user.id);
+  }, [user, medkit, members]);
+
+  const userCanEdit = canEdit(currentUserMember);
+
   const handleEditMedicine = useCallback(
     (medicine: IMedicines) => {
+      if (!userCanEdit) return;
       showCreateMedicine({
         medicine,
         medkitId: id,
       });
     },
-    [id]
+    [id, userCanEdit, showCreateMedicine]
   );
 
-  const handleDeleteMedicine = useCallback((medicine: IMedicines) => {
-    deleteMedicine(medicine.id);
-  }, []);
+  const handleDeleteMedicine = useCallback(
+    (medicine: IMedicines) => {
+      if (!userCanEdit) return;
+      deleteMedicine(medicine.id);
+    },
+    [userCanEdit, deleteMedicine]
+  );
 
   const handleMedicineDoubleClick = useCallback(
     (medicine: IMedicines) => {
@@ -67,7 +94,7 @@ export const Medkit = () => {
         navigate(PATHS.MEDICINE(id, medicine.id));
       }
     },
-    [id]
+    [id, navigate]
   );
 
   const handleFilterSubmit = useCallback(
@@ -81,10 +108,10 @@ export const Medkit = () => {
     [medicines]
   );
 
-  const filterConfig = useMemo(() => getFilterConfig(t), []);
+  const filterConfig = useMemo(() => getFilterConfig(t), [t]);
   const columns = useMemo(
-    () => getColumns(t, handleEditMedicine, handleDeleteMedicine),
-    []
+    () => getColumns(t, handleEditMedicine, handleDeleteMedicine, userCanEdit),
+    [t, handleEditMedicine, handleDeleteMedicine, userCanEdit]
   );
 
   useEffect(() => {

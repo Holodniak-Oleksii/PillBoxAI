@@ -1,7 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+import { useUserStore } from "@/app/store/user";
 import { useDeleteMedicine } from "@/services/medicines/hooks";
+import { useMedkit, useMedkitMembers } from "@/services/medkits/hooks";
 import { IMedicines } from "@/shared/types/entities";
 import { EModalKey } from "@/shared/types/enums";
+import { canEdit, getUserRole } from "@/shared/utils/medkitPermissions";
 import {
   Button,
   HStack,
@@ -12,7 +14,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useModal } from "@ebay/nice-modal-react";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { BiEdit } from "react-icons/bi";
 import { LuEllipsisVertical, LuTrash2 } from "react-icons/lu";
@@ -27,12 +29,35 @@ export const MedicineActionHeader = ({
 }: IMedicineActionHeaderProps) => {
   const { medkitId, medicineId } = useParams();
   const { t } = useTranslation();
+  const user = useUserStore((state) => state.user);
   const { mutateAsync: deleteMedicine } = useDeleteMedicine();
+  const { data: medkit } = useMedkit(medkitId, !!medkitId);
+  const { data: members } = useMedkitMembers(medkitId, !!medkitId);
+
+  // Get current user's role in this medkit
+  const currentUserMember = useMemo(() => {
+    if (!user || !medkit) return undefined;
+    // Check if user is owner (from medkit.ownerId)
+    if (medkit.ownerId === user.id) {
+      return {
+        id: -1,
+        medkitId: medkit.id,
+        userId: user.id,
+        role: "OWNER" as const,
+        addedAt: medkit.createdAt,
+      };
+    }
+    // Check if user is in members list
+    return getUserRole(members, user.id);
+  }, [user, medkit, members]);
+
+  const userCanEdit = canEdit(currentUserMember);
 
   const { show: showConfirmDialog } = useModal(EModalKey.CONFIRM_DIALOG);
   const { show: showEditMedicine } = useModal(EModalKey.CREATE_MEDICINE);
 
   const handleDeleteMedicine = useCallback(() => {
+    if (!userCanEdit) return;
     showConfirmDialog({
       title: t("modals.deleteMedicine.title"),
       description: t("modals.deleteMedicine.description", {
@@ -43,14 +68,26 @@ export const MedicineActionHeader = ({
         await deleteMedicine(medicineId);
       },
     });
-  }, [medicineId, medicine.name]);
+  }, [
+    medicineId,
+    medicine.name,
+    userCanEdit,
+    showConfirmDialog,
+    t,
+    deleteMedicine,
+  ]);
 
   const handleEditMedicine = useCallback(() => {
+    if (!userCanEdit) return;
     showEditMedicine({
       medicine,
       medkitId,
     });
-  }, [medicine, medkitId]);
+  }, [medicine, medkitId, userCanEdit, showEditMedicine]);
+
+  if (!userCanEdit) {
+    return null;
+  }
 
   return (
     <Popover.Root>

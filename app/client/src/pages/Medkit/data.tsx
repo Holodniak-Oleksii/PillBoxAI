@@ -9,7 +9,8 @@ import { LuTrash2 } from "react-icons/lu";
 export const getColumns = (
   t: TFunction,
   onEdit: (medicine: IMedicines) => void,
-  onDelete: (medicine: IMedicines) => void
+  onDelete: (medicine: IMedicines) => void,
+  canEdit: boolean = true
 ): ColumnDef<IMedicines>[] => [
   {
     accessorKey: "name",
@@ -56,6 +57,7 @@ export const getColumns = (
     size: 100,
     cell: (info) => {
       const medicine = info.row.original;
+      if (!canEdit) return null;
       return (
         <>
           <IconButton
