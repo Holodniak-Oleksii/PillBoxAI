@@ -194,3 +194,43 @@ export const SendIcon: FC<IconProps> = ({
     <polygon points="22,2 15,22 11,13 2,9 22,2" />
   </svg>
 );
+
+export const HeartIcon: FC<IconProps> = ({
+  size = 20,
+  color = "currentColor",
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={color}
+    strokeWidth="2"
+  >
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+  </svg>
+);
+
+export const PillIcon: FC<IconProps> = ({
+  size = 20,
+  color = "currentColor",
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={color}
+    strokeWidth="2"
+  >
+    <rect
+      x="8"
+      y="4"
+      width="8"
+      height="16"
+      rx="2"
+      transform="rotate(45 12 12)"
+    />
+    <line x1="12" y1="2" x2="12" y2="22" />
+  </svg>
+);

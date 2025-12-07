@@ -32,7 +32,7 @@ export const TypeMessage: FC<ITypeMessageProps> = ({
   };
 
   const renderSuggestedActions = () => {
-    return suggestedActions(onChangeMessage).map((action) => (
+    return suggestedActions(onChangeMessage, t).map((action) => (
       <Button
         variant="outline"
         borderRadius="3xl"
