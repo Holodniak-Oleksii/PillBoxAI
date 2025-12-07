@@ -198,7 +198,7 @@ paths:
       tags:
         - Medicine Boxes
       summary: Get medicine box by ID
-      description: Returns medicine box information by its identifier
+      description: Returns medicine box information by its identifier. User must be either the owner or a member of the medicine box.
       parameters:
         - name: id
           in: path
@@ -214,6 +214,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MedkitResponse'
+        '403':
+          description: Access denied - user does not have access to this medicine box
         '404':
           description: Medicine box not found
 
@@ -221,7 +223,7 @@ paths:
       tags:
         - Medicine Boxes
       summary: Update medicine box
-      description: Update medicine box information
+      description: Update medicine box information. User must be either the owner or have EDITOR/OWNER role.
       parameters:
         - name: id
           in: path
@@ -244,16 +246,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MedkitResponse'
-        '404':
-          description: Medicine box not found
         '400':
           description: Invalid data
+        '403':
+          description: Access denied - user does not have permission to edit this medicine box
+        '404':
+          description: Medicine box not found
 
     delete:
       tags:
         - Medicine Boxes
       summary: Delete medicine box
-      description: Delete medicine box by its identifier
+      description: Delete medicine box by its identifier. Only the owner can delete a medicine box.
       parameters:
         - name: id
           in: path
@@ -265,39 +269,17 @@ paths:
       responses:
         '204':
           description: Medicine box successfully deleted
+        '403':
+          description: Access denied - only the owner can delete the medicine box
         '404':
-          description: Medicine box not found
-
-  /api/medkits/owner/{ownerId}:
-    get:
-      tags:
-        - Medicine Boxes
-      summary: Get medicine boxes by owner ID
-      description: Returns all medicine boxes belonging to specific user
-      parameters:
-        - name: ownerId
-          in: path
-          description: Owner ID
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: Successfully retrieved list of medicine boxes
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MedkitResponse'
+          description: Medicine box not found or access denied
 
   /api/medkits/search:
     get:
       tags:
         - Medicine Boxes
       summary: Search medicine boxes by name
-      description: Find medicine boxes whose name contains specified text
+      description: Find medicine boxes whose name contains specified text. Only returns medicine boxes where the authenticated user is either the owner or a member.
       parameters:
         - name: name
           in: query

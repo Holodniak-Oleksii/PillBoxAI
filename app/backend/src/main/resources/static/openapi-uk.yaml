@@ -198,7 +198,7 @@ paths:
       tags:
         - Аптечки
       summary: Отримати аптечку за ID
-      description: Повертає інформацію про аптечку за її ідентифікатором
+      description: Повертає інформацію про аптечку за її ідентифікатором. Користувач має бути власником або учасником аптечки.
       parameters:
         - name: id
           in: path
@@ -214,6 +214,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MedkitResponse'
+        '403':
+          description: Доступ заборонено - користувач не має доступу до цієї аптечки
         '404':
           description: Аптечку не знайдено
 
@@ -221,7 +223,7 @@ paths:
       tags:
         - Аптечки
       summary: Оновити аптечку
-      description: Оновлення інформації про аптечку
+      description: Оновлення інформації про аптечку. Користувач має бути власником або мати роль EDITOR/OWNER.
       parameters:
         - name: id
           in: path
@@ -244,16 +246,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MedkitResponse'
-        '404':
-          description: Аптечку не знайдено
         '400':
           description: Невалідні дані
+        '403':
+          description: Доступ заборонено - користувач не має прав для редагування цієї аптечки
+        '404':
+          description: Аптечку не знайдено
 
     delete:
       tags:
         - Аптечки
       summary: Видалити аптечку
-      description: Видалення аптечки за її ідентифікатором
+      description: Видалення аптечки за її ідентифікатором. Тільки власник може видалити аптечку.
       parameters:
         - name: id
           in: path
@@ -265,39 +269,17 @@ paths:
       responses:
         '204':
           description: Аптечку успішно видалено
+        '403':
+          description: Доступ заборонено - тільки власник може видалити аптечку
         '404':
-          description: Аптечку не знайдено
-
-  /api/medkits/owner/{ownerId}:
-    get:
-      tags:
-        - Аптечки
-      summary: Отримати аптечки за ID власника
-      description: Повертає всі аптечки, які належать конкретному користувачу
-      parameters:
-        - name: ownerId
-          in: path
-          description: ID власника
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: Успішно отримано список аптечок
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MedkitResponse'
+          description: Аптечку не знайдено або доступ заборонено
 
   /api/medkits/search:
     get:
       tags:
         - Аптечки
       summary: Пошук аптечок за назвою
-      description: Знаходить аптечки, назва яких містить вказаний текст
+      description: Знаходить аптечки, назва яких містить вказаний текст. Повертає тільки ті аптечки, де автентифікований користувач є власником або учасником.
       parameters:
         - name: name
           in: query

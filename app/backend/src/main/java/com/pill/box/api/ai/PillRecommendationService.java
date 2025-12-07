@@ -8,8 +8,6 @@ import com.pill.box.api.ai.dto.RelevantPill;
 import com.pill.box.api.exception.AiProcessingException;
 import com.pill.box.api.medkit.Medkit;
 import com.pill.box.api.medkit.MedkitRepository;
-import com.pill.box.api.medkit.member.MedkitMember;
-import com.pill.box.api.medkit.member.MedkitMemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -49,7 +46,6 @@ public class PillRecommendationService {
     
     private final PillVectorStoreService vectorStoreService;
     private final MedkitRepository medkitRepository;
-    private final MedkitMemberRepository memberRepository;
     private final ChatClient chatClient;
     private final ObjectMapper objectMapper;
     
@@ -90,18 +86,9 @@ public class PillRecommendationService {
     }
     
     private List<Long> getAllUserMedkitIds(Long userId) {
-        List<Long> ownedMedkits = ((List<Medkit>) medkitRepository.findByOwnerId(userId))
+        return medkitRepository.findAllAccessibleByUserId(userId)
                 .stream()
                 .map(Medkit::getId)
-                .toList();
-        
-        List<Long> memberMedkits = ((List<MedkitMember>) memberRepository.findByUserId(userId))
-                .stream()
-                .map(member -> member.getMedkit().getId())
-                .toList();
-        
-        return Stream.concat(ownedMedkits.stream(), memberMedkits.stream())
-                .distinct()
                 .toList();
     }
     

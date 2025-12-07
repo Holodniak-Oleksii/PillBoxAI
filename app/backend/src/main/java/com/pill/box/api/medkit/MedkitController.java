@@ -27,8 +27,9 @@ public class MedkitController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MedkitResponse> getMedkitById(@PathVariable Long id) {
-        MedkitResponse response = medkitService.getMedkitById(id);
+    public ResponseEntity<MedkitResponse> getMedkitById(@PathVariable Long id,
+                                                        @AuthenticationPrincipal User user) {
+        MedkitResponse response = medkitService.getMedkitById(id, user.getId());
         return ResponseEntity.ok(response);
     }
 
@@ -38,28 +39,25 @@ public class MedkitController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/owner/{ownerId}")
-    public ResponseEntity<List<MedkitResponse>> getMedkitsByOwnerId(@PathVariable Long ownerId) {
-        List<MedkitResponse> response = medkitService.getMedkitsByOwnerId(ownerId);
-        return ResponseEntity.ok(response);
-    }
-
     @GetMapping("/search")
-    public ResponseEntity<List<MedkitResponse>> searchMedkitsByName(@RequestParam String name) {
-        List<MedkitResponse> response = medkitService.searchMedkitsByName(name);
+    public ResponseEntity<List<MedkitResponse>> searchMedkitsByName(@RequestParam String name,
+                                                                     @AuthenticationPrincipal User user) {
+        List<MedkitResponse> response = medkitService.searchMedkitsByName(name, user.getId());
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<MedkitResponse> updateMedkit(@PathVariable Long id,
-                                                       @Valid @RequestBody MedkitRequest request) {
-        MedkitResponse response = medkitService.updateMedkit(id, request);
+                                                       @Valid @RequestBody MedkitRequest request,
+                                                       @AuthenticationPrincipal User user) {
+        MedkitResponse response = medkitService.updateMedkit(id, request, user.getId());
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMedkit(@PathVariable Long id) {
-        medkitService.deleteMedkit(id);
+    public ResponseEntity<Void> deleteMedkit(@PathVariable Long id,
+                                             @AuthenticationPrincipal User user) {
+        medkitService.deleteMedkit(id, user.getId());
         return ResponseEntity.noContent().build();
     }
 }
