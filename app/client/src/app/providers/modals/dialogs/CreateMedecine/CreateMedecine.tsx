@@ -6,10 +6,13 @@ import {
   useCreateMedicine,
   useUpdateMedicine,
 } from "@/services/medicines/hooks";
+import { useMedkit, useMedkitMembers } from "@/services/medkits/hooks";
 import { IMedicines, IModalProps, IPillRequest } from "@/shared/types/entities";
-import { Box, Grid } from "@chakra-ui/react";
+import { canEdit, getUserRole } from "@/shared/utils/medkitPermissions";
+import { Box, Grid, Text } from "@chakra-ui/react";
 import { create, useModal } from "@ebay/nice-modal-react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { createMedicineFields, createMedicineSchema } from "./data";
@@ -34,6 +37,27 @@ export const CreateMedicineModal = create<ICreateMedicineModalProps>(
     const { mutateAsync: createMedicine } = useCreateMedicine();
     const { mutateAsync: updateMedicine } = useUpdateMedicine();
     const isEditMode = !!medicine;
+    const { data: medkit } = useMedkit(String(medkitId), !!medkitId);
+    const { data: members } = useMedkitMembers(medkitId, !!medkitId);
+
+    // Get current user's role in this medkit
+    const currentUserMember = useMemo(() => {
+      if (!user || !medkit) return undefined;
+      // Check if user is owner (from medkit.ownerId)
+      if (medkit.ownerId === user.id) {
+        return {
+          id: -1,
+          medkitId: medkit.id,
+          userId: user.id,
+          role: "OWNER" as const,
+          addedAt: medkit.createdAt,
+        };
+      }
+      // Check if user is in members list
+      return getUserRole(members, user.id);
+    }, [user, medkit, members]);
+
+    const userCanEdit = canEdit(currentUserMember);
 
     const {
       control,
@@ -54,6 +78,10 @@ export const CreateMedicineModal = create<ICreateMedicineModalProps>(
     });
 
     const onSubmit: SubmitHandler<ICreateMedicineFormValues> = async (data) => {
+      if (!userCanEdit) {
+        return;
+      }
+
       const pillRequest: IPillRequest = {
         name: data.name,
         description: data.description || undefined,
@@ -75,6 +103,28 @@ export const CreateMedicineModal = create<ICreateMedicineModalProps>(
       }
       remove();
     };
+
+    // Show error message if user doesn't have permission
+    if (!userCanEdit && medkitId) {
+      return (
+        <ModalLayout maxWidth={760}>
+          <CRUDModalLayout
+            onSubmit={() => remove()}
+            title={
+              isEditMode
+                ? t("modals.editMedicine.title")
+                : t("modals.createMedicine.title")
+            }
+          >
+            <Box p={4}>
+              <Text color="red.500" textAlign="center">
+                {t("modals.createMedicine.errors.noPermission")}
+              </Text>
+            </Box>
+          </CRUDModalLayout>
+        </ModalLayout>
+      );
+    }
 
     const renderFields = (start: number, end: number) =>
       createMedicineFields.slice(start, end).map((field) => (

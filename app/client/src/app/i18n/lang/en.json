@@ -123,7 +123,10 @@
         "title": "Create Medkit"
       },
       "createMedicine": {
-        "title": "Create Medicine"
+        "title": "Create Medicine",
+        "errors": {
+          "noPermission": "You don't have permission to create or edit medicines in this medkit. Only OWNER and EDITOR roles can modify medkit content."
+        }
       },
       "editMedicine": {
         "title": "Edit Medicine"
@@ -149,6 +152,36 @@
         "allSaved": "All pills have been saved",
         "saveAll": "Save All",
         "remaining": "pills remaining"
+      },
+      "manageMembers": {
+        "title": "Manage Medkit Members",
+        "addMember": "Add Member",
+        "searchUsername": "Enter username",
+        "search": "Search",
+        "add": "Add",
+        "membersList": "Members",
+        "noMembers": "No members found",
+        "you": "You",
+        "addedAt": "Added",
+        "roles": {
+          "owner": "Owner",
+          "editor": "Editor",
+          "viewer": "Viewer"
+        },
+        "errors": {
+          "usernameRequired": "Please enter a username",
+          "userNotFound": "User not found",
+          "userAlreadyMember": "User is already a member of this medkit",
+          "cannotAddYourself": "You cannot add yourself as a member",
+          "failedToAdd": "Failed to add member",
+          "failedToUpdate": "Failed to update role",
+          "failedToRemove": "Failed to remove member"
+        },
+        "success": {
+          "memberAdded": "Member added successfully",
+          "roleUpdated": "Role updated successfully",
+          "memberRemoved": "Member {{username}} removed successfully"
+        }
       }
     },
     "account": {
@@ -209,7 +242,8 @@
         "delete": "Delete medicine",
         "addMedicine": "Add Medicine",
         "editMedkit": "Edit Medkit",
-        "deleteMedkit": "Delete Medkit"
+        "deleteMedkit": "Delete Medkit",
+        "shareMedkit": "Share Medkit"
       }
     },
     "medicine": {
