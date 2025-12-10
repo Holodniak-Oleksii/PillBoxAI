@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -37,11 +39,23 @@ public class PillRecommendationService {
             - Provide your response in %s language
             
             Please provide:
-            1. Brief analysis of the query
-            2. Which medication(s) from the list might be relevant and why
-            3. Important safety reminders
+            Which medication(s) from the list might be relevant and why
             
-            Response format: Clear, conversational text with proper paragraphs.
+            CRITICAL INSTRUCTIONS:
+            - You MUST respond with valid JSON in this exact format:
+            {
+              "recommendation": "your detailed text recommendation here",
+              "recommended_pill_ids": [7, 10]
+            }
+            
+            - In "recommendation" field: write clear, conversational text WITHOUT mentioning any IDs or numbers. 
+              Just refer to medications by their names naturally.
+            
+            - In "recommended_pill_ids" array: include ONLY the actual Pill IDs (shown as [Pill ID: X] in the list above) 
+              of medications that you actually recommend. For example, if you recommend medication with [Pill ID: 7] 
+              and [Pill ID: 10], use [7, 10]. If you don't recommend any specific medication, use an empty array [].
+            
+            - NEVER include "[Pill ID: X]" or any ID references in the recommendation text!
             """;
     
     private final PillVectorStoreService vectorStoreService;
@@ -66,15 +80,15 @@ public class PillRecommendationService {
         }
         
         String context = buildContext(similarPills);
-        String aiRecommendation = getAiRecommendation(
+        AiRecommendationResult aiResult = getAiRecommendation(
                 request.getQuery(),
                 context,
                 request.getLanguage()
         );
         
-        List<RelevantPill> relevantPills = mapToRelevantPills(similarPills);
+        List<RelevantPill> relevantPills = mapToRelevantPills(similarPills, aiResult.recommendedPillIds());
         
-        return buildResponse(aiRecommendation, relevantPills, medkitIds, request.getLanguage());
+        return buildResponse(aiResult.recommendation(), relevantPills, medkitIds, request.getLanguage());
     }
     
     private List<Long> determineMedkitIds(Long requestedMedkitId, Long userId) {
@@ -121,31 +135,83 @@ public class PillRecommendationService {
                 log.warn("Failed to parse metadata for embedding {}", embedding.getId());
             }
             
+            context.append("\n   [Pill ID: ").append(embedding.getPill().getId()).append("]");
             context.append("\n\n");
         }
         
         return context.toString();
     }
     
-    private String getAiRecommendation(String query, String context, String language) {
+    private AiRecommendationResult getAiRecommendation(String query, String context, String language) {
         try {
             String languageFullName = getLanguageFullName(language);
             String prompt = String.format(RECOMMENDATION_PROMPT_TEMPLATE, query, context, languageFullName);
             
-            return chatClient.prompt()
+            String jsonResponse = chatClient.prompt()
                     .user(prompt)
                     .call()
                     .content();
+            
+            log.debug("AI raw response: {}", jsonResponse);
+            
+            String cleanedJson = extractJsonFromMarkdown(jsonResponse);
+            
+            Map<String, Object> parsedResponse = objectMapper.readValue(
+                    cleanedJson,
+                    new TypeReference<Map<String, Object>>() {}
+            );
+            
+            String recommendation = (String) parsedResponse.get("recommendation");
+            if (recommendation == null || recommendation.isBlank()) {
+                throw new AiProcessingException("AI response missing recommendation text");
+            }
+            
+            List<Integer> recommendedPillIds = (List<Integer>) parsedResponse.getOrDefault("recommended_pill_ids", List.of());
+            
+            Set<Long> recommendedIds = recommendedPillIds.stream()
+                    .map(Number::longValue)
+                    .collect(Collectors.toSet());
+            
+            log.info("AI recommended {} pill(s) with IDs: {}", recommendedIds.size(), recommendedIds);
+            
+            return new AiRecommendationResult(recommendation, recommendedIds);
         } catch (Exception e) {
             log.error("Failed to get AI recommendation", e);
             throw new AiProcessingException("Failed to generate recommendation: " + e.getMessage(), e);
         }
     }
     
-    private List<RelevantPill> mapToRelevantPills(List<PillEmbedding> embeddings) {
+    private String extractJsonFromMarkdown(String response) {
+        String trimmed = response.trim();
+        
+        if (trimmed.startsWith("```")) {
+            int firstNewline = trimmed.indexOf('\n');
+            if (firstNewline == -1) {
+                return trimmed;
+            }
+            
+            int lastTripleBacktick = trimmed.lastIndexOf("```");
+            if (lastTripleBacktick > firstNewline) {
+                return trimmed.substring(firstNewline + 1, lastTripleBacktick).trim();
+            }
+        }
+        
+        return trimmed;
+    }
+    
+    private List<RelevantPill> mapToRelevantPills(List<PillEmbedding> embeddings, Set<Long> recommendedPillIds) {
         List<RelevantPill> relevantPills = new ArrayList<>();
         
+        log.debug("Filtering {} embeddings based on {} recommended pill IDs", embeddings.size(), recommendedPillIds.size());
+        
         for (PillEmbedding embedding : embeddings) {
+            Long pillId = embedding.getPill().getId();
+            
+            if (!recommendedPillIds.contains(pillId)) {
+                log.debug("Filtering out pill ID {} ({}), not in AI recommendations", pillId, embedding.getPill().getName());
+                continue;
+            }
+            
             try {
                 Map<String, Object> metadata = objectMapper.readValue(
                         embedding.getMetadata(),
@@ -153,7 +219,7 @@ public class PillRecommendationService {
                 );
                 
                 RelevantPill relevantPill = RelevantPill.builder()
-                        .id(embedding.getPill().getId())
+                        .id(pillId)
                         .name(embedding.getPill().getName())
                         .description(embedding.getPill().getDescription())
                         .medkitId(embedding.getMedkit().getId())
@@ -161,11 +227,13 @@ public class PillRecommendationService {
                         .build();
                 
                 relevantPills.add(relevantPill);
+                log.debug("Added recommended pill ID {} ({})", pillId, embedding.getPill().getName());
             } catch (Exception e) {
                 log.warn("Failed to map embedding {} to RelevantPill", embedding.getId(), e);
             }
         }
         
+        log.info("Filtered to {} relevant pills from {} candidates", relevantPills.size(), embeddings.size());
         return relevantPills;
     }
     
@@ -200,8 +268,7 @@ public class PillRecommendationService {
         if (language != null && language.toLowerCase().startsWith("uk")) {
             return """
                     ⚠️ ВАЖЛИВО: Це лише інформаційна порада, а не медична консультація.
-                    Завжди консультуйтеся з лікарем або фармацевтом перед прийомом будь-яких ліків.;
-                    """;
+                    Завжди консультуйтеся з лікарем або фармацевтом перед прийомом будь-яких ліків.""";
         }
         return """
                 ⚠️ IMPORTANT: This is informational advice only, not medical consultation.
@@ -217,4 +284,6 @@ public class PillRecommendationService {
             default -> "English";
         };
     }
+    
+    private record AiRecommendationResult(String recommendation, Set<Long> recommendedPillIds) {}
 }
