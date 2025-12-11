@@ -39,7 +39,8 @@ public class PillRecommendationService {
             - Provide your response in %s language
             
             Please provide:
-            Which medication(s) from the list might be relevant and why
+            1. Which medication(s) from the list might be relevant and why
+            2. Important safety reminders
             
             CRITICAL INSTRUCTIONS:
             - You MUST respond with valid JSON in this exact format:
