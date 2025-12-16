@@ -44,12 +44,30 @@ export const Account = () => {
             align="start"
             flex={1}
             gap={0}
+            overflow="hidden"
+            textOverflow="ellipsis"
+            whiteSpace="nowrap"
             onClick={() => navigate(PATHS.SETTINGS)}
           >
-            <Text fontSize="sm" fontWeight="semibold" color="gray.700">
+            <Text
+              fontSize="sm"
+              fontWeight="semibold"
+              color="gray.700"
+              overflow="hidden"
+              textOverflow="ellipsis"
+              whiteSpace="nowrap"
+              maxW="100%"
+            >
               {user?.username}
             </Text>
-            <Text fontSize="xs" color="gray.500">
+            <Text
+              fontSize="xs"
+              color="gray.500"
+              overflow="hidden"
+              textOverflow="ellipsis"
+              whiteSpace="nowrap"
+              maxW="100%"
+            >
               {user?.email}
             </Text>
           </VStack>

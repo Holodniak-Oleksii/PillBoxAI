@@ -80,7 +80,13 @@ export const Chat: FC<IChatProps> = ({ conversation }) => {
   }, [conversation.messages]);
 
   return (
-    <Box h={"100%"} w={"100%"} display={"grid"} gridTemplateRows={"1fr auto"}>
+    <Box
+      h={"100%"}
+      w={"100%"}
+      display={"grid"}
+      gridTemplateRows={"1fr auto"}
+      px={4}
+    >
       <Flex
         direction={"column"}
         w={"100%"}
