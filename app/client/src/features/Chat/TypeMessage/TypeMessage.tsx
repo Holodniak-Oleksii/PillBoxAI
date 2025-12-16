@@ -47,8 +47,8 @@ export const TypeMessage: FC<ITypeMessageProps> = ({
   return (
     <Box
       borderRadius="2xl"
-      m={6}
       mt={2}
+      mb={4}
       p={4}
       border="1px solid"
       borderColor="gray.200"

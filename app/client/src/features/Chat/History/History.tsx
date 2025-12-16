@@ -1,6 +1,14 @@
 import { useChatStore } from "@/app/store/chat";
 import { Item } from "@/features/Chat/History/Item";
-import { Box, Drawer, Input, Portal, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  CloseButton,
+  Drawer,
+  Input,
+  Portal,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { FC, RefObject, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -9,12 +17,14 @@ interface IHistoryProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   container: RefObject<HTMLElement | null>;
+  isMobile?: boolean;
 }
 
 export const History: FC<IHistoryProps> = ({
   open,
   onOpenChange,
   container,
+  isMobile = false,
 }) => {
   const { t } = useTranslation();
   const conversations = useChatStore((state) => state.conversations);
@@ -61,10 +71,12 @@ export const History: FC<IHistoryProps> = ({
     >
       <Portal container={container}>
         <Drawer.Positioner
-          pos={"absolute"}
-          transform={"translateX(calc(100% + 1px))"}
+          pos={isMobile ? "fixed" : "absolute"}
+          transform={
+            isMobile ? "translateX(0)" : "translateX(calc(100% + 1px))"
+          }
           boxSize="full"
-          zIndex={2}
+          zIndex={isMobile ? 2000 : 2}
         >
           <Drawer.Content
             borderRightColor={"blackAlpha.300"}
@@ -74,6 +86,14 @@ export const History: FC<IHistoryProps> = ({
             <Drawer.Header p={4}>
               <Drawer.Title>{t("chat.history")}</Drawer.Title>
             </Drawer.Header>
+            {isMobile && (
+              <CloseButton
+                position={"absolute"}
+                right={2}
+                top={2}
+                onClick={() => onOpenChange(false)}
+              />
+            )}
             <Drawer.Body p={0} display="flex" flexDirection="column" gap={4}>
               <Box px={4}>
                 <Input
