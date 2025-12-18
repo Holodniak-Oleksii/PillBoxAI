@@ -69,7 +69,8 @@
       "usageInstructions": "Usage Instructions",
       "sideEffects": "Side Effects",
       "contraindications": "Contraindications",
-      "storageConditions": "Storage Conditions"
+      "storageConditions": "Storage Conditions",
+      "medkit": "Medkit"
     },
     "placeholders": {
       "activeSubstance": "Enter Active Substance",
@@ -91,7 +92,8 @@
       "sideEffects": "Side effects",
       "contraindications": "Contraindications",
       "storageConditions": "Storage conditions",
-      "searchByName": "Search by name..."
+      "searchByName": "Search by name...",
+      "selectMedkit": "Select medkit"
     },
     "auth": {
       "join": "Join and make life better",

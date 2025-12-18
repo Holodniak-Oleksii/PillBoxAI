@@ -15,7 +15,7 @@ import { ISignUpFormValues } from "./types";
 export const SignUpModal = create<IModalProps>(({ id }) => {
   const modal = useModal(id);
   const { show: showLogin } = useModal(EModalKey.LOGIN);
-  const { mutateAsync: registerAction } = useRegister();
+  const { mutateAsync: registerAction, isPending } = useRegister();
   const { t } = useTranslation();
 
   const {
@@ -86,7 +86,7 @@ export const SignUpModal = create<IModalProps>(({ id }) => {
             error={errors.confirmPassword?.message}
           />
 
-          <Button type="submit" width="100%" mt={2}>
+          <Button type="submit" width="100%" mt={2} disabled={isPending}>
             {t("button.signUp")}
           </Button>
         </VStack>

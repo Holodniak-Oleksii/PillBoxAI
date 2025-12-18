@@ -1,5 +1,6 @@
 import { ModalLayout } from "@/app/layouts/ModalLayout/ModalLayout";
 import { useUserStore } from "@/app/store/user";
+import { MedkitSelect } from "@/features/Chat/TypeMessage/MedkitSelect";
 import { renderFilterField } from "@/features/FilterCreator/renderFields";
 import { EFilterFieldType } from "@/features/FilterCreator/types";
 import { useCreateMedicine } from "@/services/medicines/hooks";
@@ -19,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { create, useModal } from "@ebay/nice-modal-react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FieldArrayWithId, useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -27,7 +28,7 @@ import { createMedicineSchema } from "../CreateMedecine/data";
 
 interface IEditIdentifiedPillsModalProps extends IModalProps {
   identifiedPills: IIdentifiedPill[];
-  medkitId?: number;
+  medkitId: number;
 }
 
 interface IEditablePillFormValues {
@@ -51,6 +52,9 @@ export const EditIdentifiedPillsModal = create<IEditIdentifiedPillsModalProps>(
     const { t } = useTranslation();
     const user = useUserStore((state) => state.user);
     const { mutateAsync: createMedicine } = useCreateMedicine();
+    const [selectedMedkitId, setSelectedMedkitId] = useState<string | null>(
+      medkitId ? String(medkitId) : null
+    );
 
     const defaultExpiryDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
       .toISOString()
@@ -85,7 +89,7 @@ export const EditIdentifiedPillsModal = create<IEditIdentifiedPillsModalProps>(
       index: number,
       data: IEditablePillFormValues
     ) => {
-      if (!medkitId || !user?.id) return;
+      if (!selectedMedkitId || !user?.id) return;
 
       try {
         setSavingIndex(index);
@@ -97,7 +101,7 @@ export const EditIdentifiedPillsModal = create<IEditIdentifiedPillsModalProps>(
         };
 
         await createMedicine({
-          medkitId,
+          medkitId: selectedMedkitId,
           createdById: user.id,
           pill: pillRequest,
         });
@@ -112,7 +116,7 @@ export const EditIdentifiedPillsModal = create<IEditIdentifiedPillsModalProps>(
     };
 
     const handleSaveAll = async (data: IPillsFormData) => {
-      if (!medkitId || !user?.id) return;
+      if (!selectedMedkitId || !user?.id) return;
 
       for (let i = data.pills.length - 1; i >= 0; i--) {
         const pill = data.pills[i];
@@ -125,7 +129,7 @@ export const EditIdentifiedPillsModal = create<IEditIdentifiedPillsModalProps>(
 
         try {
           await createMedicine({
-            medkitId,
+            medkitId: selectedMedkitId,
             createdById: user.id,
             pill: pillRequest,
           });
@@ -255,7 +259,11 @@ export const EditIdentifiedPillsModal = create<IEditIdentifiedPillsModalProps>(
           </Dialog.Header>
           <Dialog.Body p={4}>
             <Box maxH="60vh" overflowY="auto">
-              <VStack gap={4} align="stretch">
+              <MedkitSelect
+                value={selectedMedkitId}
+                onChange={(value) => setSelectedMedkitId(value || "")}
+              />
+              <VStack gap={4} align="stretch" mt={4}>
                 {fields.length === 0 ? (
                   <Text textAlign="center" color="gray.500" py={8}>
                     {t("modals.editIdentifiedPills.allSaved")}
@@ -273,19 +281,26 @@ export const EditIdentifiedPillsModal = create<IEditIdentifiedPillsModalProps>(
             borderColor="gray.200"
             p={4}
           >
-            <Button variant="outline" type="button" onClick={remove}>
-              {t("button.cancel")}
-            </Button>
-            <Flex gap={2} align="center">
-              <Button
-                onClick={handleSubmit(handleSaveAll)}
-                disabled={fields.length === 0 || savingIndex !== null}
-              >
-                {t("modals.editIdentifiedPills.saveAll")}
+            <Flex gap={2} align="center" w={"100%"}>
+              <Button variant="outline" type="button" onClick={remove}>
+                {t("button.cancel")}
               </Button>
-              <Text fontSize="sm" color="gray.600">
-                {fields.length} {t("modals.editIdentifiedPills.remaining")}
-              </Text>
+
+              <Flex gap={2} align="center" ml={"auto"}>
+                <Text fontSize="sm" color="gray.600" whiteSpace={"nowrap"}>
+                  {fields.length} {t("modals.editIdentifiedPills.remaining")}
+                </Text>
+                <Button
+                  onClick={handleSubmit(handleSaveAll)}
+                  disabled={
+                    fields.length === 0 ||
+                    savingIndex !== null ||
+                    !selectedMedkitId
+                  }
+                >
+                  {t("modals.editIdentifiedPills.saveAll")}
+                </Button>
+              </Flex>
             </Flex>
           </Dialog.Footer>
         </Box>

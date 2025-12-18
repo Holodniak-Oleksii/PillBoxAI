@@ -34,8 +34,10 @@ export const CreateMedicineModal = create<ICreateMedicineModalProps>(
     const { remove } = useModal();
     const { t } = useTranslation();
     const user = useUserStore((state) => state.user);
-    const { mutateAsync: createMedicine } = useCreateMedicine();
-    const { mutateAsync: updateMedicine } = useUpdateMedicine();
+    const { mutateAsync: createMedicine, isPending: isCreatePending } =
+      useCreateMedicine();
+    const { mutateAsync: updateMedicine, isPending: isUpdatePending } =
+      useUpdateMedicine();
     const isEditMode = !!medicine;
     const { data: medkit } = useMedkit(String(medkitId), !!medkitId);
     const { data: members } = useMedkitMembers(medkitId, !!medkitId);
@@ -145,6 +147,7 @@ export const CreateMedicineModal = create<ICreateMedicineModalProps>(
     return (
       <ModalLayout maxWidth={760}>
         <CRUDModalLayout
+          disabled={isUpdatePending || isCreatePending}
           onSubmit={handleSubmit(onSubmit)}
           title={
             isEditMode

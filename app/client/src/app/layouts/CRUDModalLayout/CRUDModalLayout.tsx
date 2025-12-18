@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 
 interface CRUDModalLayoutProps extends PropsWithChildren {
   title: string;
+  disabled?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSubmit: SubmitHandler<any>;
 }
@@ -14,6 +15,7 @@ export const CRUDModalLayout: FC<CRUDModalLayoutProps> = ({
   title,
   onSubmit,
   children,
+  disabled,
 }) => {
   const { t } = useTranslation();
   const { remove } = useModal();
@@ -47,7 +49,9 @@ export const CRUDModalLayout: FC<CRUDModalLayoutProps> = ({
         <Button variant="outline" type="button" onClick={remove}>
           {t("button.cancel")}
         </Button>
-        <Button type="submit">{t("button.save")}</Button>
+        <Button type="submit" disabled={disabled}>
+          {t("button.save")}
+        </Button>
       </Dialog.Footer>
     </Box>
   );

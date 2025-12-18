@@ -12,6 +12,7 @@ interface IMedkitSelectProps {
 export const MedkitSelect: FC<IMedkitSelectProps> = ({ value, onChange }) => {
   const { t } = useTranslation();
   const { data: medkits = [] } = useMedkits();
+  console.log("medkits :", medkits);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
@@ -65,7 +66,7 @@ export const MedkitSelect: FC<IMedkitSelectProps> = ({ value, onChange }) => {
         <Popover.Positioner>
           <Popover.Content
             width={triggerRef.current?.offsetWidth || 200}
-            zIndex={1000}
+            zIndex={10000}
           >
             <Popover.Body p={2}>
               <VStack

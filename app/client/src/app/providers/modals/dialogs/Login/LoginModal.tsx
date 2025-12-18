@@ -16,7 +16,7 @@ export const LoginModal = create<IModalProps>(({ id }) => {
   const modal = useModal(id);
   const { t } = useTranslation();
   const { show: showSignUp } = useModal(EModalKey.SING_UP);
-  const { mutateAsync: login } = useLogin();
+  const { mutateAsync: login, isPending } = useLogin();
   const {
     control,
     handleSubmit,
@@ -64,7 +64,7 @@ export const LoginModal = create<IModalProps>(({ id }) => {
             error={errors.password?.message}
           />
 
-          <Button type="submit" width="100%" mt={2}>
+          <Button type="submit" width="100%" mt={2} disabled={isPending}>
             {t("button.continue")}
           </Button>
         </VStack>

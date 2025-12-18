@@ -23,8 +23,10 @@ export const CreateMedkitModal = create<ICreateMedkitModalProps>(
   ({ defaultValues, medkitId }) => {
     const { remove } = useModal();
     const { t } = useTranslation();
-    const { mutateAsync: createMedkit } = useCreateMedkit();
-    const { mutateAsync: updateMedkit } = useUpdateMedkit();
+    const { mutateAsync: createMedkit, isPending: isCreatePending } =
+      useCreateMedkit();
+    const { mutateAsync: updateMedkit, isPending: isUpdatePending } =
+      useUpdateMedkit();
 
     const {
       control,
@@ -52,6 +54,7 @@ export const CreateMedkitModal = create<ICreateMedkitModalProps>(
         <CRUDModalLayout
           onSubmit={handleSubmit(onSubmit)}
           title={t("modals.createMedkit.title")}
+          disabled={isCreatePending || isUpdatePending}
         >
           {createMedkitFields.map((field) =>
             renderFilterField<ICreateMedkitFormValues>({

@@ -82,7 +82,11 @@ export const FormSelect = forwardRef<HTMLDivElement, FormSelectProps>(
       <Field.Root invalid={!!error} ref={ref} gap={0.5} required={required}>
         <Field.Label>{label}</Field.Label>
         <div style={{ position: "relative", width: "100%" }}>
-          <Popover.Root open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
+          <Popover.Root
+            positioning={{ placement: "top-end" }}
+            open={isOpen}
+            onOpenChange={(e) => setIsOpen(e.open)}
+          >
             <Popover.Trigger asChild>
               <button
                 ref={triggerRef}
