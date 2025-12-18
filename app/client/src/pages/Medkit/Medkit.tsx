@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { PATHS } from "@/app/router/paths";
 import { useUserStore } from "@/app/store/user";
 import { FilterCreator } from "@/features/FilterCreator";
@@ -45,6 +46,7 @@ export const Medkit = () => {
   const { data: medicines, isLoading: isLoadingMedicines } =
     useMedicinesByMedkitId(id);
   const { show: showCreateMedicine } = useModal(EModalKey.CREATE_MEDICINE);
+  const { show: showConfirmDialog } = useModal(EModalKey.CONFIRM_DIALOG);
 
   const [filteredMedicines, setFilteredMedicines] = useState<IMedicines[]>(
     medicines || []
@@ -82,8 +84,16 @@ export const Medkit = () => {
 
   const handleDeleteMedicine = useCallback(
     (medicine: IMedicines) => {
-      if (!userCanEdit) return;
-      deleteMedicine(medicine.id);
+      showConfirmDialog({
+        title: t("modals.deleteMedicine.title"),
+        description: t("modals.deleteMedicine.description", {
+          name: medicine.name,
+        }),
+        onConfirm: async () => {
+          if (!userCanEdit) return;
+          deleteMedicine(medicine.id);
+        },
+      });
     },
     [userCanEdit, deleteMedicine]
   );

@@ -124,6 +124,7 @@
       "createMedkit": {
         "title": "Create Medkit"
       },
+
       "createMedicine": {
         "title": "Create Medicine",
         "errors": {

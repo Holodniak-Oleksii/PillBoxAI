@@ -1,3 +1,4 @@
+import { PATHS } from "@/app/router/paths";
 import { useUserStore } from "@/app/store/user";
 import { useDeleteMedkit, useMedkitMembers } from "@/services/medkits/hooks";
 import { IMedkit } from "@/shared/types/entities";
@@ -22,7 +23,7 @@ import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { BiEdit } from "react-icons/bi";
 import { LuEllipsisVertical, LuPlus, LuShare2, LuTrash2 } from "react-icons/lu";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface IActionHeaderProps {
   medkit: IMedkit;
@@ -31,6 +32,8 @@ export const ActionHeader = ({ medkit }: IActionHeaderProps) => {
   const { id } = useParams();
   const { t } = useTranslation();
   const user = useUserStore((state) => state.user);
+  const navigate = useNavigate();
+
   const { mutateAsync: deleteMedkit } = useDeleteMedkit();
   const { data: members } = useMedkitMembers(id);
 
@@ -69,9 +72,11 @@ export const ActionHeader = ({ medkit }: IActionHeaderProps) => {
       onConfirm: async () => {
         if (!id) return;
         await deleteMedkit(id);
+        navigate(PATHS.HOME);
       },
     });
-  }, [id, medkit.name, deleteMedkit, showConfirmDialog, t]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const handleCreateMedicine = useCallback(() => {
     showCreateMedicine({
