@@ -44,6 +44,9 @@
       "aiIsTyping": "AI is typing...",
       "howCanIHelpYouToday": "How can I help you today?"
     },
+    "messages": {
+      "noMedkits": "No medkits found"
+    },
     "errors": {
       "isRequired": "This field is required",
       "minLength": "Minimum 2 characters",

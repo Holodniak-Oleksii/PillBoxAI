@@ -14,6 +14,7 @@ import {
   InputGroup,
   Kbd,
   Span,
+  Spinner,
   Text,
   useBreakpointValue,
 } from "@chakra-ui/react";
@@ -48,7 +49,8 @@ export const SideBar = ({ isOpen, onOpenChange }: SideBarProps = {}) => {
   const container = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
 
-  const { data: medkits } = useSearchMedkits(debouncedSearchQuery);
+  const { data: medkits, isLoading: isLoadingMedkits } =
+    useSearchMedkits(debouncedSearchQuery);
   const { createConversation } = useChatStore();
 
   const { show: showCreateMedkit } = useModal(EModalKey.CREATE_MEDKIT);
@@ -200,7 +202,24 @@ export const SideBar = ({ isOpen, onOpenChange }: SideBarProps = {}) => {
           overflow={"hidden"}
           overflowY={"auto"}
         >
-          {renderMedkits()}
+          {isLoadingMedkits ? (
+            <Center py={4}>
+              <Spinner size="lg" />
+            </Center>
+          ) : medkits && medkits.length > 0 ? (
+            renderMedkits()
+          ) : (
+            <Center
+              py={4}
+              display={"flex"}
+              flexDirection={"column"}
+              textAlign={"center"}
+            >
+              <Text fontSize={"sm"} fontWeight={500} color={"gray.400"}>
+                {t("messages.noMedkits")}
+              </Text>
+            </Center>
+          )}
         </Flex>
       </Flex>
       <Account />
