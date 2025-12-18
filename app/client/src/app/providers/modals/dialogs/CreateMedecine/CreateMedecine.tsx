@@ -9,7 +9,7 @@ import {
 import { useMedkit, useMedkitMembers } from "@/services/medkits/hooks";
 import { IMedicines, IModalProps, IPillRequest } from "@/shared/types/entities";
 import { canEdit, getUserRole } from "@/shared/utils/medkitPermissions";
-import { Box, Grid, Text } from "@chakra-ui/react";
+import { Box, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
 import { create, useModal } from "@ebay/nice-modal-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo } from "react";
@@ -31,6 +31,8 @@ interface ICreateMedicineModalProps extends IModalProps {
 
 export const CreateMedicineModal = create<ICreateMedicineModalProps>(
   ({ medicine, medkitId }) => {
+    const isMobile = useBreakpointValue({ base: true, md: false });
+
     const { remove } = useModal();
     const { t } = useTranslation();
     const user = useUserStore((state) => state.user);
@@ -156,8 +158,14 @@ export const CreateMedicineModal = create<ICreateMedicineModalProps>(
           }
         >
           <Grid templateColumns="1fr 1fr" gap={6} w="100%">
-            <Box>{renderFields(0, 2)}</Box>
-            <Box>{renderFields(2, 4)}</Box>
+            {isMobile ? (
+              <Box>{renderFields(0, 4)}</Box>
+            ) : (
+              <>
+                <Box>{renderFields(0, 2)}</Box>
+                <Box>{renderFields(2, 4)}</Box>
+              </>
+            )}
           </Grid>
         </CRUDModalLayout>
       </ModalLayout>
