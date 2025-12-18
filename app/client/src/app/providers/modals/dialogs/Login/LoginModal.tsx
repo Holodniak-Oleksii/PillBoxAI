@@ -1,6 +1,6 @@
 import { AuthModalLayout } from "@/app/layouts/AuthModalLayout/AuthModalLayout";
 import { ModalLayout } from "@/app/layouts/ModalLayout/ModalLayout";
-import { useGoogleAuth, useLogin } from "@/services/auth/hooks";
+import { useLogin } from "@/services/auth/hooks";
 import { IModalProps } from "@/shared/types/entities";
 import { EModalKey } from "@/shared/types/enums";
 import { FormInput } from "@/shared/ui-library/fields";
@@ -16,7 +16,6 @@ export const LoginModal = create<IModalProps>(({ id }) => {
   const modal = useModal(id);
   const { t } = useTranslation();
   const { show: showSignUp } = useModal(EModalKey.SING_UP);
-  const { mutate: googleAuth } = useGoogleAuth();
   const { mutateAsync: login } = useLogin();
   const {
     control,
@@ -31,13 +30,6 @@ export const LoginModal = create<IModalProps>(({ id }) => {
     modal.hide();
   };
 
-  const handleGoogleSignIn = async () => {
-    // TODO: Implement Google OAuth
-    console.log("Google sign in");
-    await googleAuth();
-    modal.hide();
-  };
-
   const redirectToSignUpHandler = () => {
     showSignUp();
     modal.hide();
@@ -45,7 +37,7 @@ export const LoginModal = create<IModalProps>(({ id }) => {
 
   return (
     <ModalLayout maxWidth={"fit-content"}>
-      <AuthModalLayout googleHandler={handleGoogleSignIn}>
+      <AuthModalLayout>
         <VStack
           as="form"
           onSubmit={handleSubmit(onSubmit)}

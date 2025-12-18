@@ -1,11 +1,9 @@
 import imageBG from "@/assets/auth-bg.webp";
 import imageLogo from "@/assets/logo.webp";
-import { GoogleIcon } from "@/shared/icons";
 import {
   AbsoluteCenter,
   Badge,
   Box,
-  Button,
   Center,
   Flex,
   Grid,
@@ -19,14 +17,7 @@ import {
 import { FC, PropsWithChildren } from "react";
 import { useTranslation } from "react-i18next";
 
-interface IAuthModalLayoutProps extends PropsWithChildren {
-  googleHandler: () => Promise<unknown>;
-}
-
-export const AuthModalLayout: FC<IAuthModalLayoutProps> = ({
-  children,
-  googleHandler,
-}) => {
+export const AuthModalLayout: FC<PropsWithChildren> = ({ children }) => {
   const { t } = useTranslation();
 
   return (
@@ -103,21 +94,6 @@ export const AuthModalLayout: FC<IAuthModalLayoutProps> = ({
               {t("auth.signInToContinue")}
             </Text>
           </Stack>
-
-          <Button variant="outline" width="100%" onClick={googleHandler}>
-            <HStack gap={2}>
-              <GoogleIcon />
-              <Text>{t("auth.signInWithGoogle")}</Text>
-            </HStack>
-          </Button>
-
-          <HStack>
-            <Box flex="1" height="1px" bg="gray.200" />
-            <Text fontSize="sm" color="gray.500" px={2}>
-              {t("auth.orContinueWith")}
-            </Text>
-            <Box flex="1" height="1px" bg="gray.200" />
-          </HStack>
           {children}
         </Stack>
       </Box>
