@@ -157,7 +157,7 @@ export const CreateMedicineModal = create<ICreateMedicineModalProps>(
               : t("modals.createMedicine.title")
           }
         >
-          <Grid templateColumns="1fr 1fr" gap={6} w="100%">
+          <Grid templateColumns={isMobile ? "1fr" : "1fr 1fr"} gap={6} w="100%">
             {isMobile ? (
               <Box>{renderFields(0, 4)}</Box>
             ) : (
