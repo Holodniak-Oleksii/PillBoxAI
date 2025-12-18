@@ -12,7 +12,6 @@ interface IMedkitSelectProps {
 export const MedkitSelect: FC<IMedkitSelectProps> = ({ value, onChange }) => {
   const { t } = useTranslation();
   const { data: medkits = [] } = useMedkits();
-  console.log("medkits :", medkits);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
 

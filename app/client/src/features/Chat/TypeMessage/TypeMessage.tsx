@@ -1,5 +1,5 @@
 import { useChatStore } from "@/app/store/chat";
-import { suggestedActions } from "@/features/Chat/TypeMessage/data";
+import { useUserStore } from "@/app/store/user";
 import { SendIcon } from "@/shared/icons";
 import { Box, Button, HStack, Input } from "@chakra-ui/react";
 import { FC } from "react";
@@ -23,25 +23,13 @@ export const TypeMessage: FC<ITypeMessageProps> = ({
 }) => {
   const { t } = useTranslation();
   const { isLoading } = useChatStore();
+  const isAuth = useUserStore((state) => state.isAuth);
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
-  };
-
-  const renderSuggestedActions = () => {
-    return suggestedActions(onChangeMessage, t).map((action) => (
-      <Button
-        variant="outline"
-        borderRadius="3xl"
-        key={action.text}
-        onClick={action.action}
-      >
-        {t(action.text)}
-      </Button>
-    ));
   };
 
   return (
@@ -76,8 +64,9 @@ export const TypeMessage: FC<ITypeMessageProps> = ({
         </Button>
       </HStack>
       <HStack gap={3} mt={4} flexWrap="wrap">
-        {renderSuggestedActions()}
-        <MedkitSelect value={selectedMedkitId} onChange={onMedkitChange} />
+        {isAuth && (
+          <MedkitSelect value={selectedMedkitId} onChange={onMedkitChange} />
+        )}
       </HStack>
     </Box>
   );
